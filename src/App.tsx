@@ -3,7 +3,8 @@ import "./App.css"
 import {ChakraProvider, extendTheme, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react";
 import {GlobalContextProvider} from "./utils/Context"
 import {PersonScreen} from "./components/person/PersonScreen";
-import {TagScreen} from "./components/tags/TagScreen";
+import {TagScreen} from "./components/tag/TagScreen";
+import {RevenueScreen} from "./components/revenue/RevenueScreen";
 
 const config = {
     initialColorMode: 'dark',
@@ -16,22 +17,11 @@ function App() {
     return (
         <ChakraProvider theme={theme}>
             <GlobalContextProvider>
-                {/*<BrowserRouter>*/}
-                {/*    <Routes>*/}
-                {/*        <Route*/}
-                {/*            path={"/person"}*/}
-                {/*            element={<PersonScreen/>}*/}
-                {/*        />*/}
-                {/*        <Route*/}
-                {/*            path={"/"}*/}
-                {/*            element={<LandingScreen/>}*/}
-                {/*        />*/}
-                {/*    </Routes>*/}
-                {/*</BrowserRouter>*/}
                 <Tabs>
                     <TabList>
                         <Tab>Person</Tab>
                         <Tab>Tags</Tab>
+                        <Tab>Revenue</Tab>
                     </TabList>
                     <TabPanels>
                         <TabPanel>
@@ -39,6 +29,9 @@ function App() {
                         </TabPanel>
                         <TabPanel>
                             <TagScreen/>
+                        </TabPanel>
+                        <TabPanel>
+                            <RevenueScreen/>
                         </TabPanel>
                     </TabPanels>
                 </Tabs>
