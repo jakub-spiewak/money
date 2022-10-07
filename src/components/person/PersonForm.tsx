@@ -7,44 +7,39 @@ import {
     ModalContent, ModalFooter,
     ModalHeader,
     ModalOverlay,
-    useDisclosure
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
+import {PersonType} from "../../utils/CommonTypes";
 
 interface PersonFormProps {
-}
-
-interface PersonFormType {
-    firstName: string;
-    lastName: string;
+    editValue?: PersonType,
+    isOpen: boolean,
+    onClose: () => void,
+    onSubmit: (person: PersonType) => void
 }
 
 export const PersonForm = (props: PersonFormProps) => {
-    const {isOpen, onOpen, onClose} = useDisclosure()
+    const {editValue, isOpen, onClose, onSubmit: onSubmitFromProps} = props
+
     const {
         handleSubmit,
         register,
         formState: {errors, isSubmitting},
         reset
-    } = useForm<PersonFormType>()
+    } = useForm<PersonType>()
 
-    function onSubmit(values: PersonFormType) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                alert(JSON.stringify(values, null, 2))
-                resolve(null)
-            }, 3000)
-        })
+    const onSubmit = (person: PersonType) => {
+        onSubmitFromProps(person)
+        onClose()
     }
 
     useEffect(() => {
-        if (!isOpen) reset()
-    }, [reset, isOpen])
+        if (isOpen) reset(editValue || {firstName: undefined, lastName: undefined})
+    }, [reset, editValue, isOpen])
 
     return (
         <Box>
-            <Button onClick={onOpen}>Open Modal</Button>
             <Modal
                 isOpen={isOpen}
                 onClose={onClose}
@@ -102,6 +97,7 @@ export const PersonForm = (props: PersonFormProps) => {
                         </ModalFooter>
                     </form>
                 </ModalContent>
-            </Modal></Box>
+            </Modal>
+        </Box>
     )
 }
