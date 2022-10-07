@@ -6,6 +6,7 @@ import {PersonScreen} from "./components/person/PersonScreen";
 import {TagScreen} from "./components/tag/TagScreen";
 import {RevenueScreen} from "./components/revenue/RevenueScreen";
 import {ExpenseScreen} from "./components/expense/ExpenseScreen";
+import {AnalyzeScreen} from "./components/analyze/AnalyzeScreen";
 
 const config = {
     initialColorMode: 'dark',
@@ -24,6 +25,7 @@ function App() {
                         <Tab>Tags</Tab>
                         <Tab>Revenue</Tab>
                         <Tab>Expense</Tab>
+                        <Tab>Analyze</Tab>
                     </TabList>
                     <TabPanels>
                         <TabPanel>
@@ -37,6 +39,9 @@ function App() {
                         </TabPanel>
                         <TabPanel>
                             <ExpenseScreen/>
+                        </TabPanel>
+                        <TabPanel>
+                            <AnalyzeScreen/>
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

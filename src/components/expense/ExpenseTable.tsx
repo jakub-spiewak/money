@@ -9,7 +9,7 @@ import {
     Td,
     Tfoot,
     Box,
-    IconButton, HStack, useDisclosure, Button, Tag, TagLabel,
+    IconButton, HStack, useDisclosure, Button, Tag, TagLabel, Flex,
 } from "@chakra-ui/react";
 import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";
@@ -67,21 +67,26 @@ export const ExpenseTable = (props: ExpenseTableProps) => {
                                         <Td>{person ? `${person.firstName} ${person.lastName}` : <AiOutlineHome/>}</Td>
                                         <Td isNumeric><b>{expense.amount.toFixed?.(2)}</b></Td>
                                         <Td>
-                                            {expense.tagsIds.map((tagId, index) => {
-                                                const tag = tags.find(t => t.id === tagId)
-                                                if (!tag) return null
-                                                return (
-                                                    <Tag
-                                                        size={'sm'}
-                                                        key={`form_selected_tag_${index}`}
-                                                        borderRadius='full'
-                                                        variant='solid'
-                                                        colorScheme='green'
-                                                    >
-                                                        <TagLabel>{tag.name.toUpperCase()}</TagLabel>
-                                                    </Tag>
-                                                )
-                                            })}
+                                            <Flex
+                                                wrap={'wrap'}
+                                                gap={1}
+                                            >
+                                                {expense.tagsIds.map((tagId, index) => {
+                                                    const tag = tags.find(t => t.id === tagId)
+                                                    if (!tag) return null
+                                                    return (
+                                                        <Tag
+                                                            size={'sm'}
+                                                            key={`form_selected_tag_${index}`}
+                                                            borderRadius='full'
+                                                            variant='solid'
+                                                            colorScheme='green'
+                                                        >
+                                                            <TagLabel>{tag.name.toUpperCase()}</TagLabel>
+                                                        </Tag>
+                                                    )
+                                                })}
+                                            </Flex>
                                         </Td>
                                         <Td isNumeric>
                                             <Box>

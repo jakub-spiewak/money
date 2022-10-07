@@ -15,6 +15,7 @@ import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";
 import {DeleteAlertDialog} from "../util/DeleteAlertDialog";
 import {TagType} from "../../utils/CommonTypes";
+import {useGlobalContext} from "../../utils/Context";
 
 interface TagTableProps {
     tags: TagType[],
@@ -28,6 +29,7 @@ export const TagTable = (props: TagTableProps) => {
 
     const {isOpen, onClose, onOpen} = useDisclosure()
     const [deleteValue, setDeleteValue] = useState<TagType>()
+    const {expenses} = useGlobalContext()
 
     const onDelete = (tag: TagType) => {
         setDeleteValue(tag)
@@ -41,7 +43,10 @@ export const TagTable = (props: TagTableProps) => {
     return (
         <>
             <TableContainer>
-                <Table variant='simple'>
+                <Table
+                    variant='simple'
+                    size={'sm'}
+                >
                     <TableCaption>
                         Tags
                     </TableCaption>
@@ -71,6 +76,7 @@ export const TagTable = (props: TagTableProps) => {
                                                     icon={<DeleteIcon/>}
                                                     colorScheme={'red'}
                                                     onClick={() => onDelete(tag)}
+                                                    disabled={expenses.findIndex(e => e.tagsIds.includes(tag.id)) >= 0}
                                                 />
                                             </Box>
                                         </Td>

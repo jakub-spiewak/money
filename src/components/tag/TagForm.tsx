@@ -59,7 +59,7 @@ export const TagForm = (props: TagFormProps) => {
                                     placeholder='Name'
                                     {...register('name', {
                                         required: 'This is required',
-                                        minLength: {value: 4, message: 'Minimum length should be 4'},
+                                        minLength: {value: 3, message: 'Minimum length should be 3'},
                                         maxLength: {value: 32, message: 'Maximum length should be 32'}
                                     })}
                                 />

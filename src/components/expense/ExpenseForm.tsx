@@ -47,7 +47,6 @@ export const ExpenseForm = (props: ExpenseProps) => {
 
     const onSubmit = (revenue: ExpenseType) => {
         revenue.tagsIds = formTags.map((tag) => tag.id)
-        alert(JSON.stringify(revenue))
         onSubmitFromProps({...revenue, id: editValue?.id || new Date().getMilliseconds().toString()})
         onClose()
     }
@@ -105,8 +104,13 @@ export const ExpenseForm = (props: ExpenseProps) => {
                                     placeholder={"Home"}
                                     {...register('personId')}
                                 >
-                                    {persons.map((person) => (
-                                        <option value={person.id}>{`${person.firstName} ${person.lastName}`}</option>
+                                    {persons.map((person, index) => (
+                                        <option
+                                            key={`person_option_${index}`}
+                                            value={person.id}
+                                        >
+                                            {`${person.firstName} ${person.lastName}`}
+                                        </option>
                                     ))}
                                 </Select>
                                 <FormErrorMessage>

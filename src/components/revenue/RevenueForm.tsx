@@ -43,7 +43,6 @@ export const RevenueForm = (props: RevenueProps) => {
     } = useForm<RevenueType>()
 
     const onSubmit = (revenue: RevenueType) => {
-        alert(JSON.stringify(revenue))
         onSubmitFromProps({...revenue, id: editValue?.id || new Date().getMilliseconds().toString()})
         onClose()
     }
@@ -92,8 +91,13 @@ export const RevenueForm = (props: RevenueProps) => {
                                         required: 'This is required'
                                     })}
                                 >
-                                    {persons.map((person) => (
-                                        <option value={person.id}>{`${person.firstName} ${person.lastName}`}</option>
+                                    {persons.map((person, index) => (
+                                        <option
+                                            key={`person_option_${index}`}
+                                            value={person.id}
+                                        >
+                                            {`${person.firstName} ${person.lastName}`}
+                                        </option>
                                     ))}
                                 </Select>
                                 <FormErrorMessage>

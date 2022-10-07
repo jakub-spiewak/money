@@ -8,8 +8,10 @@ specifiers:
   '@types/node': ^16.11.64
   '@types/react': ^18.0.21
   '@types/react-dom': ^18.0.6
+  chart.js: ^3.9.1
   framer-motion: ^7.5.2
   react: ^18.2.0
+  react-chartjs-2: ^4.3.1
   react-dom: ^18.2.0
   react-hook-form: ^7.36.1
   react-icons: ^4.4.0
@@ -26,8 +28,10 @@ dependencies:
   '@types/node': 16.11.64
   '@types/react': 18.0.21
   '@types/react-dom': 18.0.6
+  chart.js: 3.9.1
   framer-motion: 7.5.2_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
+  react-chartjs-2: 4.3.1_2unjvz6v6rskedwoxtmbfw2rje
   react-dom: 18.2.0_react@18.2.0
   react-hook-form: 7.36.1_react@18.2.0
   react-icons: 4.4.0_react@18.2.0
@@ -4617,6 +4621,10 @@ packages:
     engines: {node: '>=12.20'}
     dev: false
 
+  /chart.js/3.9.1:
+    resolution: {integrity: sha512-Ro2JbLmvg83gXF5F4sniaQ+lTbSv18E+TIf2cOeiH1Iqd2PGFOtem+DUufMZsCJwFE7ywPOpfXFBwRTGq7dh6w==}
+    dev: false
+
   /check-types/11.1.2:
     resolution: {integrity: sha512-tzWzvgePgLORb9/3a0YenggReLKAIb2owL03H2Xdoe5pKcUyWRSEQ8xfCar8t2SIAuEDwtmx2da1YB52YuHQMQ==}
     dev: false
@@ -9181,6 +9189,16 @@ packages:
       raf: 3.4.1
       regenerator-runtime: 0.13.9
       whatwg-fetch: 3.6.2
+    dev: false
+
+  /react-chartjs-2/4.3.1_2unjvz6v6rskedwoxtmbfw2rje:
+    resolution: {integrity: sha512-5i3mjP6tU7QSn0jvb8I4hudTzHJqS8l00ORJnVwI2sYu0ihpj83Lv2YzfxunfxTZkscKvZu2F2w9LkwNBhj6xA==}
+    peerDependencies:
+      chart.js: ^3.5.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      chart.js: 3.9.1
+      react: 18.2.0
     dev: false
 
   /react-clientside-effect/1.2.6_react@18.2.0:
