@@ -15,3 +15,11 @@ export interface RevenueType {
     personId: string,
     amount: number,
 }
+
+export interface ExpenseType {
+    id: string,
+    name: string,
+    personId?: string,
+    amount: number,
+    tagsIds: string[]
+}

@@ -9,30 +9,31 @@ import {
     Td,
     Tfoot,
     Box,
-    IconButton, HStack, useDisclosure, Button,
+    IconButton, HStack, useDisclosure, Button, Tag, TagLabel,
 } from "@chakra-ui/react";
 import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";
 import {DeleteAlertDialog} from "../util/DeleteAlertDialog";
-import {RevenueType} from "../../utils/CommonTypes";
+import {ExpenseType} from "../../utils/CommonTypes";
 import {useGlobalContext} from "../../utils/Context";
+import {AiOutlineHome} from "react-icons/ai";
 
-interface RevenueTableProps {
-    revenues: RevenueType[],
+interface ExpenseTableProps {
+    expenses: ExpenseType[],
     onAdd: () => void;
-    onEdit: (revenue: RevenueType) => void,
-    onDelete: (revenue: RevenueType) => void,
+    onEdit: (expense: ExpenseType) => void,
+    onDelete: (expense: ExpenseType) => void,
 }
 
-export const RevenueTable = (props: RevenueTableProps) => {
-    const {revenues, onEdit, onDelete: onDeleteFromProps, onAdd} = props
-    const {persons} = useGlobalContext()
+export const ExpenseTable = (props: ExpenseTableProps) => {
+    const {expenses, onEdit, onDelete: onDeleteFromProps, onAdd} = props
+    const {persons, tags} = useGlobalContext()
 
     const {isOpen, onClose, onOpen} = useDisclosure()
-    const [deleteValue, setDeleteValue] = useState<RevenueType>()
+    const [deleteValue, setDeleteValue] = useState<ExpenseType>()
 
-    const onDelete = (revenue: RevenueType) => {
-        setDeleteValue(revenue)
+    const onDelete = (expense: ExpenseType) => {
+        setDeleteValue(expense)
         onOpen()
     }
 
@@ -45,25 +46,43 @@ export const RevenueTable = (props: RevenueTableProps) => {
             <TableContainer>
                 <Table variant='simple'>
                     <TableCaption>
-                        Revenues
+                        Expenses
                     </TableCaption>
                     <Thead>
                         <Tr>
                             <Th>Name</Th>
                             <Th>Person</Th>
                             <Th isNumeric>Amount</Th>
+                            <Th>Tags</Th>
                             <Th isNumeric>Actions</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
                         {
-                            revenues.map((revenue, index) => {
-                                const person = persons.find(p => p.id === revenue.personId)
+                            expenses.map((expense, index) => {
+                                const person = persons.find(p => p.id === expense.personId)
                                 return (
-                                    <Tr key={`revenue_${index}`}>
-                                        <Td>{revenue.name}</Td>
-                                        <Td>{`${person?.firstName} ${person?.lastName}`}</Td>
-                                        <Td isNumeric><b>{revenue.amount.toFixed?.(2)}</b></Td>
+                                    <Tr key={`expense${index}`}>
+                                        <Td>{expense.name}</Td>
+                                        <Td>{person ? `${person.firstName} ${person.lastName}` : <AiOutlineHome/>}</Td>
+                                        <Td isNumeric><b>{expense.amount.toFixed?.(2)}</b></Td>
+                                        <Td>
+                                            {expense.tagsIds.map((tagId, index) => {
+                                                const tag = tags.find(t => t.id === tagId)
+                                                if (!tag) return null
+                                                return (
+                                                    <Tag
+                                                        size={'sm'}
+                                                        key={`form_selected_tag_${index}`}
+                                                        borderRadius='full'
+                                                        variant='solid'
+                                                        colorScheme='green'
+                                                    >
+                                                        <TagLabel>{tag.name.toUpperCase()}</TagLabel>
+                                                    </Tag>
+                                                )
+                                            })}
+                                        </Td>
                                         <Td isNumeric>
                                             <Box>
                                                 <IconButton
@@ -71,13 +90,13 @@ export const RevenueTable = (props: RevenueTableProps) => {
                                                     icon={<EditIcon/>}
                                                     colorScheme={'teal'}
                                                     mr={2}
-                                                    onClick={() => onEdit(revenue)}
+                                                    onClick={() => onEdit(expense)}
                                                 />
                                                 <IconButton
                                                     aria-label={'delete'}
                                                     icon={<DeleteIcon/>}
                                                     colorScheme={'red'}
-                                                    onClick={() => onDelete(revenue)}
+                                                    onClick={() => onDelete(expense)}
                                                 />
                                             </Box>
                                         </Td>
@@ -91,6 +110,7 @@ export const RevenueTable = (props: RevenueTableProps) => {
                             <Th>Name</Th>
                             <Th>Person</Th>
                             <Th isNumeric>Amount</Th>
+                            <Th>Tags</Th>
                             <Th isNumeric>Actions</Th>
                         </Tr>
                     </Tfoot>
@@ -101,7 +121,7 @@ export const RevenueTable = (props: RevenueTableProps) => {
                 flexDirection={"column-reverse"}
                 alignItems={"end"}
             >
-                <Button onClick={onAdd}>Add revenue</Button>
+                <Button onClick={onAdd}>Add expense</Button>
             </HStack>
             <DeleteAlertDialog
                 isOpen={isOpen}

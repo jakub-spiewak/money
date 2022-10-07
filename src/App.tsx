@@ -5,6 +5,7 @@ import {GlobalContextProvider} from "./utils/Context"
 import {PersonScreen} from "./components/person/PersonScreen";
 import {TagScreen} from "./components/tag/TagScreen";
 import {RevenueScreen} from "./components/revenue/RevenueScreen";
+import {ExpenseScreen} from "./components/expense/ExpenseScreen";
 
 const config = {
     initialColorMode: 'dark',
@@ -22,6 +23,7 @@ function App() {
                         <Tab>Person</Tab>
                         <Tab>Tags</Tab>
                         <Tab>Revenue</Tab>
+                        <Tab>Expense</Tab>
                     </TabList>
                     <TabPanels>
                         <TabPanel>
@@ -32,6 +34,9 @@ function App() {
                         </TabPanel>
                         <TabPanel>
                             <RevenueScreen/>
+                        </TabPanel>
+                        <TabPanel>
+                            <ExpenseScreen/>
                         </TabPanel>
                     </TabPanels>
                 </Tabs>
