@@ -13,24 +13,24 @@ import {
 } from "@chakra-ui/react";
 import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";
-import {PersonType} from "../../utils/CommonTypes";
 import {DeleteAlertDialog} from "../util/DeleteAlertDialog";
+import {TagType} from "../../utils/CommonTypes";
 
-interface PersonTableProps {
-    persons: PersonType[],
+interface TagTableProps {
+    tags: TagType[],
     onAdd: () => void;
-    onEdit: (person: PersonType) => void,
-    onDelete: (person: PersonType) => void,
+    onEdit: (tag: TagType) => void,
+    onDelete: (tag: TagType) => void,
 }
 
-export const PersonTable = (props: PersonTableProps) => {
-    const {persons, onEdit, onDelete: onDeleteFromProps, onAdd} = props
+export const TagTable = (props: TagTableProps) => {
+    const {tags, onEdit, onDelete: onDeleteFromProps, onAdd} = props
 
     const {isOpen, onClose, onOpen} = useDisclosure()
-    const [deleteValue, setDeleteValue] = useState<PersonType>()
+    const [deleteValue, setDeleteValue] = useState<TagType>()
 
-    const onDelete = (person: PersonType) => {
-        setDeleteValue(person)
+    const onDelete = (tag: TagType) => {
+        setDeleteValue(tag)
         onOpen()
     }
 
@@ -43,22 +43,20 @@ export const PersonTable = (props: PersonTableProps) => {
             <TableContainer>
                 <Table variant='simple'>
                     <TableCaption>
-                        Persons
+                        Tags
                     </TableCaption>
                     <Thead>
                         <Tr>
-                            <Th>First name</Th>
-                            <Th>Last name</Th>
+                            <Th>Name</Th>
                             <Th isNumeric>Actions</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
                         {
-                            persons.map((person, index) => {
+                            tags.map((tag, index) => {
                                 return (
-                                    <Tr key={`person_${index}`}>
-                                        <Td>{person.firstName}</Td>
-                                        <Td>{person.lastName}</Td>
+                                    <Tr key={`tag_${index}`}>
+                                        <Td>{tag.name}</Td>
                                         <Td isNumeric>
                                             <Box>
                                                 <IconButton
@@ -66,13 +64,13 @@ export const PersonTable = (props: PersonTableProps) => {
                                                     icon={<EditIcon/>}
                                                     colorScheme={'teal'}
                                                     mr={2}
-                                                    onClick={() => onEdit(person)}
+                                                    onClick={() => onEdit(tag)}
                                                 />
                                                 <IconButton
                                                     aria-label={'delete'}
                                                     icon={<DeleteIcon/>}
                                                     colorScheme={'red'}
-                                                    onClick={() => onDelete(person)}
+                                                    onClick={() => onDelete(tag)}
                                                 />
                                             </Box>
                                         </Td>
@@ -83,8 +81,7 @@ export const PersonTable = (props: PersonTableProps) => {
                     </Tbody>
                     <Tfoot>
                         <Tr>
-                            <Th>First name</Th>
-                            <Th>Last name</Th>
+                            <Th>Name</Th>
                             <Th isNumeric>Actions</Th>
                         </Tr>
                     </Tfoot>
@@ -95,13 +92,13 @@ export const PersonTable = (props: PersonTableProps) => {
                 flexDirection={"column-reverse"}
                 alignItems={"end"}
             >
-                <Button onClick={onAdd}>Add person</Button>
+                <Button onClick={onAdd}>Add tag</Button>
             </HStack>
             <DeleteAlertDialog
                 isOpen={isOpen}
                 onClose={onClose}
                 onYes={onYes}
-                message={`Are sure to delete ${deleteValue?.firstName} ${deleteValue?.lastName}?`}
+                message={`Are you sure to delete ${deleteValue?.name} tag?`}
             />
         </>
     )

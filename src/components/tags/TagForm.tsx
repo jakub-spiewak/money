@@ -1,7 +1,7 @@
 import {
     Box,
     Button, FormControl, FormErrorMessage, FormLabel,
-    Input, Mark,
+    Input,
     Modal, ModalBody,
     ModalCloseButton,
     ModalContent, ModalFooter,
@@ -10,16 +10,16 @@ import {
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
-import {PersonType} from "../../utils/CommonTypes";
+import {TagType} from "../../utils/CommonTypes";
 
-interface PersonFormProps {
-    editValue?: PersonType,
+interface TagFormProps {
+    editValue?: TagType,
     isOpen: boolean,
     onClose: () => void,
-    onSubmit: (person: PersonType) => void
+    onSubmit: (person: TagType) => void
 }
 
-export const PersonForm = (props: PersonFormProps) => {
+export const TagForm = (props: TagFormProps) => {
     const {editValue, isOpen, onClose, onSubmit: onSubmitFromProps} = props
 
     const {
@@ -27,15 +27,15 @@ export const PersonForm = (props: PersonFormProps) => {
         register,
         formState: {errors, isSubmitting},
         reset
-    } = useForm<PersonType>()
+    } = useForm<TagType>()
 
-    const onSubmit = (person: PersonType) => {
+    const onSubmit = (person: TagType) => {
         onSubmitFromProps({...person, id: editValue?.id || new Date().getMilliseconds().toString()})
         onClose()
     }
 
     useEffect(() => {
-        if (isOpen) reset(editValue || {firstName: undefined, lastName: undefined})
+        if (isOpen) reset(editValue || {name: undefined})
     }, [reset, editValue, isOpen])
 
     return (
@@ -47,39 +47,24 @@ export const PersonForm = (props: PersonFormProps) => {
                 <ModalOverlay/>
                 <ModalContent>
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <ModalHeader>Add person</ModalHeader>
+                        <ModalHeader>Add tag</ModalHeader>
                         <ModalCloseButton/>
                         <ModalBody pb={6}>
-                            <FormControl isInvalid={!!errors.firstName}>
-                                <FormLabel>First name</FormLabel>
-                                <Input
-                                    placeholder='First name'
-                                    {...register('firstName', {
-                                        required: 'This is required',
-                                        minLength: {value: 4, message: 'Minimum length should be 4'},
-                                        maxLength: {value: 32, message: 'Maximum length should be 32'}
-                                    })}
-                                />
-                                <FormErrorMessage>
-                                    {errors.firstName && errors.firstName.message}
-                                </FormErrorMessage>
-                            </FormControl>
-
                             <FormControl
                                 mt={4}
-                                isInvalid={!!errors.lastName}
+                                isInvalid={!!errors.name}
                             >
-                                <FormLabel>Last name</FormLabel>
+                                <FormLabel>Name</FormLabel>
                                 <Input
-                                    placeholder='Last name'
-                                    {...register('lastName', {
+                                    placeholder='Name'
+                                    {...register('name', {
                                         required: 'This is required',
                                         minLength: {value: 4, message: 'Minimum length should be 4'},
                                         maxLength: {value: 32, message: 'Maximum length should be 32'}
                                     })}
                                 />
                                 <FormErrorMessage>
-                                    {errors.lastName && errors.lastName.message}
+                                    {errors.name && errors.name.message}
                                 </FormErrorMessage>
                             </FormControl>
                         </ModalBody>

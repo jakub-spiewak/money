@@ -1,9 +1,11 @@
 import {createContext, ReactNode, useContext, useEffect, useMemo, useState} from "react";
-import {PersonType} from "./CommonTypes";
+import {PersonType, TagType} from "./CommonTypes";
 
 interface ContextType {
     persons: PersonType[],
-    setPersons: (persons: PersonType[]) => void
+    setPersons: (persons: PersonType[]) => void,
+    tags: TagType[],
+    setTags: (tags: TagType[]) => void
 }
 
 const getDefaultValue = (): ContextType => {
@@ -14,6 +16,9 @@ const getDefaultValue = (): ContextType => {
     return {
         persons: [],
         setPersons: () => {
+        },
+        tags: [],
+        setTags: () => {
         }
     }
 }
@@ -24,8 +29,14 @@ export const useGlobalContext: () => ContextType = () => useContext(GlobalContex
 export const GlobalContextProvider = ({children}: { children: ReactNode | ReactNode[] }) => {
     const defaultValue = useMemo(() => getDefaultValue(), [])
     const [persons, setPersons] = useState<PersonType[]>(defaultValue.persons)
+    const [tags, setTags] = useState<TagType[]>(defaultValue.tags)
 
-    const value: ContextType = useMemo(() => ({persons, setPersons}), [persons, setPersons])
+    const value: ContextType = useMemo(() => ({
+        persons,
+        setPersons,
+        tags,
+        setTags
+    }), [persons, setPersons, tags, setTags])
 
     useEffect(() => {
         localStorage.setItem('context', JSON.stringify(value))

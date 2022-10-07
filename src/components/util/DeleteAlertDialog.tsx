@@ -7,17 +7,16 @@ import {
     Button
 } from "@chakra-ui/react"
 import {useRef} from "react";
-import {PersonType} from "../../utils/CommonTypes";
 
-interface PersonDeleteAlertDialogProps {
+interface DeleteAlertDialogProps {
     isOpen: boolean,
     onClose: () => void,
     onYes: () => void,
-    person?: PersonType
+    message: string,
 }
 
-export const PersonDeleteAlertDialog = (props: PersonDeleteAlertDialogProps) => {
-    const  { isOpen, onClose, onYes, person} = props
+export const DeleteAlertDialog = (props: DeleteAlertDialogProps) => {
+    const  { isOpen, onClose, onYes, message} = props
     const cancelRef = useRef(null)
     return (
             <AlertDialog
@@ -31,11 +30,11 @@ export const PersonDeleteAlertDialog = (props: PersonDeleteAlertDialogProps) => 
                             fontSize='lg'
                             fontWeight='bold'
                         >
-                            Delete <span>{`${person?.firstName} ${person?.lastName}`}</span>
+                            Delete
                         </AlertDialogHeader>
 
                         <AlertDialogBody>
-                            Are you sure? You can't undo this action afterwards.
+                            {message}
                         </AlertDialogBody>
 
                         <AlertDialogFooter>
