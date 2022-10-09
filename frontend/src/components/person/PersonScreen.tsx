@@ -4,13 +4,17 @@ import {useGlobalContext} from "../../utils/Context";
 import {useState} from "react";
 import {PersonType} from "../../utils/CommonTypes";
 import {Container} from "@chakra-ui/react";
+import {useSelector} from "react-redux";
+import {selectPersons} from "../../redux/slice/person-slice";
 
 export const PersonScreen = () => {
-    const {persons, setPersons} = useGlobalContext()
+    const {setPersons} = useGlobalContext()
     const [modalState, setModalState] = useState<{ isOpen: boolean, editValue?: PersonType }>({
         isOpen: false,
         editValue: undefined
     })
+
+    const persons = useSelector(selectPersons)
 
     const onAdd = () => {
         setModalState({isOpen: true})

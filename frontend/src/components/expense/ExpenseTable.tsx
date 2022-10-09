@@ -59,7 +59,7 @@ export const ExpenseTable = (props: ExpenseTableProps) => {
                     </Thead>
                     <Tbody>
                         {
-                            expenses.map((expense, index) => {
+                            expenses.sort((a, b) => a.name.localeCompare(b.name)).map((expense, index) => {
                                 const person = persons.find(p => p.id === expense.personId)
                                 return (
                                     <Tr key={`expense${index}`}>
