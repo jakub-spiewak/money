@@ -20,7 +20,7 @@ interface Props {
     editValue?: PersonType,
     isOpen: boolean,
     onClose: () => void,
-    onSubmit: (person: PersonType) => void,
+    onSubmit: (person: PersonType) => Promise<void>,
 }
 
 export const PersonForm = (props: Props) => {
