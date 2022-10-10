@@ -6,6 +6,7 @@ interface Props {
 
 export const SubmitButton = (props: Props) => {
     const {isLoading} = props
+
     return (
         <Button
             colorScheme='blue'
@@ -16,4 +17,5 @@ export const SubmitButton = (props: Props) => {
             {isLoading ? <Spinner/> : "Save"}
         </Button>
     )
+
 }

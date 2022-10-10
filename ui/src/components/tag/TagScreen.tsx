@@ -1,47 +1,53 @@
 import {TagForm} from "./TagForm";
 import {TagTable} from "./TagTable";
-import {useGlobalContext} from "../../utils/Context";
-import {useState} from "react";
-import {TagType} from "../../utils/CommonTypes";
 import {Container} from "@chakra-ui/react";
+import {useFormModalStateType} from "../../utils/Hooks";
+
+import {
+    TagRequest,
+    TagResponse,
+    useCreateTagMutation,
+    useDeleteTagMutation, useReadTagQuery,
+    useUpdateTagMutation
+} from "../../redux/generated/redux-api";
 
 export const TagScreen = () => {
-    const {tags, setTags} = useGlobalContext()
-    const [modalState, setModalState] = useState<{ isOpen: boolean, editValue?: TagType }>({
-        isOpen: false,
-        editValue: undefined
-    })
 
-    const onAdd = () => {
-        setModalState({isOpen: true})
+    const modal = useFormModalStateType<TagRequest>()
+
+    const {data, isLoading, isFetching} = useReadTagQuery()
+    const [saveTag] = useCreateTagMutation()
+    const [updateTag] = useUpdateTagMutation()
+    const [deleteTag] = useDeleteTagMutation()
+
+    const onEdit = (tag: TagResponse) => {
+        tag.id && modal.open({id: tag.id, request: tag})
     }
 
-    const onEdit = (tag: TagType) => {
-        setModalState({isOpen: true, editValue: tag})
+    const onDelete = (tag: TagResponse) => {
+        tag.id && deleteTag({id: tag.id})
     }
 
-    const onDelete = (tag: TagType) => {
-        setTags(tags.filter(({id}) => id !== tag.id))
-    }
-
-    const onSubmit = (tag: TagType) => {
-        setTags([...tags.filter(({id}) => id !== tag.id), tag])
+    const onSubmit = async (tag: TagRequest) => {
+        if (modal.value?.id) await updateTag({id: modal.value.id, tagRequest: tag})
+        else await saveTag({tagRequest: tag})
     }
 
     return (
         <>
             <Container>
                 <TagTable
-                    tags={tags}
-                    onAdd={onAdd}
+                    tags={data || []}
+                    onAdd={modal.open}
                     onEdit={onEdit}
                     onDelete={onDelete}
+                    isLoading={isLoading || isFetching}
                 />
             </Container>
             <TagForm
-                editValue={modalState.editValue}
-                isOpen={modalState.isOpen}
-                onClose={() => setModalState({isOpen: false})}
+                value={modal.value}
+                isOpen={modal.isOpen}
+                onClose={modal.close}
                 onSubmit={onSubmit}
             />
         </>

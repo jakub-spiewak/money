@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
-import {PersonType} from "../../utils/CommonTypes";
 import {SubmitButton} from "../util/SubmitButton";
 import {PersonRequest} from "../../redux/generated/redux-api";
 import {FormModalValueType} from "../../utils/Hooks";
@@ -33,9 +32,9 @@ export const PersonForm = (props: Props) => {
         register,
         formState: {errors, isSubmitting},
         reset
-    } = useForm<PersonType>()
+    } = useForm<PersonRequest>()
 
-    const onSubmit = async (person: PersonType) => {
+    const onSubmit = async (person: PersonRequest) => {
         await onSubmitFromProps({...person})
         onClose()
     }

@@ -11,32 +11,35 @@ import {
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
 import {TagType} from "../../utils/CommonTypes";
+import {TagRequest} from "../../redux/generated/redux-api";
+import {FormModalValueType} from "../../utils/Hooks";
+import {SubmitButton} from "../util/SubmitButton";
 
-interface TagFormProps {
-    editValue?: TagType,
+interface Props {
+    value?: FormModalValueType<TagRequest>,
     isOpen: boolean,
     onClose: () => void,
-    onSubmit: (person: TagType) => void
+    onSubmit: (tag: TagRequest) => Promise<void>,
 }
 
-export const TagForm = (props: TagFormProps) => {
-    const {editValue, isOpen, onClose, onSubmit: onSubmitFromProps} = props
+export const TagForm = (props: Props) => {
+    const {value, isOpen, onClose, onSubmit: onSubmitFromProps} = props
 
     const {
         handleSubmit,
         register,
         formState: {errors, isSubmitting},
         reset
-    } = useForm<TagType>()
+    } = useForm<TagRequest>()
 
-    const onSubmit = (person: TagType) => {
-        onSubmitFromProps({...person, id: editValue?.id || new Date().getMilliseconds().toString()})
+    const onSubmit = async (tag: TagRequest) => {
+        await onSubmitFromProps({...tag})
         onClose()
     }
 
     useEffect(() => {
-        if (isOpen) reset(editValue || {name: undefined})
-    }, [reset, editValue, isOpen])
+        if (isOpen) reset(value?.request || {name: undefined})
+    }, [reset, value, isOpen])
 
     return (
         <Box>
@@ -70,14 +73,7 @@ export const TagForm = (props: TagFormProps) => {
                         </ModalBody>
 
                         <ModalFooter>
-                            <Button
-                                colorScheme='blue'
-                                mr={3}
-                                isLoading={isSubmitting}
-                                type='submit'
-                            >
-                                Save
-                            </Button>
+                            <SubmitButton isLoading={isSubmitting}/>
                             <Button onClick={onClose}>Cancel</Button>
                         </ModalFooter>
                     </form>

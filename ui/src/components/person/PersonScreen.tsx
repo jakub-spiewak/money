@@ -14,7 +14,7 @@ import {useFormModalStateType} from "../../utils/Hooks";
 export const PersonScreen = () => {
     const modal = useFormModalStateType<PersonResponse>()
 
-    const [savePerson] = useCreatePersonMutation()
+    const [createPerson] = useCreatePersonMutation()
     const [updatePerson] = useUpdatePersonMutation()
     const [deletePerson] = useDeletePersonMutation()
 
@@ -30,7 +30,7 @@ export const PersonScreen = () => {
 
     const onSubmit = async (person: PersonRequest) => {
         if (modal.value?.id) await updatePerson({id: modal.value.id, personRequest: person})
-        else await savePerson({personRequest: person})
+        else await createPerson({personRequest: person})
     }
 
     return (

@@ -14,24 +14,26 @@ import {
 import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";
 import {DeleteAlertDialog} from "../util/DeleteAlertDialog";
-import {TagType} from "../../utils/CommonTypes";
 import {useGlobalContext} from "../../utils/Context";
+import {TagRequest, TagResponse} from "../../redux/generated/redux-api";
+import {LoadingDataTable} from "../util/LoadingDataTable";
 
-interface TagTableProps {
-    tags: TagType[],
+interface Props {
+    tags: TagResponse[],
     onAdd: () => void;
-    onEdit: (tag: TagType) => void,
-    onDelete: (tag: TagType) => void,
+    onEdit: (tag: TagResponse) => void,
+    onDelete: (tag: TagRequest) => void,
+    isLoading?: boolean,
 }
 
-export const TagTable = (props: TagTableProps) => {
-    const {tags, onEdit, onDelete: onDeleteFromProps, onAdd} = props
+export const TagTable = (props: Props) => {
+    const {isLoading, tags, onEdit, onDelete: onDeleteFromProps, onAdd} = props
 
     const {isOpen, onClose, onOpen} = useDisclosure()
-    const [deleteValue, setDeleteValue] = useState<TagType>()
+    const [deleteValue, setDeleteValue] = useState<TagResponse>()
     const {expenses} = useGlobalContext()
 
-    const onDelete = (tag: TagType) => {
+    const onDelete = (tag: TagResponse) => {
         setDeleteValue(tag)
         onOpen()
     }
@@ -58,31 +60,33 @@ export const TagTable = (props: TagTableProps) => {
                     </Thead>
                     <Tbody>
                         {
-                            tags.map((tag, index) => {
-                                return (
-                                    <Tr key={`tag_${index}`}>
-                                        <Td>{tag.name}</Td>
-                                        <Td isNumeric>
-                                            <Box>
-                                                <IconButton
-                                                    aria-label={'edit'}
-                                                    icon={<EditIcon/>}
-                                                    colorScheme={'teal'}
-                                                    mr={2}
-                                                    onClick={() => onEdit(tag)}
-                                                />
-                                                <IconButton
-                                                    aria-label={'delete'}
-                                                    icon={<DeleteIcon/>}
-                                                    colorScheme={'red'}
-                                                    onClick={() => onDelete(tag)}
-                                                    disabled={expenses.findIndex(e => e.tagsIds.includes(tag.id)) >= 0}
-                                                />
-                                            </Box>
-                                        </Td>
-                                    </Tr>
-                                )
-                            })
+                            isLoading ?
+                                <LoadingDataTable size={2}/> :
+                                tags.map((tag, index) => {
+                                    return (
+                                        <Tr key={`tag_${index}`}>
+                                            <Td>{tag.name}</Td>
+                                            <Td isNumeric>
+                                                <Box>
+                                                    <IconButton
+                                                        aria-label={'edit'}
+                                                        icon={<EditIcon/>}
+                                                        colorScheme={'teal'}
+                                                        mr={2}
+                                                        onClick={() => onEdit(tag)}
+                                                    />
+                                                    <IconButton
+                                                        aria-label={'delete'}
+                                                        icon={<DeleteIcon/>}
+                                                        colorScheme={'red'}
+                                                        onClick={() => onDelete(tag)}
+                                                        disabled={expenses.findIndex(e => e.tagsIds.includes(tag.id || "")) >= 0}
+                                                    />
+                                                </Box>
+                                            </Td>
+                                        </Tr>
+                                    )
+                                })
                         }
                     </Tbody>
                     <Tfoot>
