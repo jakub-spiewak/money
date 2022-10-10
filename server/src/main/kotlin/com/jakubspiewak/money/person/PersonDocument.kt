@@ -12,7 +12,6 @@ import org.springframework.stereotype.Indexed
 @Document
 class PersonDocument(
     @Id
-    @JsonSerialize(using = MongodbObjectIdSerializer::class)
     var id: ObjectId = ObjectId.get(),
     @Field(FIRST_NAME_FIELD)
     var firstName: String = "",
