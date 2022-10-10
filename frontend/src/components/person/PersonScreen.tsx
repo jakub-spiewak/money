@@ -1,20 +1,27 @@
 import {PersonForm} from "./PersonForm";
 import {PersonTable} from "./PersonTable";
-import {useGlobalContext} from "../../utils/Context";
 import {useState} from "react";
 import {PersonType} from "../../utils/CommonTypes";
 import {Container} from "@chakra-ui/react";
-import {useSelector} from "react-redux";
-import {selectPersons} from "../../redux/slice/person-slice";
+import {
+    useCreatePersonMutation,
+    useDeletePersonMutation,
+    useEditPersonMutation, useFetchPersonQuery,
+} from "../../redux/slice/person-slice";
 
 export const PersonScreen = () => {
-    const {setPersons} = useGlobalContext()
     const [modalState, setModalState] = useState<{ isOpen: boolean, editValue?: PersonType }>({
         isOpen: false,
         editValue: undefined
     })
 
-    const persons = useSelector(selectPersons)
+    const [savePerson, {isLoading: isCreatePersonLoading}] = useCreatePersonMutation()
+    const [updatePerson, {isLoading: isEditPersonLoading}] = useEditPersonMutation()
+    const [deletePerson, {isLoading: isDeletePersonLoading}] = useDeletePersonMutation()
+
+    const {data} = useFetchPersonQuery()
+
+    const persons = data || []
 
     const onAdd = () => {
         setModalState({isOpen: true})
@@ -25,11 +32,12 @@ export const PersonScreen = () => {
     }
 
     const onDelete = (person: PersonType) => {
-        setPersons(persons.filter(({id}) => id !== person.id))
+        person.id && deletePerson(person.id)
     }
 
-    const onSubmit = (person: PersonType) => {
-        setPersons([...persons.filter(({id}) => id !== person.id), person])
+    const onSubmit = async (person: PersonType) => {
+        if (modalState.editValue) await updatePerson(person)
+        else await savePerson(person)
     }
 
     return (

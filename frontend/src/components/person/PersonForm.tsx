@@ -9,7 +9,7 @@ import {
     ModalCloseButton,
     ModalContent, ModalFooter,
     ModalHeader,
-    ModalOverlay,
+    ModalOverlay, Spinner,
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
@@ -19,7 +19,7 @@ interface PersonFormProps {
     editValue?: PersonType,
     isOpen: boolean,
     onClose: () => void,
-    onSubmit: (person: PersonType) => void
+    onSubmit: (person: PersonType) => void,
 }
 
 export const PersonForm = (props: PersonFormProps) => {
@@ -32,8 +32,8 @@ export const PersonForm = (props: PersonFormProps) => {
         reset
     } = useForm<PersonType>()
 
-    const onSubmit = (person: PersonType) => {
-        onSubmitFromProps({...person, id: editValue?.id || new Date().getMilliseconds().toString()})
+    const onSubmit = async (person: PersonType) => {
+        await onSubmitFromProps({...person, id: editValue?.id})
         onClose()
     }
 
@@ -94,7 +94,7 @@ export const PersonForm = (props: PersonFormProps) => {
                                 isLoading={isSubmitting}
                                 type='submit'
                             >
-                                Save
+                                {isSubmitting ? <Spinner/> : "Save"}
                             </Button>
                             <Button onClick={onClose}>Cancel</Button>
                         </ModalFooter>

@@ -1,5 +1,5 @@
 export interface PersonType {
-    id: string,
+    id?: string,
     firstName: string,
     lastName: string
 }
