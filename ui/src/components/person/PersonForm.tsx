@@ -9,20 +9,21 @@ import {
     ModalCloseButton,
     ModalContent, ModalFooter,
     ModalHeader,
-    ModalOverlay, Spinner,
+    ModalOverlay,
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
 import {PersonType} from "../../utils/CommonTypes";
+import {SubmitButton} from "../util/SubmitButton";
 
-interface PersonFormProps {
+interface Props {
     editValue?: PersonType,
     isOpen: boolean,
     onClose: () => void,
     onSubmit: (person: PersonType) => void,
 }
 
-export const PersonForm = (props: PersonFormProps) => {
+export const PersonForm = (props: Props) => {
     const {editValue, isOpen, onClose, onSubmit: onSubmitFromProps} = props
 
     const {
@@ -88,14 +89,7 @@ export const PersonForm = (props: PersonFormProps) => {
                         </ModalBody>
 
                         <ModalFooter>
-                            <Button
-                                colorScheme='blue'
-                                mr={3}
-                                isLoading={isSubmitting}
-                                type='submit'
-                            >
-                                {isSubmitting ? <Spinner/> : "Save"}
-                            </Button>
+                            <SubmitButton isLoading={isSubmitting}/>
                             <Button onClick={onClose}>Cancel</Button>
                         </ModalFooter>
                     </form>

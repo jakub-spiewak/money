@@ -15,16 +15,18 @@ import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";
 import {PersonType} from "../../utils/CommonTypes";
 import {DeleteAlertDialog} from "../util/DeleteAlertDialog";
+import {LoadingDataTable} from "../util/LoadingDataTable";
 
 interface PersonTableProps {
     persons: PersonType[],
     onAdd: () => void;
     onEdit: (person: PersonType) => void,
     onDelete: (person: PersonType) => void,
+    isLoading?: boolean
 }
 
 export const PersonTable = (props: PersonTableProps) => {
-    const {persons, onEdit, onDelete: onDeleteFromProps, onAdd} = props
+    const {persons, onEdit, onDelete: onDeleteFromProps, onAdd, isLoading} = props
 
     const {isOpen, onClose, onOpen} = useDisclosure()
     const [deleteValue, setDeleteValue] = useState<PersonType>()
@@ -54,31 +56,33 @@ export const PersonTable = (props: PersonTableProps) => {
                     </Thead>
                     <Tbody>
                         {
-                            persons.map((person, index) => {
-                                return (
-                                    <Tr key={`person_${index}`}>
-                                        <Td>{person.firstName}</Td>
-                                        <Td>{person.lastName}</Td>
-                                        <Td isNumeric>
-                                            <Box>
-                                                <IconButton
-                                                    aria-label={'edit'}
-                                                    icon={<EditIcon/>}
-                                                    colorScheme={'teal'}
-                                                    mr={2}
-                                                    onClick={() => onEdit(person)}
-                                                />
-                                                <IconButton
-                                                    aria-label={'delete'}
-                                                    icon={<DeleteIcon/>}
-                                                    colorScheme={'red'}
-                                                    onClick={() => onDelete(person)}
-                                                />
-                                            </Box>
-                                        </Td>
-                                    </Tr>
-                                )
-                            })
+                            isLoading ?
+                                <LoadingDataTable size={3}/> :
+                                persons.map((person, index) => {
+                                    return (
+                                        <Tr key={`person_${index}`}>
+                                            <Td>{person.firstName}</Td>
+                                            <Td>{person.lastName}</Td>
+                                            <Td isNumeric>
+                                                <Box>
+                                                    <IconButton
+                                                        aria-label={'edit'}
+                                                        icon={<EditIcon/>}
+                                                        colorScheme={'teal'}
+                                                        mr={2}
+                                                        onClick={() => onEdit(person)}
+                                                    />
+                                                    <IconButton
+                                                        aria-label={'delete'}
+                                                        icon={<DeleteIcon/>}
+                                                        colorScheme={'red'}
+                                                        onClick={() => onDelete(person)}
+                                                    />
+                                                </Box>
+                                            </Td>
+                                        </Tr>
+                                    )
+                                })
                         }
                     </Tbody>
                     <Tfoot>

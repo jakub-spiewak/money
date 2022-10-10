@@ -15,13 +15,11 @@ export const PersonScreen = () => {
         editValue: undefined
     })
 
-    const [savePerson, {isLoading: isCreatePersonLoading}] = useCreatePersonMutation()
-    const [updatePerson, {isLoading: isEditPersonLoading}] = useEditPersonMutation()
-    const [deletePerson, {isLoading: isDeletePersonLoading}] = useDeletePersonMutation()
+    const [savePerson] = useCreatePersonMutation()
+    const [updatePerson] = useEditPersonMutation()
+    const [deletePerson] = useDeletePersonMutation()
 
-    const {data} = useFetchPersonQuery()
-
-    const persons = data || []
+    const {data: persons, isLoading, isFetching} = useFetchPersonQuery()
 
     const onAdd = () => {
         setModalState({isOpen: true})
@@ -44,10 +42,11 @@ export const PersonScreen = () => {
         <>
             <Container>
                 <PersonTable
-                    persons={persons}
+                    persons={persons || []}
                     onAdd={onAdd}
                     onEdit={onEdit}
                     onDelete={onDelete}
+                    isLoading={isLoading || isFetching}
                 />
             </Container>
             <PersonForm
