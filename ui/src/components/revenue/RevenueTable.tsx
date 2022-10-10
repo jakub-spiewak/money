@@ -14,24 +14,24 @@ import {
 import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";
 import {DeleteAlertDialog} from "../util/DeleteAlertDialog";
-import {RevenueType} from "../../utils/CommonTypes";
-import {useGlobalContext} from "../../utils/Context";
+import {RevenueResponse} from "../../redux/generated/redux-api";
+import {LoadingDataTable} from "../util/LoadingDataTable";
 
-interface RevenueTableProps {
-    revenues: RevenueType[],
+interface Props {
+    revenues: RevenueResponse[],
     onAdd: () => void;
-    onEdit: (revenue: RevenueType) => void,
-    onDelete: (revenue: RevenueType) => void,
+    onEdit: (revenue: RevenueResponse) => void,
+    onDelete: (revenue: RevenueResponse) => void,
+    isLoading?: boolean
 }
 
-export const RevenueTable = (props: RevenueTableProps) => {
-    const {revenues, onEdit, onDelete: onDeleteFromProps, onAdd} = props
-    const {persons} = useGlobalContext()
+export const RevenueTable = (props: Props) => {
+    const {isLoading, revenues, onEdit, onDelete: onDeleteFromProps, onAdd} = props
 
     const {isOpen, onClose, onOpen} = useDisclosure()
-    const [deleteValue, setDeleteValue] = useState<RevenueType>()
+    const [deleteValue, setDeleteValue] = useState<RevenueResponse>()
 
-    const onDelete = (revenue: RevenueType) => {
+    const onDelete = (revenue: RevenueResponse) => {
         setDeleteValue(revenue)
         onOpen()
     }
@@ -57,33 +57,35 @@ export const RevenueTable = (props: RevenueTableProps) => {
                     </Thead>
                     <Tbody>
                         {
-                            revenues.map((revenue, index) => {
-                                const person = persons.find(p => p.id === revenue.personId)
-                                return (
-                                    <Tr key={`revenue_${index}`}>
-                                        <Td>{revenue.name}</Td>
-                                        <Td>{`${person?.firstName} ${person?.lastName}`}</Td>
-                                        <Td isNumeric><b>{revenue.amount.toFixed?.(2)}</b></Td>
-                                        <Td isNumeric>
-                                            <Box>
-                                                <IconButton
-                                                    aria-label={'edit'}
-                                                    icon={<EditIcon/>}
-                                                    colorScheme={'teal'}
-                                                    mr={2}
-                                                    onClick={() => onEdit(revenue)}
-                                                />
-                                                <IconButton
-                                                    aria-label={'delete'}
-                                                    icon={<DeleteIcon/>}
-                                                    colorScheme={'red'}
-                                                    onClick={() => onDelete(revenue)}
-                                                />
-                                            </Box>
-                                        </Td>
-                                    </Tr>
-                                )
-                            })
+                            isLoading ?
+                                <LoadingDataTable size={4}/> :
+                                revenues.map((revenue, index) => {
+                                    const {person} = revenue
+                                    return (
+                                        <Tr key={`revenue_${index}`}>
+                                            <Td>{revenue.name}</Td>
+                                            <Td>{`${person?.firstName} ${person?.lastName}`}</Td>
+                                            <Td isNumeric><b>{revenue.amount?.toFixed?.(2)}</b></Td>
+                                            <Td isNumeric>
+                                                <Box>
+                                                    <IconButton
+                                                        aria-label={'edit'}
+                                                        icon={<EditIcon/>}
+                                                        colorScheme={'teal'}
+                                                        mr={2}
+                                                        onClick={() => onEdit(revenue)}
+                                                    />
+                                                    <IconButton
+                                                        aria-label={'delete'}
+                                                        icon={<DeleteIcon/>}
+                                                        colorScheme={'red'}
+                                                        onClick={() => onDelete(revenue)}
+                                                    />
+                                                </Box>
+                                            </Td>
+                                        </Tr>
+                                    )
+                                })
                         }
                     </Tbody>
                     <Tfoot>

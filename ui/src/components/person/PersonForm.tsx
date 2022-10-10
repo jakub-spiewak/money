@@ -15,17 +15,15 @@ import {useForm} from "react-hook-form";
 import {useEffect} from "react";
 import {SubmitButton} from "../util/SubmitButton";
 import {PersonRequest} from "../../redux/generated/redux-api";
-import {FormModalValueType} from "../../utils/Hooks";
+import {FormModalStateType} from "../../utils/Hooks";
 
 interface Props {
-    value?: FormModalValueType<PersonRequest>,
-    isOpen: boolean,
-    onClose: () => void,
+    state: FormModalStateType<PersonRequest>
     onSubmit: (person: PersonRequest) => Promise<void>,
 }
 
 export const PersonForm = (props: Props) => {
-    const {value, isOpen, onClose, onSubmit: onSubmitFromProps} = props
+    const {state: {isOpen, value, close}, onSubmit: onSubmitFromProps} = props
 
     const {
         handleSubmit,
@@ -36,7 +34,7 @@ export const PersonForm = (props: Props) => {
 
     const onSubmit = async (person: PersonRequest) => {
         await onSubmitFromProps({...person})
-        onClose()
+        close()
     }
 
     useEffect(() => {
@@ -47,7 +45,7 @@ export const PersonForm = (props: Props) => {
         <Box>
             <Modal
                 isOpen={isOpen}
-                onClose={onClose}
+                onClose={close}
             >
                 <ModalOverlay/>
                 <ModalContent>
@@ -91,7 +89,7 @@ export const PersonForm = (props: Props) => {
 
                         <ModalFooter>
                             <SubmitButton isLoading={isSubmitting}/>
-                            <Button onClick={onClose}>Cancel</Button>
+                            <Button onClick={close}>Cancel</Button>
                         </ModalFooter>
                     </form>
                 </ModalContent>

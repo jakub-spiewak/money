@@ -45,9 +45,7 @@ export const TagScreen = () => {
                 />
             </Container>
             <TagForm
-                value={modal.value}
-                isOpen={modal.isOpen}
-                onClose={modal.close}
+                state={modal}
                 onSubmit={onSubmit}
             />
         </>

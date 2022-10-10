@@ -5,14 +5,14 @@ export type FormModalValueType<T> = {
     id: string
 }
 
-type UseFormModalStateType<T> = {
+export type FormModalStateType<T> = {
     isOpen: boolean,
     value?: FormModalValueType<T>,
     open: (value?: FormModalValueType<T>) => void,
     close: () => void
 }
 
-export function useFormModalStateType<T>(): UseFormModalStateType<T> {
+export function useFormModalStateType<T>(): FormModalStateType<T> {
     const [isOpen, setIsOpen] = useState(false)
     const [value, setValue] = useState<FormModalValueType<T>>()
 

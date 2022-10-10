@@ -1,5 +1,9 @@
 import { api } from "../api";
-export const addTagTypes = ["tag-controller", "person-controller"] as const;
+export const addTagTypes = [
+  "tag-controller",
+  "revenue-controller",
+  "person-controller",
+] as const;
 const injectedRtkApi = api
   .enhanceEndpoints({
     addTagTypes,
@@ -17,6 +21,27 @@ const injectedRtkApi = api
       deleteTag: build.mutation<DeleteTagApiResponse, DeleteTagApiArg>({
         query: (queryArg) => ({ url: `/tag/${queryArg.id}`, method: "DELETE" }),
         invalidatesTags: ["tag-controller"],
+      }),
+      updateRevenue: build.mutation<
+        UpdateRevenueApiResponse,
+        UpdateRevenueApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/revenue/${queryArg.id}`,
+          method: "PUT",
+          body: queryArg.revenueRequest,
+        }),
+        invalidatesTags: ["revenue-controller"],
+      }),
+      deleteRevenue: build.mutation<
+        DeleteRevenueApiResponse,
+        DeleteRevenueApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/revenue/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["revenue-controller"],
       }),
       updatePerson: build.mutation<UpdatePersonApiResponse, UpdatePersonApiArg>(
         {
@@ -49,6 +74,21 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["tag-controller"],
       }),
+      readRevenue: build.query<ReadRevenueApiResponse, ReadRevenueApiArg>({
+        query: () => ({ url: `/revenue` }),
+        providesTags: ["revenue-controller"],
+      }),
+      createRevenue: build.mutation<
+        CreateRevenueApiResponse,
+        CreateRevenueApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/revenue`,
+          method: "POST",
+          body: queryArg.revenueRequest,
+        }),
+        invalidatesTags: ["revenue-controller"],
+      }),
       readPerson: build.query<ReadPersonApiResponse, ReadPersonApiArg>({
         query: () => ({ url: `/person` }),
         providesTags: ["person-controller"],
@@ -76,6 +116,15 @@ export type DeleteTagApiResponse = /** status 200 OK */ Unit;
 export type DeleteTagApiArg = {
   id: string;
 };
+export type UpdateRevenueApiResponse = /** status 200 OK */ Unit;
+export type UpdateRevenueApiArg = {
+  id: string;
+  revenueRequest: RevenueRequest;
+};
+export type DeleteRevenueApiResponse = /** status 200 OK */ Unit;
+export type DeleteRevenueApiArg = {
+  id: string;
+};
 export type UpdatePersonApiResponse = /** status 200 OK */ Unit;
 export type UpdatePersonApiArg = {
   id: string;
@@ -91,6 +140,12 @@ export type CreateTagApiResponse = /** status 200 OK */ Unit;
 export type CreateTagApiArg = {
   tagRequest: TagRequest;
 };
+export type ReadRevenueApiResponse = /** status 200 OK */ RevenueResponse[];
+export type ReadRevenueApiArg = void;
+export type CreateRevenueApiResponse = /** status 200 OK */ Unit;
+export type CreateRevenueApiArg = {
+  revenueRequest: RevenueRequest;
+};
 export type ReadPersonApiResponse = /** status 200 OK */ PersonResponse[];
 export type ReadPersonApiArg = void;
 export type CreatePersonApiResponse = /** status 200 OK */ Unit;
@@ -100,6 +155,11 @@ export type CreatePersonApiArg = {
 export type Unit = object;
 export type TagRequest = {
   name?: string;
+};
+export type RevenueRequest = {
+  name?: string;
+  amount?: number;
+  personId?: string;
 };
 export type PersonRequest = {
   firstName?: string;
@@ -114,13 +174,23 @@ export type PersonResponse = {
   firstName?: string;
   lastName?: string;
 };
+export type RevenueResponse = {
+  id?: string;
+  name?: string;
+  amount?: number;
+  person?: PersonResponse;
+};
 export const {
   useUpdateTagMutation,
   useDeleteTagMutation,
+  useUpdateRevenueMutation,
+  useDeleteRevenueMutation,
   useUpdatePersonMutation,
   useDeletePersonMutation,
   useReadTagQuery,
   useCreateTagMutation,
+  useReadRevenueQuery,
+  useCreateRevenueMutation,
   useReadPersonQuery,
   useCreatePersonMutation,
 } = injectedRtkApi;

@@ -1,47 +1,58 @@
 import {RevenueForm} from "./RevenueForm";
 import {RevenueTable} from "./RevenueTable";
-import {useGlobalContext} from "../../utils/Context";
-import {useState} from "react";
 import {Container} from "@chakra-ui/react";
-import {RevenueType} from "../../utils/CommonTypes";
+import {useFormModalStateType} from "../../utils/Hooks";
+import {
+    RevenueRequest,
+    RevenueResponse,
+    useCreateRevenueMutation,
+    useDeleteRevenueMutation,
+    useReadRevenueQuery,
+    useUpdateRevenueMutation
+} from "../../redux/generated/redux-api";
 
 export const RevenueScreen = () => {
-    const {revenues, setRevenues} = useGlobalContext()
-    const [modalState, setModalState] = useState<{ isOpen: boolean, editValue?: RevenueType }>({
-        isOpen: false,
-        editValue: undefined
-    })
 
-    const onAdd = () => {
-        setModalState({isOpen: true})
+    const modal = useFormModalStateType<RevenueRequest>()
+
+    const {data, isLoading, isFetching} = useReadRevenueQuery()
+    const [saveRevenue] = useCreateRevenueMutation()
+    const [updateRevenue] = useUpdateRevenueMutation()
+    const [deleteRevenue] = useDeleteRevenueMutation()
+
+    const onEdit = (revenue: RevenueResponse) => {
+        revenue.id && modal.open({
+            id: revenue.id,
+            request: {
+                name: revenue.name,
+                amount: revenue.amount,
+                personId: revenue.person?.id
+            }
+        })
     }
 
-    const onEdit = (revenue: RevenueType) => {
-        setModalState({isOpen: true, editValue: revenue})
+    const onDelete = (revenue: RevenueResponse) => {
+        revenue.id && deleteRevenue({id: revenue.id})
     }
 
-    const onDelete = (revenue: RevenueType) => {
-        setRevenues(revenues.filter(({id}) => id !== revenue.id))
-    }
-
-    const onSubmit = (revenue: RevenueType) => {
-        setRevenues([...revenues.filter(({id}) => id !== revenue.id), revenue])
+    const onSubmit = async (revenue: RevenueRequest) => {
+        if (modal.value?.id) await updateRevenue({id: modal.value.id, revenueRequest: revenue})
+        else await saveRevenue({revenueRequest: revenue})
     }
 
     return (
         <>
             <Container>
                 <RevenueTable
-                    revenues={revenues}
-                    onAdd={onAdd}
+                    revenues={data || []}
+                    onAdd={modal.open}
                     onEdit={onEdit}
                     onDelete={onDelete}
+                    isLoading={isLoading || isFetching}
                 />
             </Container>
             <RevenueForm
-                editValue={modalState.editValue}
-                isOpen={modalState.isOpen}
-                onClose={() => setModalState({isOpen: false})}
+                state={modal}
                 onSubmit={onSubmit}
             />
         </>

@@ -10,20 +10,17 @@ import {
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
-import {TagType} from "../../utils/CommonTypes";
 import {TagRequest} from "../../redux/generated/redux-api";
-import {FormModalValueType} from "../../utils/Hooks";
+import {FormModalStateType} from "../../utils/Hooks";
 import {SubmitButton} from "../util/SubmitButton";
 
 interface Props {
-    value?: FormModalValueType<TagRequest>,
-    isOpen: boolean,
-    onClose: () => void,
+    state: FormModalStateType<TagRequest>
     onSubmit: (tag: TagRequest) => Promise<void>,
 }
 
 export const TagForm = (props: Props) => {
-    const {value, isOpen, onClose, onSubmit: onSubmitFromProps} = props
+    const {state: {isOpen, close, value}, onSubmit: onSubmitFromProps} = props
 
     const {
         handleSubmit,
@@ -34,7 +31,7 @@ export const TagForm = (props: Props) => {
 
     const onSubmit = async (tag: TagRequest) => {
         await onSubmitFromProps({...tag})
-        onClose()
+        close()
     }
 
     useEffect(() => {
@@ -45,7 +42,7 @@ export const TagForm = (props: Props) => {
         <Box>
             <Modal
                 isOpen={isOpen}
-                onClose={onClose}
+                onClose={close}
             >
                 <ModalOverlay/>
                 <ModalContent>
@@ -74,7 +71,7 @@ export const TagForm = (props: Props) => {
 
                         <ModalFooter>
                             <SubmitButton isLoading={isSubmitting}/>
-                            <Button onClick={onClose}>Cancel</Button>
+                            <Button onClick={close}>Cancel</Button>
                         </ModalFooter>
                     </form>
                 </ModalContent>

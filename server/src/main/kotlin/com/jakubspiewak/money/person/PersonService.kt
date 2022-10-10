@@ -9,14 +9,16 @@ import reactor.core.publisher.Mono
 
 @Service
 class PersonService(private val repository: PersonRepository) {
-    fun readAll(): Flux<PersonResponse> = repository.findAll()
-        .map {
+    companion object {
+        fun mapFromDocumentToResponse(value: PersonDocument): PersonResponse =
             PersonResponse(
-                id = it.id.toString(),
-                firstName = it.firstName,
-                lastName = it.lastName
+                id = value.id.toString(),
+                firstName = value.firstName,
+                lastName = value.lastName
             )
-        }
+    }
+    fun readAll(): Flux<PersonResponse> = repository.findAll()
+        .map { mapFromDocumentToResponse(it) }
 
     fun create(request: PersonRequest): Mono<Unit> = repository.save(
         PersonDocument(

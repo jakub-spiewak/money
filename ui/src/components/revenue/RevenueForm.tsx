@@ -17,45 +17,44 @@ import {
     NumberInput,
     NumberInputField,
     NumberInputStepper,
-    Select,
+    Select, Spinner,
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
-import {RevenueType} from "../../utils/CommonTypes";
-import {useGlobalContext} from "../../utils/Context";
+import {RevenueRequest, useReadPersonQuery} from "../../redux/generated/redux-api";
+import {FormModalStateType} from "../../utils/Hooks";
 
-interface RevenueProps {
-    editValue?: RevenueType,
-    isOpen: boolean,
-    onClose: () => void,
-    onSubmit: (revenue: RevenueType) => void
+interface Props {
+    state: FormModalStateType<RevenueRequest>,
+    onSubmit: (revenue: RevenueRequest) => Promise<void>
 }
 
-export const RevenueForm = (props: RevenueProps) => {
-    const {editValue, isOpen, onClose, onSubmit: onSubmitFromProps} = props
-    const {persons} = useGlobalContext()
+export const RevenueForm = (props: Props) => {
+    const {state: {isOpen, close, value}, onSubmit: onSubmitFromProps} = props
+
+    const {data: persons, isFetching} = useReadPersonQuery()
 
     const {
         handleSubmit,
         register,
         formState: {errors, isSubmitting},
         reset
-    } = useForm<RevenueType>()
+    } = useForm<RevenueRequest>()
 
-    const onSubmit = (revenue: RevenueType) => {
-        onSubmitFromProps({...revenue, id: editValue?.id || new Date().getMilliseconds().toString()})
-        onClose()
+    const onSubmit = async (revenue: RevenueRequest) => {
+        await onSubmitFromProps(revenue)
+        close()
     }
 
     useEffect(() => {
-        if (isOpen) reset(editValue || {amount: undefined, personId: undefined})
-    }, [reset, editValue, isOpen])
+        if (isOpen) reset(value?.request || {amount: undefined, personId: undefined})
+    }, [reset, value, isOpen])
 
     return (
         <Box>
             <Modal
                 isOpen={isOpen}
-                onClose={onClose}
+                onClose={close}
             >
                 <ModalOverlay/>
                 <ModalContent>
@@ -91,14 +90,17 @@ export const RevenueForm = (props: RevenueProps) => {
                                         required: 'This is required'
                                     })}
                                 >
-                                    {persons.map((person, index) => (
-                                        <option
-                                            key={`person_option_${index}`}
-                                            value={person.id}
-                                        >
-                                            {`${person.firstName} ${person.lastName}`}
-                                        </option>
-                                    ))}
+                                    {
+                                        isFetching ?
+                                            <Spinner/> :
+                                            persons?.map((person, index) => (
+                                                <option
+                                                    key={`person_option_${index}`}
+                                                    value={person.id}
+                                                >
+                                                    {`${person.firstName} ${person.lastName}`}
+                                                </option>
+                                            ))}
                                 </Select>
                                 <FormErrorMessage>
                                     {errors.personId && errors.personId.message}
@@ -143,7 +145,7 @@ export const RevenueForm = (props: RevenueProps) => {
                             >
                                 Save
                             </Button>
-                            <Button onClick={onClose}>Cancel</Button>
+                            <Button onClick={close}>Cancel</Button>
                         </ModalFooter>
                     </form>
                 </ModalContent>

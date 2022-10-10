@@ -12,6 +12,7 @@ import {
 import {useFormModalStateType} from "../../utils/Hooks";
 
 export const PersonScreen = () => {
+
     const modal = useFormModalStateType<PersonResponse>()
 
     const [createPerson] = useCreatePersonMutation()
@@ -45,9 +46,7 @@ export const PersonScreen = () => {
                 />
             </Container>
             <PersonForm
-                value={modal.value}
-                isOpen={modal.isOpen}
-                onClose={modal.close}
+                state={modal}
                 onSubmit={onSubmit}
             />
         </>
