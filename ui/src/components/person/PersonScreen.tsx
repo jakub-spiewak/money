@@ -1,58 +1,53 @@
 import {PersonForm} from "./PersonForm";
 import {PersonTable} from "./PersonTable";
-import {useState} from "react";
-import {PersonType} from "../../utils/CommonTypes";
 import {Container} from "@chakra-ui/react";
+
 import {
+    PersonRequest, PersonResponse,
     useCreatePersonMutation,
-    useDeletePersonMutation,
-    useEditPersonMutation, useFetchPersonQuery,
-} from "../../redux/slice/person-slice";
+    useDeletePersonMutation, useReadPersonQuery,
+    useUpdatePersonMutation
+} from "../../redux/generated/redux-api";
+
+import {useFormModalStateType} from "../../utils/Hooks";
 
 export const PersonScreen = () => {
-    const [modalState, setModalState] = useState<{ isOpen: boolean, editValue?: PersonType }>({
-        isOpen: false,
-        editValue: undefined
-    })
+    const modal = useFormModalStateType<PersonResponse>()
 
     const [savePerson] = useCreatePersonMutation()
-    const [updatePerson] = useEditPersonMutation()
+    const [updatePerson] = useUpdatePersonMutation()
     const [deletePerson] = useDeletePersonMutation()
 
-    const {data: persons, isLoading, isFetching} = useFetchPersonQuery()
+    const {data, isLoading, isFetching} = useReadPersonQuery()
 
-    const onAdd = () => {
-        setModalState({isOpen: true})
+    const onEdit = (person: PersonResponse) => {
+        person.id && modal.open({id: person.id, request: person})
     }
 
-    const onEdit = (person: PersonType) => {
-        setModalState({isOpen: true, editValue: person})
+    const onDelete = (person: PersonResponse) => {
+        person.id && deletePerson({id: person.id})
     }
 
-    const onDelete = (person: PersonType) => {
-        person.id && deletePerson(person.id)
-    }
-
-    const onSubmit = async (person: PersonType) => {
-        if (modalState.editValue) await updatePerson(person)
-        else await savePerson(person)
+    const onSubmit = async (person: PersonRequest) => {
+        if (modal.value?.id) await updatePerson({id: modal.value.id, personRequest: person})
+        else await savePerson({personRequest: person})
     }
 
     return (
         <>
             <Container>
                 <PersonTable
-                    persons={persons || []}
-                    onAdd={onAdd}
+                    persons={data || []}
+                    onAdd={modal.open}
                     onEdit={onEdit}
                     onDelete={onDelete}
                     isLoading={isLoading || isFetching}
                 />
             </Container>
             <PersonForm
-                editValue={modalState.editValue}
-                isOpen={modalState.isOpen}
-                onClose={() => setModalState({isOpen: false})}
+                value={modal.value}
+                isOpen={modal.isOpen}
+                onClose={modal.close}
                 onSubmit={onSubmit}
             />
         </>

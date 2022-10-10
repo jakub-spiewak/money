@@ -2,7 +2,7 @@ import {TagForm} from "./TagForm";
 import {TagTable} from "./TagTable";
 import {useGlobalContext} from "../../utils/Context";
 import {useState} from "react";
-import {PersonType, TagType} from "../../utils/CommonTypes";
+import {TagType} from "../../utils/CommonTypes";
 import {Container} from "@chakra-ui/react";
 
 export const TagScreen = () => {

@@ -1,9 +1,8 @@
 import 'chart.js/auto';
 import {
     Box,
-    Button, Center,
-    Container, Grid, GridItem, Heading,
-    HStack,
+    Center,
+    Container, Grid, GridItem,
     IconButton,
     Popover,
     PopoverArrow,

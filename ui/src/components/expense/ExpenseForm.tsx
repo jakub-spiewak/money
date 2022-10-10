@@ -23,7 +23,7 @@ import {useForm} from "react-hook-form";
 import {useEffect, useState} from "react";
 import {ExpenseType, TagType} from "../../utils/CommonTypes";
 import {useGlobalContext} from "../../utils/Context";
-import {AddIcon, ChevronDownIcon} from "@chakra-ui/icons";
+import {AddIcon} from "@chakra-ui/icons";
 
 interface ExpenseProps {
     editValue?: ExpenseType,

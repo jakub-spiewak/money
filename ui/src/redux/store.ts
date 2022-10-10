@@ -1,14 +1,14 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
-import {personSlice} from "./slice/person-slice"
+import {api} from "./api";
 
 const reducer = combineReducers({
-    [personSlice.reducerPath]: personSlice.reducer
+    [api.reducerPath]: api.reducer
 })
 
 export const store = configureStore({
     reducer,
     middleware: (getDefaultMiddleware) => {
-        return getDefaultMiddleware().concat(personSlice.middleware)
+        return getDefaultMiddleware().concat(api.middleware)
     }
 })
 

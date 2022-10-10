@@ -13,25 +13,25 @@ import {
 } from "@chakra-ui/react";
 import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";
-import {PersonType} from "../../utils/CommonTypes";
 import {DeleteAlertDialog} from "../util/DeleteAlertDialog";
 import {LoadingDataTable} from "../util/LoadingDataTable";
+import {PersonResponse} from "../../redux/generated/redux-api";
 
-interface PersonTableProps {
-    persons: PersonType[],
+interface Props {
+    persons: PersonResponse[],
     onAdd: () => void;
-    onEdit: (person: PersonType) => void,
-    onDelete: (person: PersonType) => void,
+    onEdit: (person: PersonResponse) => void,
+    onDelete: (person: PersonResponse) => void,
     isLoading?: boolean
 }
 
-export const PersonTable = (props: PersonTableProps) => {
+export const PersonTable = (props: Props) => {
     const {persons, onEdit, onDelete: onDeleteFromProps, onAdd, isLoading} = props
 
     const {isOpen, onClose, onOpen} = useDisclosure()
-    const [deleteValue, setDeleteValue] = useState<PersonType>()
+    const [deleteValue, setDeleteValue] = useState<PersonResponse>()
 
-    const onDelete = (person: PersonType) => {
+    const onDelete = (person: PersonResponse) => {
         setDeleteValue(person)
         onOpen()
     }

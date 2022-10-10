@@ -15,16 +15,18 @@ import {useForm} from "react-hook-form";
 import {useEffect} from "react";
 import {PersonType} from "../../utils/CommonTypes";
 import {SubmitButton} from "../util/SubmitButton";
+import {PersonRequest} from "../../redux/generated/redux-api";
+import {FormModalValueType} from "../../utils/Hooks";
 
 interface Props {
-    editValue?: PersonType,
+    value?: FormModalValueType<PersonRequest>,
     isOpen: boolean,
     onClose: () => void,
-    onSubmit: (person: PersonType) => Promise<void>,
+    onSubmit: (person: PersonRequest) => Promise<void>,
 }
 
 export const PersonForm = (props: Props) => {
-    const {editValue, isOpen, onClose, onSubmit: onSubmitFromProps} = props
+    const {value, isOpen, onClose, onSubmit: onSubmitFromProps} = props
 
     const {
         handleSubmit,
@@ -34,13 +36,13 @@ export const PersonForm = (props: Props) => {
     } = useForm<PersonType>()
 
     const onSubmit = async (person: PersonType) => {
-        await onSubmitFromProps({...person, id: editValue?.id})
+        await onSubmitFromProps({...person})
         onClose()
     }
 
     useEffect(() => {
-        if (isOpen) reset(editValue || {firstName: undefined, lastName: undefined})
-    }, [reset, editValue, isOpen])
+        if (isOpen) reset(value?.request || {firstName: undefined, lastName: undefined})
+    }, [reset, value, isOpen])
 
     return (
         <Box>
