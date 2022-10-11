@@ -1,8 +1,7 @@
 package com.jakubspiewak.money.revenue
 
-import com.jakubspiewak.money.person.PersonDocument
 import com.jakubspiewak.money.person.PersonRepository
-import com.jakubspiewak.money.person.PersonService
+import com.jakubspiewak.money.person.type.PersonResponse
 import com.jakubspiewak.money.revenue.type.RevenueRequest
 import com.jakubspiewak.money.revenue.type.RevenueResponse
 import org.bson.types.ObjectId
@@ -13,21 +12,20 @@ import reactor.core.publisher.Mono
 @Service
 class RevenueService(private val repository: RevenueRepository, private val personRepository: PersonRepository) {
 
-    companion object {
-        fun mapFromDocumentToResponse(value: RevenueDocument, personDocument: PersonDocument): RevenueResponse =
-            RevenueResponse(
-                id = value.id.toString(),
-                name = value.name,
-                amount = value.amount,
-                person = PersonService.mapFromDocumentToResponse(personDocument)
-            )
-    }
-
     fun readAll(): Flux<RevenueResponse> = repository.findAll()
         .flatMap { revenue ->
             personRepository.findById(revenue.person)
                 .map { person ->
-                    mapFromDocumentToResponse(revenue, person)
+                    RevenueResponse(
+                        id = revenue.id.toString(),
+                        name = revenue.name,
+                        amount = revenue.amount,
+                        person = PersonResponse(
+                            id = person.id.toString(),
+                            firstName = person.firstName,
+                            lastName = person.lastName
+                        )
+                    )
                 }
         }
 
