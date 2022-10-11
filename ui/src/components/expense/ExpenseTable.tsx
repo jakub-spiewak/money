@@ -1,38 +1,44 @@
 import {
-    Th,
-    Tr,
+    Box,
+    Button,
+    Flex,
+    HStack,
+    IconButton,
     Table,
     TableCaption,
     TableContainer,
-    Thead,
+    Tag,
+    TagLabel,
     Tbody,
     Td,
     Tfoot,
-    Box,
-    IconButton, HStack, useDisclosure, Button, Tag, TagLabel, Flex,
+    Th,
+    Thead,
+    Tr,
+    useDisclosure,
 } from "@chakra-ui/react";
 import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";
 import {DeleteAlertDialog} from "../util/DeleteAlertDialog";
-import {ExpenseType} from "../../utils/CommonTypes";
-import {useGlobalContext} from "../../utils/Context";
 import {AiOutlineHome} from "react-icons/ai";
+import {ExpenseResponse} from "../../redux/generated/redux-api";
+import {LoadingDataTable} from "../util/LoadingDataTable";
 
 interface ExpenseTableProps {
-    expenses: ExpenseType[],
+    expenses: ExpenseResponse[],
     onAdd: () => void;
-    onEdit: (expense: ExpenseType) => void,
-    onDelete: (expense: ExpenseType) => void,
+    onEdit: (expense: ExpenseResponse) => void,
+    onDelete: (expense: ExpenseResponse) => void,
+    isLoading?: boolean
 }
 
 export const ExpenseTable = (props: ExpenseTableProps) => {
-    const {expenses, onEdit, onDelete: onDeleteFromProps, onAdd} = props
-    const {persons, tags} = useGlobalContext()
+    const {isLoading, expenses, onEdit, onDelete: onDeleteFromProps, onAdd} = props
 
     const {isOpen, onClose, onOpen} = useDisclosure()
-    const [deleteValue, setDeleteValue] = useState<ExpenseType>()
+    const [deleteValue, setDeleteValue] = useState<ExpenseResponse>()
 
-    const onDelete = (expense: ExpenseType) => {
+    const onDelete = (expense: ExpenseResponse) => {
         setDeleteValue(expense)
         onOpen()
     }
@@ -59,55 +65,60 @@ export const ExpenseTable = (props: ExpenseTableProps) => {
                     </Thead>
                     <Tbody>
                         {
-                            expenses.sort((a, b) => a.name.localeCompare(b.name)).map((expense, index) => {
-                                const person = persons.find(p => p.id === expense.personId)
-                                return (
-                                    <Tr key={`expense${index}`}>
-                                        <Td>{expense.name}</Td>
-                                        <Td>{person ? `${person.firstName} ${person.lastName}` : <AiOutlineHome/>}</Td>
-                                        <Td isNumeric><b>{expense.amount.toFixed?.(2)}</b></Td>
-                                        <Td>
-                                            <Flex
-                                                wrap={'wrap'}
-                                                gap={1}
-                                            >
-                                                {expense.tagsIds.map((tagId, index) => {
-                                                    const tag = tags.find(t => t.id === tagId)
-                                                    if (!tag) return null
-                                                    return (
-                                                        <Tag
-                                                            size={'sm'}
-                                                            key={`form_selected_tag_${index}`}
-                                                            borderRadius='full'
-                                                            variant='solid'
-                                                            colorScheme='green'
-                                                        >
-                                                            <TagLabel>{tag.name.toUpperCase()}</TagLabel>
-                                                        </Tag>
-                                                    )
-                                                })}
-                                            </Flex>
-                                        </Td>
-                                        <Td isNumeric>
-                                            <Box>
-                                                <IconButton
-                                                    aria-label={'edit'}
-                                                    icon={<EditIcon/>}
-                                                    colorScheme={'teal'}
-                                                    mr={2}
-                                                    onClick={() => onEdit(expense)}
-                                                />
-                                                <IconButton
-                                                    aria-label={'delete'}
-                                                    icon={<DeleteIcon/>}
-                                                    colorScheme={'red'}
-                                                    onClick={() => onDelete(expense)}
-                                                />
-                                            </Box>
-                                        </Td>
-                                    </Tr>
-                                )
-                            })
+                            isLoading ?
+                                <LoadingDataTable size={5}/> :
+                                expenses.map((expense, index) => {
+                                    return (
+                                        <Tr key={`expense${index}`}>
+                                            <Td>{expense.name}</Td>
+                                            <Td>
+                                                {
+                                                    expense.person ? `${expense.person.firstName} ${expense.person.lastName}` :
+                                                        <AiOutlineHome/>
+                                                }
+                                            </Td>
+                                            <Td isNumeric><b>{expense.amount?.toFixed?.(2)}</b></Td>
+                                            <Td>
+                                                <Flex
+                                                    wrap={'wrap'}
+                                                    gap={1}
+                                                >
+                                                    {expense.tags?.map((tag, index) => {
+                                                        if (!tag) return null
+                                                        return (
+                                                            <Tag
+                                                                size={'sm'}
+                                                                key={`form_selected_tag_${index}`}
+                                                                borderRadius='full'
+                                                                variant='solid'
+                                                                colorScheme='green'
+                                                            >
+                                                                <TagLabel>{tag.name?.toUpperCase()}</TagLabel>
+                                                            </Tag>
+                                                        )
+                                                    })}
+                                                </Flex>
+                                            </Td>
+                                            <Td isNumeric>
+                                                <Box>
+                                                    <IconButton
+                                                        aria-label={'edit'}
+                                                        icon={<EditIcon/>}
+                                                        colorScheme={'teal'}
+                                                        mr={2}
+                                                        onClick={() => onEdit(expense)}
+                                                    />
+                                                    <IconButton
+                                                        aria-label={'delete'}
+                                                        icon={<DeleteIcon/>}
+                                                        colorScheme={'red'}
+                                                        onClick={() => onDelete(expense)}
+                                                    />
+                                                </Box>
+                                            </Td>
+                                        </Tr>
+                                    )
+                                })
                         }
                     </Tbody>
                     <Tfoot>

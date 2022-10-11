@@ -3,9 +3,11 @@ import {PersonTable} from "./PersonTable";
 import {Container} from "@chakra-ui/react";
 
 import {
-    PersonRequest, PersonResponse,
+    PersonRequest,
+    PersonResponse,
     useCreatePersonMutation,
-    useDeletePersonMutation, useReadPersonQuery,
+    useDeletePersonMutation,
+    useReadPersonQuery,
     useUpdatePersonMutation
 } from "../../redux/generated/redux-api";
 

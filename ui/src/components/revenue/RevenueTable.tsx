@@ -1,15 +1,18 @@
 import {
-    Th,
-    Tr,
+    Box,
+    Button,
+    HStack,
+    IconButton,
     Table,
     TableCaption,
     TableContainer,
-    Thead,
     Tbody,
     Td,
     Tfoot,
-    Box,
-    IconButton, HStack, useDisclosure, Button,
+    Th,
+    Thead,
+    Tr,
+    useDisclosure,
 } from "@chakra-ui/react";
 import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";

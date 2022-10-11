@@ -1,10 +1,15 @@
 import {
     Box,
-    Button, Flex,
+    Button,
+    Flex,
     FormControl,
     FormErrorMessage,
     FormLabel,
-    Input, Menu, MenuButton, MenuItem, MenuList,
+    Input,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -17,60 +22,64 @@ import {
     NumberInput,
     NumberInputField,
     NumberInputStepper,
-    Select, Tag, TagCloseButton, TagLabel,
+    Select,
+    Tag,
+    TagCloseButton,
+    TagLabel,
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect, useState} from "react";
-import {ExpenseType, TagType} from "../../utils/CommonTypes";
-import {useGlobalContext} from "../../utils/Context";
 import {AddIcon} from "@chakra-ui/icons";
+import {FormModalStateType} from "../../utils/Hooks";
+import {ExpenseRequest, TagResponse, useReadPersonQuery, useReadTagQuery} from "../../redux/generated/redux-api";
+import {SubmitButton} from "../util/SubmitButton";
 
 interface ExpenseProps {
-    editValue?: ExpenseType,
-    isOpen: boolean,
-    onClose: () => void,
-    onSubmit: (revenue: ExpenseType) => void
+    state: FormModalStateType<ExpenseRequest>,
+    onSubmit: (expense: ExpenseRequest) => Promise<void>
 }
 
 export const ExpenseForm = (props: ExpenseProps) => {
-    const {editValue, isOpen, onClose, onSubmit: onSubmitFromProps} = props
-    const {persons, tags} = useGlobalContext()
+    const {state: {isOpen, value, close}, onSubmit: onSubmitFromProps} = props
+
+    const {data: tags} = useReadTagQuery()
+    const {data: persons} = useReadPersonQuery()
 
     const {
         handleSubmit,
         register,
         formState: {errors, isSubmitting},
         reset
-    } = useForm<ExpenseType>()
+    } = useForm<ExpenseRequest>()
 
-    const [formTags, setFormTags] = useState<TagType[]>([])
+    const [formTags, setFormTags] = useState<TagResponse[]>([])
 
-    const onSubmit = (revenue: ExpenseType) => {
-        revenue.tagsIds = formTags.map((tag) => tag.id)
-        onSubmitFromProps({...revenue, id: editValue?.id || new Date().getMilliseconds().toString()})
-        onClose()
+    const onSubmit = async (expense: ExpenseRequest) => {
+        expense.tags = formTags.map((tag) => tag.id || "")
+        await onSubmitFromProps(expense)
+        close()
     }
 
     useEffect(() => {
         if (isOpen) {
-            reset(editValue || {amount: undefined, personId: undefined})
+            reset(value?.request || {amount: undefined, person: undefined, name: undefined, tags: undefined})
         }
-        if (isOpen && editValue) {
+
+        if (isOpen && value) {
             setFormTags(
-                editValue.tagsIds
-                    .map((tagId) => tags.find((t) => t.id === tagId))
-                    .filter(tag => tag !== undefined) as TagType[]
+                value.request?.tags
+                    ?.map((tag) => tags?.find(t => t.id === tag) || {}) || []
             )
         } else {
             setFormTags([])
         }
-    }, [reset, editValue, isOpen, tags])
+    }, [reset, value, isOpen, tags])
 
     return (
         <Box>
             <Modal
                 isOpen={isOpen}
-                onClose={onClose}
+                onClose={close}
             >
                 <ModalOverlay/>
                 <ModalContent>
@@ -97,14 +106,14 @@ export const ExpenseForm = (props: ExpenseProps) => {
                             </FormControl>
                             <FormControl
                                 mt={4}
-                                isInvalid={!!errors.personId}
+                                isInvalid={!!errors.person}
                             >
                                 <FormLabel>From</FormLabel>
                                 <Select
                                     placeholder={"Home"}
-                                    {...register('personId')}
+                                    {...register('person')}
                                 >
-                                    {persons.map((person, index) => (
+                                    {persons?.map((person, index) => (
                                         <option
                                             key={`person_option_${index}`}
                                             value={person.id}
@@ -114,7 +123,7 @@ export const ExpenseForm = (props: ExpenseProps) => {
                                     ))}
                                 </Select>
                                 <FormErrorMessage>
-                                    {errors.personId && errors.personId.message}
+                                    {errors.person && errors.person.message}
                                 </FormErrorMessage>
                             </FormControl>
                             <FormControl
@@ -151,19 +160,19 @@ export const ExpenseForm = (props: ExpenseProps) => {
                                         as={Button}
                                         mt={4}
                                         leftIcon={<AddIcon/>}
-                                        disabled={tags.filter(tag => !formTags.includes(tag)).length === 0}
+                                        disabled={tags?.filter(tag => !formTags.includes(tag)).length === 0}
                                     >
                                         Tag
                                     </MenuButton>
                                     <MenuList>
-                                        {tags.filter(tag => !formTags.includes(tag)).map((tag, index) => (
+                                        {tags?.filter(tag => !formTags.includes(tag)).map((tag, index) => (
                                             <MenuItem
                                                 key={`form_tag_${index}`}
                                                 onClick={() => {
                                                     setFormTags(prev => [...prev, tag])
                                                 }}
                                             >
-                                                {tag.name.toUpperCase()}
+                                                {tag.name?.toUpperCase()}
                                             </MenuItem>
                                         ))}
                                     </MenuList>
@@ -181,7 +190,7 @@ export const ExpenseForm = (props: ExpenseProps) => {
                                             variant='solid'
                                             colorScheme='green'
                                         >
-                                            <TagLabel>{tag.name.toUpperCase()}</TagLabel>
+                                            <TagLabel>{tag.name?.toUpperCase()}</TagLabel>
                                             <TagCloseButton
                                                 onClick={() => {
                                                     setFormTags(prev => prev.filter(t => t.id !== tag.id))
@@ -194,15 +203,8 @@ export const ExpenseForm = (props: ExpenseProps) => {
                         </ModalBody>
 
                         <ModalFooter>
-                            <Button
-                                colorScheme='blue'
-                                mr={3}
-                                isLoading={isSubmitting}
-                                type='submit'
-                            >
-                                Save
-                            </Button>
-                            <Button onClick={onClose}>Cancel</Button>
+                            <SubmitButton isLoading={isSubmitting}/>
+                            <Button onClick={close}>Cancel</Button>
                         </ModalFooter>
                     </form>
                 </ModalContent>

@@ -1,47 +1,69 @@
 import {ExpenseForm} from "./ExpenseForm";
 import {ExpenseTable} from "./ExpenseTable";
-import {useGlobalContext} from "../../utils/Context";
-import {useState} from "react";
 import {Container} from "@chakra-ui/react";
-import {ExpenseType} from "../../utils/CommonTypes";
+import {useFormModalStateType} from "../../utils/Hooks";
+import {
+    ExpenseRequest,
+    ExpenseResponse,
+    useCreateExpenseMutation,
+    useDeleteExpenseMutation,
+    useReadExpenseQuery,
+    useReadPersonQuery,
+    useReadTagQuery,
+    useUpdateExpenseMutation
+} from "../../redux/generated/redux-api";
+import {useEffect} from "react";
 
 export const ExpenseScreen = () => {
-    const {expenses, setExpenses} = useGlobalContext()
-    const [modalState, setModalState] = useState<{ isOpen: boolean, editValue?: ExpenseType }>({
-        isOpen: false,
-        editValue: undefined
-    })
 
-    const onAdd = () => {
-        setModalState({isOpen: true})
+    const modal = useFormModalStateType<ExpenseRequest>()
+
+    const {data: tags} = useReadTagQuery()
+    const {data: persons} = useReadPersonQuery()
+
+    const {data, isLoading, isFetching, refetch} = useReadExpenseQuery()
+    const [createExpense] = useCreateExpenseMutation()
+    const [updateExpense] = useUpdateExpenseMutation()
+    const [deleteExpense] = useDeleteExpenseMutation()
+
+    const onEdit = (expense: ExpenseResponse) => {
+        expense.id && modal.open({
+            id: expense.id,
+            request: {
+                name: expense.name,
+                amount: expense.amount,
+                person: expense.person?.id,
+                tags: expense.tags?.map(tag => tag.id || "") || []
+            }
+        })
     }
 
-    const onEdit = (expense: ExpenseType) => {
-        setModalState({isOpen: true, editValue: expense})
+    const onDelete = (expense: ExpenseResponse) => {
+        expense.id && deleteExpense({id: expense.id})
     }
 
-    const onDelete = (expense: ExpenseType) => {
-        setExpenses(expenses.filter(({id}) => id !== expense.id))
+    const onSubmit = async (expense: ExpenseRequest) => {
+        if (modal.value?.id) await updateExpense({id: modal.value.id, expenseRequest: expense})
+        else await createExpense({expenseRequest: expense})
     }
 
-    const onSubmit = (expense: ExpenseType) => {
-        setExpenses([...expenses.filter(({id}) => id !== expense.id), expense])
-    }
+    useEffect(() => {
+       refetch()
+    }, [tags, persons, refetch])
 
     return (
         <>
             <Container maxW={'8xl'}>
                 <ExpenseTable
-                    expenses={expenses}
-                    onAdd={onAdd}
+                    expenses={data || []}
+                    onAdd={modal.open}
                     onEdit={onEdit}
                     onDelete={onDelete}
+                    isLoading={isLoading && isFetching}
                 />
             </Container>
             <ExpenseForm
-                editValue={modalState.editValue}
-                isOpen={modalState.isOpen}
-                onClose={() => setModalState({isOpen: false})}
+                state={modal}
                 onSubmit={onSubmit}
             />
         </>

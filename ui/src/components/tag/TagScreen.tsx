@@ -7,7 +7,8 @@ import {
     TagRequest,
     TagResponse,
     useCreateTagMutation,
-    useDeleteTagMutation, useReadTagQuery,
+    useDeleteTagMutation,
+    useReadTagQuery,
     useUpdateTagMutation
 } from "../../redux/generated/redux-api";
 
@@ -16,7 +17,7 @@ export const TagScreen = () => {
     const modal = useFormModalStateType<TagRequest>()
 
     const {data, isLoading, isFetching} = useReadTagQuery()
-    const [saveTag] = useCreateTagMutation()
+    const [createTag] = useCreateTagMutation()
     const [updateTag] = useUpdateTagMutation()
     const [deleteTag] = useDeleteTagMutation()
 
@@ -30,8 +31,9 @@ export const TagScreen = () => {
 
     const onSubmit = async (tag: TagRequest) => {
         if (modal.value?.id) await updateTag({id: modal.value.id, tagRequest: tag})
-        else await saveTag({tagRequest: tag})
+        else await createTag({tagRequest: tag})
     }
+
 
     return (
         <>

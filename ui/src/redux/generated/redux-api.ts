@@ -3,6 +3,7 @@ export const addTagTypes = [
   "tag-controller",
   "revenue-controller",
   "person-controller",
+  "expense-controller",
 ] as const;
 const injectedRtkApi = api
   .enhanceEndpoints({
@@ -62,6 +63,27 @@ const injectedRtkApi = api
           invalidatesTags: ["person-controller"],
         }
       ),
+      updateExpense: build.mutation<
+        UpdateExpenseApiResponse,
+        UpdateExpenseApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/expense/${queryArg.id}`,
+          method: "PUT",
+          body: queryArg.expenseRequest,
+        }),
+        invalidatesTags: ["expense-controller"],
+      }),
+      deleteExpense: build.mutation<
+        DeleteExpenseApiResponse,
+        DeleteExpenseApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/expense/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["expense-controller"],
+      }),
       readTag: build.query<ReadTagApiResponse, ReadTagApiArg>({
         query: () => ({ url: `/tag` }),
         providesTags: ["tag-controller"],
@@ -103,6 +125,21 @@ const injectedRtkApi = api
           invalidatesTags: ["person-controller"],
         }
       ),
+      readExpense: build.query<ReadExpenseApiResponse, ReadExpenseApiArg>({
+        query: () => ({ url: `/expense` }),
+        providesTags: ["expense-controller"],
+      }),
+      createExpense: build.mutation<
+        CreateExpenseApiResponse,
+        CreateExpenseApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/expense`,
+          method: "POST",
+          body: queryArg.expenseRequest,
+        }),
+        invalidatesTags: ["expense-controller"],
+      }),
     }),
     overrideExisting: false,
   });
@@ -134,6 +171,15 @@ export type DeletePersonApiResponse = /** status 200 OK */ Unit;
 export type DeletePersonApiArg = {
   id: string;
 };
+export type UpdateExpenseApiResponse = /** status 200 OK */ Unit;
+export type UpdateExpenseApiArg = {
+  id: string;
+  expenseRequest: ExpenseRequest;
+};
+export type DeleteExpenseApiResponse = /** status 200 OK */ Unit;
+export type DeleteExpenseApiArg = {
+  id: string;
+};
 export type ReadTagApiResponse = /** status 200 OK */ TagResponse[];
 export type ReadTagApiArg = void;
 export type CreateTagApiResponse = /** status 200 OK */ Unit;
@@ -152,6 +198,12 @@ export type CreatePersonApiResponse = /** status 200 OK */ Unit;
 export type CreatePersonApiArg = {
   personRequest: PersonRequest;
 };
+export type ReadExpenseApiResponse = /** status 200 OK */ ExpenseResponse[];
+export type ReadExpenseApiArg = void;
+export type CreateExpenseApiResponse = /** status 200 OK */ Unit;
+export type CreateExpenseApiArg = {
+  expenseRequest: ExpenseRequest;
+};
 export type Unit = object;
 export type TagRequest = {
   name?: string;
@@ -164,6 +216,12 @@ export type RevenueRequest = {
 export type PersonRequest = {
   firstName?: string;
   lastName?: string;
+};
+export type ExpenseRequest = {
+  name?: string;
+  amount?: number;
+  person?: string;
+  tags?: string[];
 };
 export type TagResponse = {
   id?: string;
@@ -180,6 +238,13 @@ export type RevenueResponse = {
   amount?: number;
   person?: PersonResponse;
 };
+export type ExpenseResponse = {
+  id?: string;
+  name?: string;
+  amount?: number;
+  person?: PersonResponse;
+  tags?: TagResponse[];
+};
 export const {
   useUpdateTagMutation,
   useDeleteTagMutation,
@@ -187,10 +252,14 @@ export const {
   useDeleteRevenueMutation,
   useUpdatePersonMutation,
   useDeletePersonMutation,
+  useUpdateExpenseMutation,
+  useDeleteExpenseMutation,
   useReadTagQuery,
   useCreateTagMutation,
   useReadRevenueQuery,
   useCreateRevenueMutation,
   useReadPersonQuery,
   useCreatePersonMutation,
+  useReadExpenseQuery,
+  useCreateExpenseMutation,
 } = injectedRtkApi;
