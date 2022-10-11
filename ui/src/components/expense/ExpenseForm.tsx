@@ -56,6 +56,7 @@ export const ExpenseForm = (props: ExpenseProps) => {
 
     const onSubmit = async (expense: ExpenseRequest) => {
         expense.tags = formTags.map((tag) => tag.id || "")
+        if (expense.person === "") expense.person = undefined
         await onSubmitFromProps(expense)
         close()
     }

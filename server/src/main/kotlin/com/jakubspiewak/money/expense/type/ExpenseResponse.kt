@@ -8,6 +8,6 @@ data class ExpenseResponse(
     val id: String,
     val name: String,
     val amount: BigDecimal,
-    val person: PersonResponse,
+    val person: PersonResponse?,
     val tags: List<TagResponse>
 )
