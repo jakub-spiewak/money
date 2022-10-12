@@ -4,7 +4,7 @@ const config = {
     apiFile: './api.ts',
     outputFile: './generated/redux-api.ts',
     hooks: true,
-    tag: true
+    tag: true,
 }
 
 module.exports = config

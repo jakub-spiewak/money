@@ -1,6 +1,6 @@
 import {TagForm} from "./TagForm";
 import {TagTable} from "./TagTable";
-import {Container} from "@chakra-ui/react";
+import {Center} from "@chakra-ui/react";
 import {useFormModalStateType} from "../../utils/Hooks";
 
 import {
@@ -37,7 +37,7 @@ export const TagScreen = () => {
 
     return (
         <>
-            <Container>
+            <Center>
                 <TagTable
                     tags={data || []}
                     onAdd={modal.open}
@@ -45,7 +45,7 @@ export const TagScreen = () => {
                     onDelete={onDelete}
                     isLoading={isLoading || isFetching}
                 />
-            </Container>
+            </Center>
             <TagForm
                 state={modal}
                 onSubmit={onSubmit}

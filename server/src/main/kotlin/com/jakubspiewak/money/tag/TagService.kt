@@ -3,13 +3,14 @@ package com.jakubspiewak.money.tag
 import com.jakubspiewak.money.tag.type.TagRequest
 import com.jakubspiewak.money.tag.type.TagResponse
 import org.bson.types.ObjectId
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Service
 class TagService(private val repository: TagRepository) {
-    fun readAll(): Flux<TagResponse> = repository.findAll()
+    fun readAll(): Flux<TagResponse> = repository.findAll(Sort.by(Sort.Direction.ASC, "name"))
         .map {
             TagResponse(
                 id = it.id.toString(),

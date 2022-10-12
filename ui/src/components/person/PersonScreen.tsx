@@ -1,6 +1,6 @@
 import {PersonForm} from "./PersonForm";
 import {PersonTable} from "./PersonTable";
-import {Container} from "@chakra-ui/react";
+import {Center} from "@chakra-ui/react";
 
 import {
     PersonRequest,
@@ -38,7 +38,7 @@ export const PersonScreen = () => {
 
     return (
         <>
-            <Container>
+            <Center px={0}>
                 <PersonTable
                     persons={data || []}
                     onAdd={modal.open}
@@ -46,7 +46,7 @@ export const PersonScreen = () => {
                     onDelete={onDelete}
                     isLoading={isLoading || isFetching}
                 />
-            </Container>
+            </Center>
             <PersonForm
                 state={modal}
                 onSubmit={onSubmit}

@@ -1,11 +1,17 @@
 package com.jakubspiewak.money.tag
 
 import com.jakubspiewak.money.tag.type.TagRequest
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.*
 
+@Tag(name = TagController.TAG)
 @RequestMapping("tag")
 @RestController
 class TagController(private val service: TagService) {
+    companion object {
+        const val TAG = "tag"
+    }
+
     @PostMapping
     fun createTag(@RequestBody request: TagRequest) = service.create(request)
 

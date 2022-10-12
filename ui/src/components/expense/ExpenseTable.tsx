@@ -15,7 +15,7 @@ import {
     Th,
     Thead,
     Tr,
-    useDisclosure,
+    useDisclosure, VStack,
 } from "@chakra-ui/react";
 import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";
@@ -49,96 +49,98 @@ export const ExpenseTable = (props: ExpenseTableProps) => {
 
     return (
         <>
-            <TableContainer>
-                <Table variant='simple'>
-                    <TableCaption>
-                        Expenses
-                    </TableCaption>
-                    <Thead>
-                        <Tr>
-                            <Th>Name</Th>
-                            <Th>Person</Th>
-                            <Th isNumeric>Amount</Th>
-                            <Th>Tags</Th>
-                            <Th isNumeric>Actions</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {
-                            isLoading ?
-                                <LoadingDataTable size={5}/> :
-                                expenses.map((expense, index) => {
-                                    return (
-                                        <Tr key={`expense${index}`}>
-                                            <Td>{expense.name}</Td>
-                                            <Td>
-                                                {
-                                                    expense.person ? `${expense.person.firstName} ${expense.person.lastName}` :
-                                                        <AiOutlineHome/>
-                                                }
-                                            </Td>
-                                            <Td isNumeric><b>{expense.amount?.toFixed?.(2)}</b></Td>
-                                            <Td>
-                                                <Flex
-                                                    wrap={'wrap'}
-                                                    gap={1}
-                                                >
-                                                    {expense.tags?.map((tag, index) => {
-                                                        if (!tag) return null
-                                                        return (
-                                                            <Tag
-                                                                size={'sm'}
-                                                                key={`form_selected_tag_${index}`}
-                                                                borderRadius='full'
-                                                                variant='solid'
-                                                                colorScheme='green'
-                                                            >
-                                                                <TagLabel>{tag.name?.toUpperCase()}</TagLabel>
-                                                            </Tag>
-                                                        )
-                                                    })}
-                                                </Flex>
-                                            </Td>
-                                            <Td isNumeric>
-                                                <Box>
-                                                    <IconButton
-                                                        aria-label={'edit'}
-                                                        icon={<EditIcon/>}
-                                                        colorScheme={'teal'}
-                                                        mr={2}
-                                                        onClick={() => onEdit(expense)}
-                                                    />
-                                                    <IconButton
-                                                        aria-label={'delete'}
-                                                        icon={<DeleteIcon/>}
-                                                        colorScheme={'red'}
-                                                        onClick={() => onDelete(expense)}
-                                                    />
-                                                </Box>
-                                            </Td>
-                                        </Tr>
-                                    )
-                                })
-                        }
-                    </Tbody>
-                    <Tfoot>
-                        <Tr>
-                            <Th>Name</Th>
-                            <Th>Person</Th>
-                            <Th isNumeric>Amount</Th>
-                            <Th>Tags</Th>
-                            <Th isNumeric>Actions</Th>
-                        </Tr>
-                    </Tfoot>
-                </Table>
-            </TableContainer>
-            <HStack
-                width={"full"}
-                flexDirection={"column-reverse"}
-                alignItems={"end"}
-            >
-                <Button onClick={onAdd}>Add expense</Button>
-            </HStack>
+            <VStack maxW={"100vw"}>
+                <TableContainer>
+                    <Table variant='simple'>
+                        <TableCaption>
+                            Expenses
+                        </TableCaption>
+                        <Thead>
+                            <Tr>
+                                <Th>Name</Th>
+                                <Th>Person</Th>
+                                <Th isNumeric>Amount</Th>
+                                <Th>Tags</Th>
+                                <Th isNumeric>Actions</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {
+                                isLoading ?
+                                    <LoadingDataTable size={5}/> :
+                                    expenses.map((expense, index) => {
+                                        return (
+                                            <Tr key={`expense${index}`}>
+                                                <Td>{expense.name}</Td>
+                                                <Td>
+                                                    {
+                                                        expense.person ? `${expense.person.firstName} ${expense.person.lastName}` :
+                                                            <AiOutlineHome/>
+                                                    }
+                                                </Td>
+                                                <Td isNumeric><b>{expense.amount?.toFixed?.(2)}</b></Td>
+                                                <Td>
+                                                    <Flex
+                                                        wrap={'wrap'}
+                                                        gap={1}
+                                                    >
+                                                        {expense.tags?.map((tag, index) => {
+                                                            if (!tag) return null
+                                                            return (
+                                                                <Tag
+                                                                    size={'sm'}
+                                                                    key={`form_selected_tag_${index}`}
+                                                                    borderRadius='full'
+                                                                    variant='solid'
+                                                                    colorScheme='green'
+                                                                >
+                                                                    <TagLabel>{tag.name?.toUpperCase()}</TagLabel>
+                                                                </Tag>
+                                                            )
+                                                        })}
+                                                    </Flex>
+                                                </Td>
+                                                <Td isNumeric>
+                                                    <Box>
+                                                        <IconButton
+                                                            aria-label={'edit'}
+                                                            icon={<EditIcon/>}
+                                                            colorScheme={'teal'}
+                                                            mr={2}
+                                                            onClick={() => onEdit(expense)}
+                                                        />
+                                                        <IconButton
+                                                            aria-label={'delete'}
+                                                            icon={<DeleteIcon/>}
+                                                            colorScheme={'red'}
+                                                            onClick={() => onDelete(expense)}
+                                                        />
+                                                    </Box>
+                                                </Td>
+                                            </Tr>
+                                        )
+                                    })
+                            }
+                        </Tbody>
+                        <Tfoot>
+                            <Tr>
+                                <Th>Name</Th>
+                                <Th>Person</Th>
+                                <Th isNumeric>Amount</Th>
+                                <Th>Tags</Th>
+                                <Th isNumeric>Actions</Th>
+                            </Tr>
+                        </Tfoot>
+                    </Table>
+                </TableContainer>
+                <HStack
+                    width={"full"}
+                    flexDirection={"column-reverse"}
+                    alignItems={"end"}
+                >
+                    <Button onClick={onAdd}>Add expense</Button>
+                </HStack>
+            </VStack>
             <DeleteAlertDialog
                 isOpen={isOpen}
                 onClose={onClose}

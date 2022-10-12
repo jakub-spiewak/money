@@ -12,7 +12,7 @@ import {
     Th,
     Thead,
     Tr,
-    useDisclosure,
+    useDisclosure, VStack,
 } from "@chakra-ui/react";
 import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";
@@ -45,69 +45,71 @@ export const RevenueTable = (props: Props) => {
 
     return (
         <>
-            <TableContainer>
-                <Table variant='simple'>
-                    <TableCaption>
-                        Revenues
-                    </TableCaption>
-                    <Thead>
-                        <Tr>
-                            <Th>Name</Th>
-                            <Th>Person</Th>
-                            <Th isNumeric>Amount</Th>
-                            <Th isNumeric>Actions</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {
-                            isLoading ?
-                                <LoadingDataTable size={4}/> :
-                                revenues.map((revenue, index) => {
-                                    const {person} = revenue
-                                    return (
-                                        <Tr key={`revenue_${index}`}>
-                                            <Td>{revenue.name}</Td>
-                                            <Td>{`${person?.firstName} ${person?.lastName}`}</Td>
-                                            <Td isNumeric><b>{revenue.amount?.toFixed?.(2)}</b></Td>
-                                            <Td isNumeric>
-                                                <Box>
-                                                    <IconButton
-                                                        aria-label={'edit'}
-                                                        icon={<EditIcon/>}
-                                                        colorScheme={'teal'}
-                                                        mr={2}
-                                                        onClick={() => onEdit(revenue)}
-                                                    />
-                                                    <IconButton
-                                                        aria-label={'delete'}
-                                                        icon={<DeleteIcon/>}
-                                                        colorScheme={'red'}
-                                                        onClick={() => onDelete(revenue)}
-                                                    />
-                                                </Box>
-                                            </Td>
-                                        </Tr>
-                                    )
-                                })
-                        }
-                    </Tbody>
-                    <Tfoot>
-                        <Tr>
-                            <Th>Name</Th>
-                            <Th>Person</Th>
-                            <Th isNumeric>Amount</Th>
-                            <Th isNumeric>Actions</Th>
-                        </Tr>
-                    </Tfoot>
-                </Table>
-            </TableContainer>
-            <HStack
-                width={"full"}
-                flexDirection={"column-reverse"}
-                alignItems={"end"}
-            >
-                <Button onClick={onAdd}>Add revenue</Button>
-            </HStack>
+            <VStack maxW={"100vw"}>
+                <TableContainer>
+                    <Table variant='simple'>
+                        <TableCaption>
+                            Revenues
+                        </TableCaption>
+                        <Thead>
+                            <Tr>
+                                <Th>Name</Th>
+                                <Th>Person</Th>
+                                <Th isNumeric>Amount</Th>
+                                <Th isNumeric>Actions</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {
+                                isLoading ?
+                                    <LoadingDataTable size={4}/> :
+                                    revenues.map((revenue, index) => {
+                                        const {person} = revenue
+                                        return (
+                                            <Tr key={`revenue_${index}`}>
+                                                <Td>{revenue.name}</Td>
+                                                <Td>{`${person?.firstName} ${person?.lastName}`}</Td>
+                                                <Td isNumeric><b>{revenue.amount?.toFixed?.(2)}</b></Td>
+                                                <Td isNumeric>
+                                                    <Box>
+                                                        <IconButton
+                                                            aria-label={'edit'}
+                                                            icon={<EditIcon/>}
+                                                            colorScheme={'teal'}
+                                                            mr={2}
+                                                            onClick={() => onEdit(revenue)}
+                                                        />
+                                                        <IconButton
+                                                            aria-label={'delete'}
+                                                            icon={<DeleteIcon/>}
+                                                            colorScheme={'red'}
+                                                            onClick={() => onDelete(revenue)}
+                                                        />
+                                                    </Box>
+                                                </Td>
+                                            </Tr>
+                                        )
+                                    })
+                            }
+                        </Tbody>
+                        <Tfoot>
+                            <Tr>
+                                <Th>Name</Th>
+                                <Th>Person</Th>
+                                <Th isNumeric>Amount</Th>
+                                <Th isNumeric>Actions</Th>
+                            </Tr>
+                        </Tfoot>
+                    </Table>
+                </TableContainer>
+                <HStack
+                    width={"full"}
+                    flexDirection={"column-reverse"}
+                    alignItems={"end"}
+                >
+                    <Button onClick={onAdd}>Add revenue</Button>
+                </HStack>
+            </VStack>
             <DeleteAlertDialog
                 isOpen={isOpen}
                 onClose={onClose}

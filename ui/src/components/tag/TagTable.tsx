@@ -13,6 +13,7 @@ import {
     Thead,
     Tr,
     useDisclosure,
+    VStack,
 } from "@chakra-ui/react";
 import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";
@@ -20,6 +21,7 @@ import {DeleteAlertDialog} from "../util/DeleteAlertDialog";
 import {useGlobalContext} from "../../utils/Context";
 import {TagRequest, TagResponse} from "../../redux/generated/redux-api";
 import {LoadingDataTable} from "../util/LoadingDataTable";
+import {theme} from "../../theme";
 
 interface Props {
     tags: TagResponse[],
@@ -47,66 +49,68 @@ export const TagTable = (props: Props) => {
 
     return (
         <>
-            <TableContainer>
-                <Table
-                    variant='simple'
-                    size={'sm'}
+            <VStack maxW={"100vh"}>
+                <TableContainer minW={["100vw", theme.breakpoints.sm]}>
+                    <Table
+                        variant='simple'
+                        size={'sm'}
+                    >
+                        <TableCaption>
+                            Tags
+                        </TableCaption>
+                        <Thead>
+                            <Tr>
+                                <Th>Name</Th>
+                                <Th isNumeric>Actions</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {
+                                isLoading ?
+                                    <LoadingDataTable size={2}/> :
+                                    tags.map((tag, index) => {
+                                        return (
+                                            <Tr key={`tag_${index}`}>
+                                                <Td>{tag.name}</Td>
+                                                <Td isNumeric>
+                                                    <Box>
+                                                        <IconButton
+                                                            aria-label={'edit'}
+                                                            icon={<EditIcon/>}
+                                                            colorScheme={'teal'}
+                                                            mr={2}
+                                                            onClick={() => onEdit(tag)}
+                                                        />
+                                                        <IconButton
+                                                            aria-label={'delete'}
+                                                            icon={<DeleteIcon/>}
+                                                            colorScheme={'red'}
+                                                            onClick={() => onDelete(tag)}
+                                                            disabled={expenses.findIndex(e => e.tagsIds.includes(tag.id || "")) >= 0}
+                                                        />
+                                                    </Box>
+                                                </Td>
+                                            </Tr>
+                                        )
+                                    })
+                            }
+                        </Tbody>
+                        <Tfoot>
+                            <Tr>
+                                <Th>Name</Th>
+                                <Th isNumeric>Actions</Th>
+                            </Tr>
+                        </Tfoot>
+                    </Table>
+                </TableContainer>
+                <HStack
+                    width={"full"}
+                    flexDirection={"column-reverse"}
+                    alignItems={"end"}
                 >
-                    <TableCaption>
-                        Tags
-                    </TableCaption>
-                    <Thead>
-                        <Tr>
-                            <Th>Name</Th>
-                            <Th isNumeric>Actions</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {
-                            isLoading ?
-                                <LoadingDataTable size={2}/> :
-                                tags.map((tag, index) => {
-                                    return (
-                                        <Tr key={`tag_${index}`}>
-                                            <Td>{tag.name}</Td>
-                                            <Td isNumeric>
-                                                <Box>
-                                                    <IconButton
-                                                        aria-label={'edit'}
-                                                        icon={<EditIcon/>}
-                                                        colorScheme={'teal'}
-                                                        mr={2}
-                                                        onClick={() => onEdit(tag)}
-                                                    />
-                                                    <IconButton
-                                                        aria-label={'delete'}
-                                                        icon={<DeleteIcon/>}
-                                                        colorScheme={'red'}
-                                                        onClick={() => onDelete(tag)}
-                                                        disabled={expenses.findIndex(e => e.tagsIds.includes(tag.id || "")) >= 0}
-                                                    />
-                                                </Box>
-                                            </Td>
-                                        </Tr>
-                                    )
-                                })
-                        }
-                    </Tbody>
-                    <Tfoot>
-                        <Tr>
-                            <Th>Name</Th>
-                            <Th isNumeric>Actions</Th>
-                        </Tr>
-                    </Tfoot>
-                </Table>
-            </TableContainer>
-            <HStack
-                width={"full"}
-                flexDirection={"column-reverse"}
-                alignItems={"end"}
-            >
-                <Button onClick={onAdd}>Add tag</Button>
-            </HStack>
+                    <Button onClick={onAdd}>Add tag</Button>
+                </HStack>
+            </VStack>
             <DeleteAlertDialog
                 isOpen={isOpen}
                 onClose={onClose}

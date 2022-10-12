@@ -133,6 +133,7 @@ export const ExpenseForm = (props: ExpenseProps) => {
                             >
                                 <FormLabel>Amount</FormLabel>
                                 <NumberInput
+                                    isValidCharacter={(c) => /[0-9.,]/.test(c)}
                                     defaultValue={0}
                                     min={0}
                                     placeholder='Amount'

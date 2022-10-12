@@ -3,6 +3,7 @@ package com.jakubspiewak.money.person
 import com.jakubspiewak.money.person.type.PersonRequest
 import com.jakubspiewak.money.person.type.PersonResponse
 import org.bson.types.ObjectId
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -17,7 +18,8 @@ class PersonService(private val repository: PersonRepository) {
                 lastName = value.lastName
             )
     }
-    fun readAll(): Flux<PersonResponse> = repository.findAll()
+
+    fun readAll(): Flux<PersonResponse> = repository.findAll(Sort.by(Sort.Direction.ASC, "firstName"))
         .map { mapFromDocumentToResponse(it) }
 
     fun create(request: PersonRequest): Mono<Unit> = repository.save(

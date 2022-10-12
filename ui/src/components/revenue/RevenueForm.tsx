@@ -112,6 +112,7 @@ export const RevenueForm = (props: Props) => {
                             >
                                 <FormLabel>Amount</FormLabel>
                                 <NumberInput
+                                    isValidCharacter={(c) => /[0-9.,]/.test(c)}
                                     defaultValue={0}
                                     min={0}
                                     placeholder='Amount'

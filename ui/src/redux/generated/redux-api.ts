@@ -1,9 +1,10 @@
 import { api } from "../api";
 export const addTagTypes = [
-  "tag-controller",
-  "revenue-controller",
-  "person-controller",
-  "expense-controller",
+  "tag",
+  "revenue",
+  "person",
+  "expense",
+  "analyze",
 ] as const;
 const injectedRtkApi = api
   .enhanceEndpoints({
@@ -17,11 +18,11 @@ const injectedRtkApi = api
           method: "PUT",
           body: queryArg.tagRequest,
         }),
-        invalidatesTags: ["tag-controller"],
+        invalidatesTags: ["tag"],
       }),
       deleteTag: build.mutation<DeleteTagApiResponse, DeleteTagApiArg>({
         query: (queryArg) => ({ url: `/tag/${queryArg.id}`, method: "DELETE" }),
-        invalidatesTags: ["tag-controller"],
+        invalidatesTags: ["tag"],
       }),
       updateRevenue: build.mutation<
         UpdateRevenueApiResponse,
@@ -32,7 +33,7 @@ const injectedRtkApi = api
           method: "PUT",
           body: queryArg.revenueRequest,
         }),
-        invalidatesTags: ["revenue-controller"],
+        invalidatesTags: ["revenue", "person", "tag"],
       }),
       deleteRevenue: build.mutation<
         DeleteRevenueApiResponse,
@@ -42,7 +43,7 @@ const injectedRtkApi = api
           url: `/revenue/${queryArg.id}`,
           method: "DELETE",
         }),
-        invalidatesTags: ["revenue-controller"],
+        invalidatesTags: ["revenue", "person", "tag"],
       }),
       updatePerson: build.mutation<UpdatePersonApiResponse, UpdatePersonApiArg>(
         {
@@ -51,7 +52,7 @@ const injectedRtkApi = api
             method: "PUT",
             body: queryArg.personRequest,
           }),
-          invalidatesTags: ["person-controller"],
+          invalidatesTags: ["person"],
         }
       ),
       deletePerson: build.mutation<DeletePersonApiResponse, DeletePersonApiArg>(
@@ -60,7 +61,7 @@ const injectedRtkApi = api
             url: `/person/${queryArg.id}`,
             method: "DELETE",
           }),
-          invalidatesTags: ["person-controller"],
+          invalidatesTags: ["person"],
         }
       ),
       updateExpense: build.mutation<
@@ -72,7 +73,7 @@ const injectedRtkApi = api
           method: "PUT",
           body: queryArg.expenseRequest,
         }),
-        invalidatesTags: ["expense-controller"],
+        invalidatesTags: ["person", "tag", "expense"],
       }),
       deleteExpense: build.mutation<
         DeleteExpenseApiResponse,
@@ -82,11 +83,11 @@ const injectedRtkApi = api
           url: `/expense/${queryArg.id}`,
           method: "DELETE",
         }),
-        invalidatesTags: ["expense-controller"],
+        invalidatesTags: ["person", "tag", "expense"],
       }),
       readTag: build.query<ReadTagApiResponse, ReadTagApiArg>({
         query: () => ({ url: `/tag` }),
-        providesTags: ["tag-controller"],
+        providesTags: ["tag"],
       }),
       createTag: build.mutation<CreateTagApiResponse, CreateTagApiArg>({
         query: (queryArg) => ({
@@ -94,11 +95,11 @@ const injectedRtkApi = api
           method: "POST",
           body: queryArg.tagRequest,
         }),
-        invalidatesTags: ["tag-controller"],
+        invalidatesTags: ["tag"],
       }),
       readRevenue: build.query<ReadRevenueApiResponse, ReadRevenueApiArg>({
         query: () => ({ url: `/revenue` }),
-        providesTags: ["revenue-controller"],
+        providesTags: ["revenue", "person", "tag"],
       }),
       createRevenue: build.mutation<
         CreateRevenueApiResponse,
@@ -109,11 +110,11 @@ const injectedRtkApi = api
           method: "POST",
           body: queryArg.revenueRequest,
         }),
-        invalidatesTags: ["revenue-controller"],
+        invalidatesTags: ["revenue", "person", "tag"],
       }),
       readPerson: build.query<ReadPersonApiResponse, ReadPersonApiArg>({
         query: () => ({ url: `/person` }),
-        providesTags: ["person-controller"],
+        providesTags: ["person"],
       }),
       createPerson: build.mutation<CreatePersonApiResponse, CreatePersonApiArg>(
         {
@@ -122,12 +123,12 @@ const injectedRtkApi = api
             method: "POST",
             body: queryArg.personRequest,
           }),
-          invalidatesTags: ["person-controller"],
+          invalidatesTags: ["person"],
         }
       ),
       readExpense: build.query<ReadExpenseApiResponse, ReadExpenseApiArg>({
         query: () => ({ url: `/expense` }),
-        providesTags: ["expense-controller"],
+        providesTags: ["person", "tag", "expense"],
       }),
       createExpense: build.mutation<
         CreateExpenseApiResponse,
@@ -138,7 +139,11 @@ const injectedRtkApi = api
           method: "POST",
           body: queryArg.expenseRequest,
         }),
-        invalidatesTags: ["expense-controller"],
+        invalidatesTags: ["person", "tag", "expense"],
+      }),
+      analyze: build.query<AnalyzeApiResponse, AnalyzeApiArg>({
+        query: () => ({ url: `/analyze` }),
+        providesTags: ["revenue", "person", "analyze", "tag", "expense"],
       }),
     }),
     overrideExisting: false,
@@ -204,6 +209,8 @@ export type CreateExpenseApiResponse = /** status 200 OK */ Unit;
 export type CreateExpenseApiArg = {
   expenseRequest: ExpenseRequest;
 };
+export type AnalyzeApiResponse = /** status 200 OK */ AnalyzeResponse;
+export type AnalyzeApiArg = void;
 export type Unit = object;
 export type TagRequest = {
   name?: string;
@@ -245,6 +252,26 @@ export type ExpenseResponse = {
   person?: PersonResponse;
   tags?: TagResponse[];
 };
+export type ExpenseSummaryFromTag = {
+  name?: string;
+  amount?: number;
+  part?: number;
+};
+export type TagSummary = {
+  name?: string;
+  amount?: number;
+  expenses?: ExpenseSummaryFromTag[];
+  partOfRevenues?: number;
+  partOfExpenses?: number;
+};
+export type AnalyzeResponse = {
+  revenueAmountSum?: number;
+  expensesAmountSum?: number;
+  savingAmountSum?: number;
+  savingPart?: number;
+  expensesPart?: number;
+  tags?: TagSummary[];
+};
 export const {
   useUpdateTagMutation,
   useDeleteTagMutation,
@@ -262,4 +289,5 @@ export const {
   useCreatePersonMutation,
   useReadExpenseQuery,
   useCreateExpenseMutation,
+  useAnalyzeQuery,
 } = injectedRtkApi;

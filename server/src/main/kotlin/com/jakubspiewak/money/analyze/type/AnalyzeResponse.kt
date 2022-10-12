@@ -10,6 +10,7 @@ data class ExpenseSummaryFromTag(
 
 data class TagSummary(
     val name: String,
+    val amount: BigDecimal,
     val expenses: List<ExpenseSummaryFromTag>,
     val partOfRevenues: BigDecimal,
     val partOfExpenses: BigDecimal

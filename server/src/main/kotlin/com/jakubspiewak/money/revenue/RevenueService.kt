@@ -5,6 +5,7 @@ import com.jakubspiewak.money.person.type.PersonResponse
 import com.jakubspiewak.money.revenue.type.RevenueRequest
 import com.jakubspiewak.money.revenue.type.RevenueResponse
 import org.bson.types.ObjectId
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -12,7 +13,7 @@ import reactor.core.publisher.Mono
 @Service
 class RevenueService(private val repository: RevenueRepository, private val personRepository: PersonRepository) {
 
-    fun readAll(): Flux<RevenueResponse> = repository.findAll()
+    fun readAll(): Flux<RevenueResponse> = repository.findAll(Sort.by(Sort.Direction.DESC, "amount"))
         .flatMap { revenue ->
             personRepository.findById(revenue.person)
                 .map { person ->

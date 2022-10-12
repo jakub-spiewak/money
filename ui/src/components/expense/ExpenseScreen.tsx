@@ -1,6 +1,6 @@
 import {ExpenseForm} from "./ExpenseForm";
 import {ExpenseTable} from "./ExpenseTable";
-import {Container} from "@chakra-ui/react";
+import {Center} from "@chakra-ui/react";
 import {useFormModalStateType} from "../../utils/Hooks";
 import {
     ExpenseRequest,
@@ -8,20 +8,14 @@ import {
     useCreateExpenseMutation,
     useDeleteExpenseMutation,
     useReadExpenseQuery,
-    useReadPersonQuery,
-    useReadTagQuery,
     useUpdateExpenseMutation
 } from "../../redux/generated/redux-api";
-import {useEffect} from "react";
 
 export const ExpenseScreen = () => {
 
     const modal = useFormModalStateType<ExpenseRequest>()
 
-    const {data: tags} = useReadTagQuery()
-    const {data: persons} = useReadPersonQuery()
-
-    const {data, isLoading, isFetching, refetch} = useReadExpenseQuery()
+    const {data, isLoading, isFetching} = useReadExpenseQuery()
     const [createExpense] = useCreateExpenseMutation()
     const [updateExpense] = useUpdateExpenseMutation()
     const [deleteExpense] = useDeleteExpenseMutation()
@@ -47,13 +41,9 @@ export const ExpenseScreen = () => {
         else await createExpense({expenseRequest: expense})
     }
 
-    useEffect(() => {
-       refetch()
-    }, [tags, persons, refetch])
-
     return (
         <>
-            <Container maxW={'8xl'}>
+            <Center>
                 <ExpenseTable
                     expenses={data || []}
                     onAdd={modal.open}
@@ -61,7 +51,7 @@ export const ExpenseScreen = () => {
                     onDelete={onDelete}
                     isLoading={isLoading && isFetching}
                 />
-            </Container>
+            </Center>
             <ExpenseForm
                 state={modal}
                 onSubmit={onSubmit}

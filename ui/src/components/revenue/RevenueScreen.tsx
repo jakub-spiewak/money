@@ -1,14 +1,12 @@
-import {useEffect} from "react";
 import {RevenueForm} from "./RevenueForm";
 import {RevenueTable} from "./RevenueTable";
-import {Container} from "@chakra-ui/react";
+import {Center} from "@chakra-ui/react";
 import {useFormModalStateType} from "../../utils/Hooks";
 import {
     RevenueRequest,
     RevenueResponse,
     useCreateRevenueMutation,
     useDeleteRevenueMutation,
-    useReadPersonQuery,
     useReadRevenueQuery,
     useUpdateRevenueMutation
 } from "../../redux/generated/redux-api";
@@ -17,9 +15,7 @@ export const RevenueScreen = () => {
 
     const modal = useFormModalStateType<RevenueRequest>()
 
-    const {data: persons} = useReadPersonQuery()
-
-    const {data, isLoading, isFetching, refetch} = useReadRevenueQuery()
+    const {data, isLoading, isFetching} = useReadRevenueQuery()
     const [saveRevenue] = useCreateRevenueMutation()
     const [updateRevenue] = useUpdateRevenueMutation()
     const [deleteRevenue] = useDeleteRevenueMutation()
@@ -44,13 +40,9 @@ export const RevenueScreen = () => {
         else await saveRevenue({revenueRequest: revenue})
     }
 
-    useEffect(() => {
-        refetch()
-    }, [persons, refetch])
-
     return (
         <>
-            <Container>
+            <Center>
                 <RevenueTable
                     revenues={data || []}
                     onAdd={modal.open}
@@ -58,7 +50,7 @@ export const RevenueScreen = () => {
                     onDelete={onDelete}
                     isLoading={isLoading || isFetching}
                 />
-            </Container>
+            </Center>
             <RevenueForm
                 state={modal}
                 onSubmit={onSubmit}

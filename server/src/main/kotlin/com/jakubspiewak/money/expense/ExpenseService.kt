@@ -2,15 +2,16 @@ package com.jakubspiewak.money.expense
 
 import com.jakubspiewak.money.expense.type.ExpenseRequest
 import com.jakubspiewak.money.expense.type.ExpenseResponse
-import com.jakubspiewak.money.person.PersonDocument
 import com.jakubspiewak.money.person.PersonRepository
 import com.jakubspiewak.money.person.type.PersonResponse
 import com.jakubspiewak.money.tag.TagRepository
 import com.jakubspiewak.money.tag.type.TagResponse
 import org.bson.types.ObjectId
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.util.*
 
 @Service
 class ExpenseService(
@@ -18,34 +19,38 @@ class ExpenseService(
     private val personRepository: PersonRepository,
     private val tagRepository: TagRepository
 ) {
-    fun readAll(): Flux<ExpenseResponse> = repository.findAll().flatMap { expense ->
-        return@flatMap Mono.zip(
-            expense.person?.let { personRepository.findById(it) } ?: Mono.just(0),
-            tagRepository.findAllById(expense.tags).collectList(),
-        ) { personDocument, tagsDocuments ->
+    fun readAll(): Flux<ExpenseResponse> =
+        repository.findAll(Sort.by(Sort.Direction.DESC, "amount")).flatMap { expense ->
 
-            val person = if (personDocument is PersonDocument) PersonResponse(
-                id = personDocument.id.toString(),
-                firstName = personDocument.firstName,
-                lastName = personDocument.lastName
-            )
-            else null
+            val personMono = expense.person
+                ?.let { personRepository.findById(it) }
+                ?.map { Optional.of(it) }
+                ?: Mono.just(Optional.empty())
 
-            val tags = tagsDocuments.map { tag ->
-                TagResponse(
-                    id = tag.id.toString(), name = tag.name
+            val tagsMono = tagRepository.findAllById(expense.tags).collectList()
+
+            Mono.zip(personMono, tagsMono) { personDocument, tagsDocuments ->
+                val person = personDocument.map {
+                    PersonResponse(
+                        id = it.id.toString(), firstName = it.firstName, lastName = it.lastName
+                    )
+                }.orElse(null)
+
+                val tags = tagsDocuments.map { tag ->
+                    TagResponse(
+                        id = tag.id.toString(), name = tag.name
+                    )
+                }
+
+                ExpenseResponse(
+                    id = expense.id.toString(),
+                    name = expense.name,
+                    amount = expense.amount,
+                    person = person,
+                    tags = tags
                 )
             }
-
-            ExpenseResponse(
-                id = expense.id.toString(),
-                name = expense.name,
-                amount = expense.amount,
-                person = person,
-                tags = tags
-            )
         }
-    }
 
     fun create(request: ExpenseRequest): Mono<Unit> = repository.save(
         ExpenseDocument(name = request.name,

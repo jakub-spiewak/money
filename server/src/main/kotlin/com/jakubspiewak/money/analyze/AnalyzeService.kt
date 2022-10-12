@@ -45,12 +45,13 @@ class AnalyzeService(
                         ExpenseSummaryFromTag(
                             name = tagExpense.name,
                             amount = amount.toBigDecimal2(),
-                            part = amount.div(currentTagExpenseSum).toBigDecimal2()
+                            part = amount.div(currentTagExpenseSum).toBigDecimalPercentage()
                         )
                     }
 
                     TagSummary(
                         name = tag.name,
+                        amount = currentTagExpenseSum.toBigDecimal2(),
                         partOfRevenues = currentTagExpenseSum.div(revenueAmountSum).toBigDecimalPercentage(),
                         partOfExpenses = currentTagExpenseSum.div(expenseAmountSum).toBigDecimalPercentage(),
                         expenses = currentTagExpensesSummary
