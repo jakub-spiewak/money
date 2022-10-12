@@ -16,7 +16,7 @@ function App() {
         <Provider store={store}>
             <ChakraProvider theme={theme}>
                 <GlobalContextProvider>
-                    <Tabs>
+                    <Tabs defaultIndex={4}>
                         <TabList
                             maxW={"100vw"}
                             overflowX={"auto"}

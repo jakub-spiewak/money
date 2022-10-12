@@ -1,14 +1,11 @@
 import {
     Box,
     Button,
-    Flex,
     HStack,
     IconButton,
     Table,
     TableCaption,
     TableContainer,
-    Tag,
-    TagLabel,
     Tbody,
     Td,
     Tfoot,
@@ -23,6 +20,7 @@ import {DeleteAlertDialog} from "../util/DeleteAlertDialog";
 import {AiOutlineHome} from "react-icons/ai";
 import {ExpenseResponse} from "../../redux/generated/redux-api";
 import {LoadingDataTable} from "../util/LoadingDataTable";
+import {ExpenseTableTagsCell} from "./ExpenseTableTagsCell";
 
 interface ExpenseTableProps {
     expenses: ExpenseResponse[],
@@ -51,7 +49,10 @@ export const ExpenseTable = (props: ExpenseTableProps) => {
         <>
             <VStack maxW={"100vw"}>
                 <TableContainer>
-                    <Table variant='simple'>
+                    <Table
+                        variant='simple'
+                        size={'sm'}
+                    >
                         <TableCaption>
                             Expenses
                         </TableCaption>
@@ -80,25 +81,7 @@ export const ExpenseTable = (props: ExpenseTableProps) => {
                                                 </Td>
                                                 <Td isNumeric><b>{expense.amount?.toFixed?.(2)}</b></Td>
                                                 <Td>
-                                                    <Flex
-                                                        wrap={'wrap'}
-                                                        gap={1}
-                                                    >
-                                                        {expense.tags?.map((tag, index) => {
-                                                            if (!tag) return null
-                                                            return (
-                                                                <Tag
-                                                                    size={'sm'}
-                                                                    key={`form_selected_tag_${index}`}
-                                                                    borderRadius='full'
-                                                                    variant='solid'
-                                                                    colorScheme='green'
-                                                                >
-                                                                    <TagLabel>{tag.name?.toUpperCase()}</TagLabel>
-                                                                </Tag>
-                                                            )
-                                                        })}
-                                                    </Flex>
+                                                    <ExpenseTableTagsCell tags={expense.tags || []}/>
                                                 </Td>
                                                 <Td isNumeric>
                                                     <Box>
