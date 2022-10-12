@@ -23,8 +23,7 @@ class AnalyzeService(
             revenueService.readAll().collectList(),
             expenseService.readAll().collectList(),
             tagService.readAll().collectList()
-        )
-            .map { data ->
+        ).map { data ->
                 val revenueList = data.t1
                 val expenseList = data.t2
                 val tagList = data.t3
@@ -37,26 +36,26 @@ class AnalyzeService(
                 val expensePart = expenseAmountSum.div(revenueAmountSum)
 
                 val tags = tagList.map { tag ->
-                    val expensesWithCurrentTag = expenseList.filter { expense -> expense.tags.contains(tag) }
-                    val currentTagExpenseSum = expensesWithCurrentTag.sumOf { it.amount.toDouble() }
+                        val expensesWithCurrentTag = expenseList.filter { expense -> expense.tags.contains(tag) }
+                        val currentTagExpenseSum = expensesWithCurrentTag.sumOf { it.amount.toDouble() }
 
-                    val currentTagExpensesSummary = expensesWithCurrentTag.map { tagExpense ->
-                        val amount = tagExpense.amount.toDouble()
-                        ExpenseSummaryFromTag(
-                            name = tagExpense.name,
-                            amount = amount.toBigDecimal2(),
-                            part = amount.div(currentTagExpenseSum).toBigDecimalPercentage()
+                        val currentTagExpensesSummary = expensesWithCurrentTag.map { tagExpense ->
+                                val amount = tagExpense.amount.toDouble()
+                                ExpenseSummaryFromTag(
+                                    name = tagExpense.name,
+                                    amount = amount.toBigDecimal2(),
+                                    part = amount.div(currentTagExpenseSum).toBigDecimalPercentage()
+                                )
+                            }.sortedByDescending { it.amount }
+
+                        TagSummary(
+                            name = tag.name,
+                            amount = currentTagExpenseSum.toBigDecimal2(),
+                            partOfRevenues = currentTagExpenseSum.div(revenueAmountSum).toBigDecimalPercentage(),
+                            partOfExpenses = currentTagExpenseSum.div(expenseAmountSum).toBigDecimalPercentage(),
+                            expenses = currentTagExpensesSummary
                         )
-                    }
-
-                    TagSummary(
-                        name = tag.name,
-                        amount = currentTagExpenseSum.toBigDecimal2(),
-                        partOfRevenues = currentTagExpenseSum.div(revenueAmountSum).toBigDecimalPercentage(),
-                        partOfExpenses = currentTagExpenseSum.div(expenseAmountSum).toBigDecimalPercentage(),
-                        expenses = currentTagExpensesSummary
-                    )
-                }
+                    }.sortedByDescending { it.amount }
 
                 AnalyzeResponse(
                     revenueAmountSum = revenueAmountSum.toBigDecimal2(),

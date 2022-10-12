@@ -7,7 +7,6 @@ import com.jakubspiewak.money.person.type.PersonResponse
 import com.jakubspiewak.money.tag.TagRepository
 import com.jakubspiewak.money.tag.type.TagResponse
 import org.bson.types.ObjectId
-import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -19,12 +18,10 @@ class ExpenseService(
     private val personRepository: PersonRepository,
     private val tagRepository: TagRepository
 ) {
-    fun readAll(): Flux<ExpenseResponse> =
-        repository.findAll(Sort.by(Sort.Direction.DESC, "amount")).flatMap { expense ->
+    fun readAll(): Flux<ExpenseResponse> = repository.findAll().flatMap { expense ->
 
             val personMono = expense.person
-                ?.let { personRepository.findById(it) }
-                ?.map { Optional.of(it) }
+                ?.let { personRepository.findById(it) }?.map { Optional.of(it) }
                 ?: Mono.just(Optional.empty())
 
             val tagsMono = tagRepository.findAllById(expense.tags).collectList()
@@ -50,7 +47,7 @@ class ExpenseService(
                     tags = tags
                 )
             }
-        }
+        }.sort { o1, o2 -> o2.amount.compareTo(o1.amount) }
 
     fun create(request: ExpenseRequest): Mono<Unit> = repository.save(
         ExpenseDocument(name = request.name,

@@ -47,7 +47,10 @@ export const RevenueTable = (props: Props) => {
         <>
             <VStack maxW={"100vw"}>
                 <TableContainer>
-                    <Table variant='simple'>
+                    <Table
+                        variant='simple'
+                        size={'sm'}
+                    >
                         <TableCaption>
                             Revenues
                         </TableCaption>
