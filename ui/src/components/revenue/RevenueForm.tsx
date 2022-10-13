@@ -12,17 +12,13 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
-    NumberDecrementStepper,
-    NumberIncrementStepper,
-    NumberInput,
-    NumberInputField,
-    NumberInputStepper,
-    Select, Spinner,
+    Select,
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
 import {RevenueRequest, useReadPersonQuery} from "../../redux/generated/redux-api";
 import {FormModalStateType} from "../../utils/Hooks";
+import {FormNumberInput} from "../../utils/FormNumberInput";
 
 interface Props {
     state: FormModalStateType<RevenueRequest>,
@@ -32,13 +28,15 @@ interface Props {
 export const RevenueForm = (props: Props) => {
     const {state: {isOpen, close, value}, onSubmit: onSubmitFromProps} = props
 
-    const {data: persons, isFetching} = useReadPersonQuery()
+    const {data: persons, } = useReadPersonQuery()
 
     const {
         handleSubmit,
         register,
         formState: {errors, isSubmitting},
-        reset
+        reset,
+        getValues,
+        setValue,
     } = useForm<RevenueRequest>()
 
     const onSubmit = async (revenue: RevenueRequest) => {
@@ -91,16 +89,14 @@ export const RevenueForm = (props: Props) => {
                                     })}
                                 >
                                     {
-                                        isFetching ?
-                                            <Spinner/> :
-                                            persons?.map((person, index) => (
-                                                <option
-                                                    key={`person_option_${index}`}
-                                                    value={person.id}
-                                                >
-                                                    {`${person.firstName} ${person.lastName}`}
-                                                </option>
-                                            ))}
+                                        persons?.map((person, index) => (
+                                            <option
+                                                key={`person_option_${index}`}
+                                                value={person.id}
+                                            >
+                                                {`${person.firstName} ${person.lastName}`}
+                                            </option>
+                                        ))}
                                 </Select>
                                 <FormErrorMessage>
                                     {errors.personId && errors.personId.message}
@@ -111,26 +107,18 @@ export const RevenueForm = (props: Props) => {
                                 isInvalid={!!errors.amount}
                             >
                                 <FormLabel>Amount</FormLabel>
-                                <NumberInput
-                                    isValidCharacter={(c) => /[0-9.,]/.test(c)}
-                                    defaultValue={0}
-                                    min={0}
-                                    placeholder='Amount'
-                                    precision={2}
-                                    step={1}
-                                >
-                                    <NumberInputField
-                                        {...register('amount', {
-                                            valueAsNumber: true,
-                                            required: 'This is required',
-                                            min: {value: 0.01, message: 'Should be more than 0.00'},
-                                        })}
-                                    />
-                                    <NumberInputStepper>
-                                        <NumberIncrementStepper/>
-                                        <NumberDecrementStepper/>
-                                    </NumberInputStepper>
-                                </NumberInput>
+                                <FormNumberInput
+                                    wrapper={{
+                                        min: 0,
+                                        getValues,
+                                        setValue,
+                                    }}
+                                    {...register('amount', {
+                                        valueAsNumber: true,
+                                        required: 'This is required',
+                                        min: {value: 0.01, message: 'Should be more than 0.00'},
+                                    })}
+                                />
                                 <FormErrorMessage>
                                     {errors.amount && errors.amount.message}
                                 </FormErrorMessage>

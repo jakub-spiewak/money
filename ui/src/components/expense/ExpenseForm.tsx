@@ -17,11 +17,6 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
-    NumberDecrementStepper,
-    NumberIncrementStepper,
-    NumberInput,
-    NumberInputField,
-    NumberInputStepper,
     Select,
     Tag,
     TagCloseButton,
@@ -33,6 +28,7 @@ import {AddIcon} from "@chakra-ui/icons";
 import {FormModalStateType} from "../../utils/Hooks";
 import {ExpenseRequest, TagResponse, useReadPersonQuery, useReadTagQuery} from "../../redux/generated/redux-api";
 import {SubmitButton} from "../util/SubmitButton";
+import {FormNumberInput} from "../../utils/FormNumberInput";
 
 interface ExpenseProps {
     state: FormModalStateType<ExpenseRequest>,
@@ -49,7 +45,8 @@ export const ExpenseForm = (props: ExpenseProps) => {
         handleSubmit,
         register,
         formState: {errors, isSubmitting},
-        reset
+        getValues, setValue,
+        reset,
     } = useForm<ExpenseRequest>()
 
     const [formTags, setFormTags] = useState<TagResponse[]>([])
@@ -132,26 +129,17 @@ export const ExpenseForm = (props: ExpenseProps) => {
                                 isInvalid={!!errors.amount}
                             >
                                 <FormLabel>Amount</FormLabel>
-                                <NumberInput
-                                    isValidCharacter={(c) => /[0-9.,]/.test(c)}
-                                    defaultValue={0}
-                                    min={0}
-                                    placeholder='Amount'
-                                    precision={2}
-                                    step={1}
-                                >
-                                    <NumberInputField
-                                        {...register('amount', {
-                                            valueAsNumber: true,
-                                            required: 'This is required',
-                                            min: {value: 0.01, message: 'Should be more than 0.00'},
-                                        })}
-                                    />
-                                    <NumberInputStepper>
-                                        <NumberIncrementStepper/>
-                                        <NumberDecrementStepper/>
-                                    </NumberInputStepper>
-                                </NumberInput>
+                                <FormNumberInput
+                                    wrapper={{
+                                        min: 0,
+                                        getValues, setValue
+                                    }}
+                                    {...register('amount', {
+                                        valueAsNumber: true,
+                                        required: 'This is required',
+                                        min: {value: 0.01, message: 'Should be more than 0.00'},
+                                    })}
+                                />
                                 <FormErrorMessage>
                                     {errors.amount && errors.amount.message}
                                 </FormErrorMessage>

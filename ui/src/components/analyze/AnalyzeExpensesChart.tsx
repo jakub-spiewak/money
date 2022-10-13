@@ -42,7 +42,14 @@ export const AnalyzeExpenseChart = (props: Props) => {
                     },
                     normalized: true,
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: "chartArea",
+                            align: "start",
+                            fullSize: false
+                        }
+                    }
                 }}
             />
         </Box>
