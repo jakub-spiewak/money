@@ -4,6 +4,7 @@ export const addTagTypes = [
   "revenue",
   "person",
   "expense",
+  "scheduled_expense",
   "analyze",
 ] as const;
 const injectedRtkApi = api
@@ -64,26 +65,47 @@ const injectedRtkApi = api
           invalidatesTags: ["person"],
         }
       ),
-      updateExpense: build.mutation<
-        UpdateExpenseApiResponse,
-        UpdateExpenseApiArg
+      updateSingleExpense: build.mutation<
+        UpdateSingleExpenseApiResponse,
+        UpdateSingleExpenseApiArg
       >({
         query: (queryArg) => ({
-          url: `/expense/${queryArg.id}`,
+          url: `/expense/single/${queryArg.id}`,
           method: "PUT",
-          body: queryArg.expenseRequest,
+          body: queryArg.singleExpenseRequest,
         }),
         invalidatesTags: ["person", "tag", "expense"],
       }),
-      deleteExpense: build.mutation<
-        DeleteExpenseApiResponse,
-        DeleteExpenseApiArg
+      deleteSingleExpense: build.mutation<
+        DeleteSingleExpenseApiResponse,
+        DeleteSingleExpenseApiArg
       >({
         query: (queryArg) => ({
-          url: `/expense/${queryArg.id}`,
+          url: `/expense/single/${queryArg.id}`,
           method: "DELETE",
         }),
         invalidatesTags: ["person", "tag", "expense"],
+      }),
+      updateScheduledExpense: build.mutation<
+        UpdateScheduledExpenseApiResponse,
+        UpdateScheduledExpenseApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/expense/scheduled/${queryArg.id}`,
+          method: "PUT",
+          body: queryArg.scheduledExpenseRequest,
+        }),
+        invalidatesTags: ["person", "scheduled_expense", "tag"],
+      }),
+      deleteScheduledExpense: build.mutation<
+        DeleteScheduledExpenseApiResponse,
+        DeleteScheduledExpenseApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/expense/scheduled/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["person", "scheduled_expense", "tag"],
       }),
       readTag: build.query<ReadTagApiResponse, ReadTagApiArg>({
         query: () => ({ url: `/tag` }),
@@ -126,24 +148,51 @@ const injectedRtkApi = api
           invalidatesTags: ["person"],
         }
       ),
-      readExpense: build.query<ReadExpenseApiResponse, ReadExpenseApiArg>({
-        query: () => ({ url: `/expense` }),
+      readSingleExpense: build.query<
+        ReadSingleExpenseApiResponse,
+        ReadSingleExpenseApiArg
+      >({
+        query: () => ({ url: `/expense/single` }),
         providesTags: ["person", "tag", "expense"],
       }),
-      createExpense: build.mutation<
-        CreateExpenseApiResponse,
-        CreateExpenseApiArg
+      createSingleExpense: build.mutation<
+        CreateSingleExpenseApiResponse,
+        CreateSingleExpenseApiArg
       >({
         query: (queryArg) => ({
-          url: `/expense`,
+          url: `/expense/single`,
           method: "POST",
-          body: queryArg.expenseRequest,
+          body: queryArg.singleExpenseRequest,
         }),
         invalidatesTags: ["person", "tag", "expense"],
       }),
+      readScheduledExpense: build.query<
+        ReadScheduledExpenseApiResponse,
+        ReadScheduledExpenseApiArg
+      >({
+        query: () => ({ url: `/expense/scheduled` }),
+        providesTags: ["person", "scheduled_expense", "tag"],
+      }),
+      createScheduledExpense: build.mutation<
+        CreateScheduledExpenseApiResponse,
+        CreateScheduledExpenseApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/expense/scheduled`,
+          method: "POST",
+          body: queryArg.scheduledExpenseRequest,
+        }),
+        invalidatesTags: ["person", "scheduled_expense", "tag"],
+      }),
       analyze: build.query<AnalyzeApiResponse, AnalyzeApiArg>({
         query: () => ({ url: `/analyze` }),
-        providesTags: ["revenue", "person", "analyze", "tag", "expense"],
+        providesTags: [
+          "revenue",
+          "person",
+          "analyze",
+          "scheduled_expense",
+          "tag",
+        ],
       }),
     }),
     overrideExisting: false,
@@ -176,13 +225,22 @@ export type DeletePersonApiResponse = /** status 200 OK */ Unit;
 export type DeletePersonApiArg = {
   id: string;
 };
-export type UpdateExpenseApiResponse = /** status 200 OK */ Unit;
-export type UpdateExpenseApiArg = {
+export type UpdateSingleExpenseApiResponse = /** status 200 OK */ Unit;
+export type UpdateSingleExpenseApiArg = {
   id: string;
-  expenseRequest: ExpenseRequest;
+  singleExpenseRequest: SingleExpenseRequest;
 };
-export type DeleteExpenseApiResponse = /** status 200 OK */ Unit;
-export type DeleteExpenseApiArg = {
+export type DeleteSingleExpenseApiResponse = /** status 200 OK */ Unit;
+export type DeleteSingleExpenseApiArg = {
+  id: string;
+};
+export type UpdateScheduledExpenseApiResponse = /** status 200 OK */ Unit;
+export type UpdateScheduledExpenseApiArg = {
+  id: string;
+  scheduledExpenseRequest: ScheduledExpenseRequest;
+};
+export type DeleteScheduledExpenseApiResponse = /** status 200 OK */ Unit;
+export type DeleteScheduledExpenseApiArg = {
   id: string;
 };
 export type ReadTagApiResponse = /** status 200 OK */ TagResponse[];
@@ -203,11 +261,19 @@ export type CreatePersonApiResponse = /** status 200 OK */ Unit;
 export type CreatePersonApiArg = {
   personRequest: PersonRequest;
 };
-export type ReadExpenseApiResponse = /** status 200 OK */ ExpenseResponse[];
-export type ReadExpenseApiArg = void;
-export type CreateExpenseApiResponse = /** status 200 OK */ Unit;
-export type CreateExpenseApiArg = {
-  expenseRequest: ExpenseRequest;
+export type ReadSingleExpenseApiResponse =
+  /** status 200 OK */ SingleExpenseResponse[];
+export type ReadSingleExpenseApiArg = void;
+export type CreateSingleExpenseApiResponse = /** status 200 OK */ Unit;
+export type CreateSingleExpenseApiArg = {
+  singleExpenseRequest: SingleExpenseRequest;
+};
+export type ReadScheduledExpenseApiResponse =
+  /** status 200 OK */ ScheduledExpenseResponse[];
+export type ReadScheduledExpenseApiArg = void;
+export type CreateScheduledExpenseApiResponse = /** status 200 OK */ Unit;
+export type CreateScheduledExpenseApiArg = {
+  scheduledExpenseRequest: ScheduledExpenseRequest;
 };
 export type AnalyzeApiResponse = /** status 200 OK */ AnalyzeResponse;
 export type AnalyzeApiArg = void;
@@ -224,7 +290,14 @@ export type PersonRequest = {
   firstName?: string;
   lastName?: string;
 };
-export type ExpenseRequest = {
+export type SingleExpenseRequest = {
+  name?: string;
+  amount?: number;
+  person?: string;
+  date?: string;
+  tags?: string[];
+};
+export type ScheduledExpenseRequest = {
   name?: string;
   amount?: number;
   person?: string;
@@ -245,7 +318,15 @@ export type RevenueResponse = {
   amount?: number;
   person?: PersonResponse;
 };
-export type ExpenseResponse = {
+export type SingleExpenseResponse = {
+  id?: string;
+  name?: string;
+  amount?: number;
+  person?: PersonResponse;
+  date?: string;
+  tags?: TagResponse[];
+};
+export type ScheduledExpenseResponse = {
   id?: string;
   name?: string;
   amount?: number;
@@ -279,15 +360,19 @@ export const {
   useDeleteRevenueMutation,
   useUpdatePersonMutation,
   useDeletePersonMutation,
-  useUpdateExpenseMutation,
-  useDeleteExpenseMutation,
+  useUpdateSingleExpenseMutation,
+  useDeleteSingleExpenseMutation,
+  useUpdateScheduledExpenseMutation,
+  useDeleteScheduledExpenseMutation,
   useReadTagQuery,
   useCreateTagMutation,
   useReadRevenueQuery,
   useCreateRevenueMutation,
   useReadPersonQuery,
   useCreatePersonMutation,
-  useReadExpenseQuery,
-  useCreateExpenseMutation,
+  useReadSingleExpenseQuery,
+  useCreateSingleExpenseMutation,
+  useReadScheduledExpenseQuery,
+  useCreateScheduledExpenseMutation,
   useAnalyzeQuery,
 } = injectedRtkApi;

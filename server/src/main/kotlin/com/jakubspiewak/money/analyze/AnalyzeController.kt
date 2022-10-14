@@ -1,6 +1,6 @@
 package com.jakubspiewak.money.analyze
 
-import com.jakubspiewak.money.expense.ExpenseController
+import com.jakubspiewak.money.expense.scheduled.ScheduledExpenseController
 import com.jakubspiewak.money.person.PersonController
 import com.jakubspiewak.money.revenue.RevenueController
 import com.jakubspiewak.money.tag.TagController
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @Tag(name = AnalyzeController.TAG)
-@Tag(name = ExpenseController.TAG)
+@Tag(name = ScheduledExpenseController.TAG)
 @Tag(name = RevenueController.TAG)
 @Tag(name = PersonController.TAG)
 @Tag(name = TagController.TAG)

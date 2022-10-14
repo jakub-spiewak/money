@@ -1,9 +1,8 @@
-package com.jakubspiewak.money.expense
+package com.jakubspiewak.money.expense.single
 
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ExpenseRepository : ReactiveMongoRepository<ExpenseDocument, ObjectId> {
-}
+interface SingleExpenseRepository : ReactiveMongoRepository<SingleExpenseDocument, ObjectId> {}

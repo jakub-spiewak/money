@@ -3,7 +3,7 @@ package com.jakubspiewak.money.analyze
 import com.jakubspiewak.money.analyze.type.AnalyzeResponse
 import com.jakubspiewak.money.analyze.type.ExpenseSummaryFromTag
 import com.jakubspiewak.money.analyze.type.TagSummary
-import com.jakubspiewak.money.expense.ExpenseService
+import com.jakubspiewak.money.expense.scheduled.ScheduledExpenseService
 import com.jakubspiewak.money.revenue.RevenueService
 import com.jakubspiewak.money.tag.TagService
 import com.jakubspiewak.money.util.toBigDecimal2
@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono
 @Service
 class AnalyzeService(
     private val revenueService: RevenueService,
-    private val expenseService: ExpenseService,
+    private val expenseService: ScheduledExpenseService,
     private val tagService: TagService
 ) {
 

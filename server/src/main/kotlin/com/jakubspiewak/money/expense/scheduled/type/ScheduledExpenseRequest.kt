@@ -1,8 +1,8 @@
-package com.jakubspiewak.money.expense.type
+package com.jakubspiewak.money.expense.scheduled.type
 
 import java.math.BigDecimal
 
-data class ExpenseRequest(
+data class ScheduledExpenseRequest(
     val name: String,
     val amount: BigDecimal,
     val person: String?,

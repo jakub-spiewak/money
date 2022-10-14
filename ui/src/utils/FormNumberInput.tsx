@@ -105,6 +105,7 @@ const MobileNumberInput: NumberInputComponentType = forwardRef<HTMLInputElement,
                        value={value}
                        type={'number'}
                        inputMode={'decimal'}
+                       placeholder={props.placeholder}
                        ref={ref}
                 />
                 <Button {...dec}>-</Button>

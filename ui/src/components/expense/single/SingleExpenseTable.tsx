@@ -16,27 +16,27 @@ import {
 } from "@chakra-ui/react";
 import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";
-import {DeleteAlertDialog} from "../util/DeleteAlertDialog";
+import {DeleteAlertDialog} from "../../util/DeleteAlertDialog";
 import {AiOutlineHome} from "react-icons/ai";
-import {ExpenseResponse} from "../../redux/generated/redux-api";
-import {LoadingDataTable} from "../util/LoadingDataTable";
-import {ExpenseTableTagsCell} from "./ExpenseTableTagsCell";
+import {SingleExpenseResponse} from "../../../redux/generated/redux-api";
+import {LoadingDataTable} from "../../util/LoadingDataTable";
+import {ExpenseTableTagsCell} from "../ExpenseTableTagsCell";
 
-interface ExpenseTableProps {
-    expenses: ExpenseResponse[],
+interface Props {
+    expenses: SingleExpenseResponse[],
     onAdd: () => void;
-    onEdit: (expense: ExpenseResponse) => void,
-    onDelete: (expense: ExpenseResponse) => void,
+    onEdit: (expense: SingleExpenseResponse) => void,
+    onDelete: (expense: SingleExpenseResponse) => void,
     isLoading?: boolean
 }
 
-export const ExpenseTable = (props: ExpenseTableProps) => {
+export const SingleExpenseTable = (props: Props) => {
     const {isLoading, expenses, onEdit, onDelete: onDeleteFromProps, onAdd} = props
 
     const {isOpen, onClose, onOpen} = useDisclosure()
-    const [deleteValue, setDeleteValue] = useState<ExpenseResponse>()
+    const [deleteValue, setDeleteValue] = useState<SingleExpenseResponse>()
 
-    const onDelete = (expense: ExpenseResponse) => {
+    const onDelete = (expense: SingleExpenseResponse) => {
         setDeleteValue(expense)
         onOpen()
     }
@@ -48,7 +48,9 @@ export const ExpenseTable = (props: ExpenseTableProps) => {
     return (
         <>
             <VStack maxW={"100vw"}>
-                <TableContainer>
+                <TableContainer
+                    minW={"50vw"}
+                >
                     <Table
                         variant='simple'
                         size={'sm'}
@@ -59,8 +61,9 @@ export const ExpenseTable = (props: ExpenseTableProps) => {
                         <Thead>
                             <Tr>
                                 <Th>Name</Th>
-                                <Th>Person</Th>
                                 <Th isNumeric>Amount</Th>
+                                <Th>Date</Th>
+                                <Th>Person</Th>
                                 <Th>Tags</Th>
                                 <Th isNumeric>Actions</Th>
                             </Tr>
@@ -73,13 +76,14 @@ export const ExpenseTable = (props: ExpenseTableProps) => {
                                         return (
                                             <Tr key={`expense${index}`}>
                                                 <Td>{expense.name}</Td>
+                                                <Td isNumeric><b>{expense.amount?.toFixed?.(2)}</b></Td>
+                                                <Td>{expense.date ? new Date(expense.date).toLocaleDateString() : '-'}</Td>
                                                 <Td>
                                                     {
                                                         expense.person ? `${expense.person.firstName} ${expense.person.lastName}` :
                                                             <AiOutlineHome/>
                                                     }
                                                 </Td>
-                                                <Td isNumeric><b>{expense.amount?.toFixed?.(2)}</b></Td>
                                                 <Td>
                                                     <ExpenseTableTagsCell tags={expense.tags || []}/>
                                                 </Td>
@@ -108,8 +112,9 @@ export const ExpenseTable = (props: ExpenseTableProps) => {
                         <Tfoot>
                             <Tr>
                                 <Th>Name</Th>
-                                <Th>Person</Th>
                                 <Th isNumeric>Amount</Th>
+                                <Th isNumeric>Date</Th>
+                                <Th>Person</Th>
                                 <Th>Tags</Th>
                                 <Th isNumeric>Actions</Th>
                             </Tr>
@@ -121,7 +126,7 @@ export const ExpenseTable = (props: ExpenseTableProps) => {
                     flexDirection={"column-reverse"}
                     alignItems={"end"}
                 >
-                    <Button onClick={onAdd}>Add expense</Button>
+                    <Button onClick={onAdd}>Add single expense</Button>
                 </HStack>
             </VStack>
             <DeleteAlertDialog

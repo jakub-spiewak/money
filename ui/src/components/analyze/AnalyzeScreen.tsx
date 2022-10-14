@@ -1,6 +1,6 @@
 import 'chart.js/auto';
 import {Flex} from "@chakra-ui/react";
-import {useAnalyzeQuery, useReadExpenseQuery} from "../../redux/generated/redux-api";
+import {useAnalyzeQuery, useReadScheduledExpenseQuery} from "../../redux/generated/redux-api";
 import {AnalyzeTagTable} from "./AnalyzeTagTable";
 import {AnalyzeExpenseSavingChart} from "./AnalyzeExpenseSavingChart";
 import {AnalyzeScreenHeadings} from "./AnalyzeScreenHeadings";
@@ -9,7 +9,7 @@ import {AnalyzeExpenseChart} from "./AnalyzeExpensesChart";
 export const AnalyzeScreen = () => {
 
     const {data} = useAnalyzeQuery()
-    const {data: expenses = []} = useReadExpenseQuery()
+    const {data: expenses = []} = useReadScheduledExpenseQuery()
 
     if (!data) return null
 

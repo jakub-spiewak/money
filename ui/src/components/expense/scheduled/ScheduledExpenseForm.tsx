@@ -25,17 +25,22 @@ import {
 import {useForm} from "react-hook-form";
 import {useEffect, useState} from "react";
 import {AddIcon} from "@chakra-ui/icons";
-import {FormModalStateType} from "../../utils/Hooks";
-import {ExpenseRequest, TagResponse, useReadPersonQuery, useReadTagQuery} from "../../redux/generated/redux-api";
-import {SubmitButton} from "../util/SubmitButton";
-import {FormNumberInput} from "../../utils/FormNumberInput";
+import {FormModalStateType} from "../../../utils/Hooks";
+import {
+    ScheduledExpenseRequest,
+    TagResponse,
+    useReadPersonQuery,
+    useReadTagQuery
+} from "../../../redux/generated/redux-api";
+import {SubmitButton} from "../../util/SubmitButton";
+import {FormNumberInput} from "../../../utils/FormNumberInput";
 
 interface ExpenseProps {
-    state: FormModalStateType<ExpenseRequest>,
-    onSubmit: (expense: ExpenseRequest) => Promise<void>
+    state: FormModalStateType<ScheduledExpenseRequest>,
+    onSubmit: (expense: ScheduledExpenseRequest) => Promise<void>
 }
 
-export const ExpenseForm = (props: ExpenseProps) => {
+export const ScheduledExpenseForm = (props: ExpenseProps) => {
     const {state: {isOpen, value, close}, onSubmit: onSubmitFromProps} = props
 
     const {data: tags} = useReadTagQuery()
@@ -47,11 +52,11 @@ export const ExpenseForm = (props: ExpenseProps) => {
         formState: {errors, isSubmitting},
         getValues, setValue,
         reset,
-    } = useForm<ExpenseRequest>()
+    } = useForm<ScheduledExpenseRequest>()
 
     const [formTags, setFormTags] = useState<TagResponse[]>([])
 
-    const onSubmit = async (expense: ExpenseRequest) => {
+    const onSubmit = async (expense: ScheduledExpenseRequest) => {
         expense.tags = formTags.map((tag) => tag.id || "")
         if (expense.person === "") expense.person = undefined
         await onSubmitFromProps(expense)
@@ -104,6 +109,27 @@ export const ExpenseForm = (props: ExpenseProps) => {
                             </FormControl>
                             <FormControl
                                 mt={4}
+                                isInvalid={!!errors.amount}
+                            >
+                                <FormLabel>Amount</FormLabel>
+                                <FormNumberInput
+                                    placeholder={"Amount"}
+                                    wrapper={{
+                                        min: 0,
+                                        getValues, setValue
+                                    }}
+                                    {...register('amount', {
+                                        valueAsNumber: true,
+                                        required: 'This is required',
+                                        min: {value: 0.01, message: 'Should be more than 0.00'},
+                                    })}
+                                />
+                                <FormErrorMessage>
+                                    {errors.amount && errors.amount.message}
+                                </FormErrorMessage>
+                            </FormControl>
+                            <FormControl
+                                mt={4}
                                 isInvalid={!!errors.person}
                             >
                                 <FormLabel>From</FormLabel>
@@ -122,26 +148,6 @@ export const ExpenseForm = (props: ExpenseProps) => {
                                 </Select>
                                 <FormErrorMessage>
                                     {errors.person && errors.person.message}
-                                </FormErrorMessage>
-                            </FormControl>
-                            <FormControl
-                                mt={4}
-                                isInvalid={!!errors.amount}
-                            >
-                                <FormLabel>Amount</FormLabel>
-                                <FormNumberInput
-                                    wrapper={{
-                                        min: 0,
-                                        getValues, setValue
-                                    }}
-                                    {...register('amount', {
-                                        valueAsNumber: true,
-                                        required: 'This is required',
-                                        min: {value: 0.01, message: 'Should be more than 0.00'},
-                                    })}
-                                />
-                                <FormErrorMessage>
-                                    {errors.amount && errors.amount.message}
                                 </FormErrorMessage>
                             </FormControl>
                             <FormControl pt={2}>

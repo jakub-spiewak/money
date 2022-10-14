@@ -1,10 +1,10 @@
-package com.jakubspiewak.money.expense.type
+package com.jakubspiewak.money.expense.scheduled.type
 
 import com.jakubspiewak.money.person.type.PersonResponse
 import com.jakubspiewak.money.tag.type.TagResponse
 import java.math.BigDecimal
 
-data class ExpenseResponse(
+data class ScheduledExpenseResponse(
     val id: String,
     val name: String,
     val amount: BigDecimal,

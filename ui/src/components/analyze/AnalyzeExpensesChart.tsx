@@ -1,9 +1,9 @@
 import {Pie} from "react-chartjs-2"
-import {ExpenseResponse} from "../../redux/generated/redux-api";
+import {ScheduledExpenseResponse} from "../../redux/generated/redux-api";
 import {Box} from "@chakra-ui/react";
 
 interface Props {
-    expenses: ExpenseResponse[]
+    expenses: ScheduledExpenseResponse[]
 }
 
 const chartColors = ["#fd7f6f", "#7eb0d5", "#b2e061", "#bd7ebe", "#ffb55a", "#ffee65", "#beb9db", "#fdcce5", "#8bd3c7"]
