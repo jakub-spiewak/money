@@ -1,11 +1,13 @@
 import {Button, Spinner} from "@chakra-ui/react";
+import {Control} from "react-hook-form";
 
 interface Props {
-    isLoading?: boolean
+    isLoading?: boolean,
+    control?: Control
 }
 
 export const SubmitButton = (props: Props) => {
-    const {isLoading} = props
+    const {isLoading, control} = props
 
     return (
         <Button
@@ -14,7 +16,7 @@ export const SubmitButton = (props: Props) => {
             isLoading={isLoading}
             type='submit'
         >
-            {isLoading ? <Spinner/> : "Save"}
+            {isLoading || control?._formState.isSubmitting ? <Spinner/> : "Save"}
         </Button>
     )
 

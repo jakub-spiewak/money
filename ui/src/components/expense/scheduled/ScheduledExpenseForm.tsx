@@ -33,7 +33,7 @@ import {
     useReadTagQuery
 } from "../../../redux/generated/redux-api";
 import {SubmitButton} from "../../util/SubmitButton";
-import {FormNumberInput} from "../../../utils/FormNumberInput";
+import {NumberFormField} from "../../util/form/NumberFormField";
 
 interface ExpenseProps {
     state: FormModalStateType<ScheduledExpenseRequest>,
@@ -112,18 +112,6 @@ export const ScheduledExpenseForm = (props: ExpenseProps) => {
                                 isInvalid={!!errors.amount}
                             >
                                 <FormLabel>Amount</FormLabel>
-                                <FormNumberInput
-                                    placeholder={"Amount"}
-                                    wrapper={{
-                                        min: 0,
-                                        getValues, setValue
-                                    }}
-                                    {...register('amount', {
-                                        valueAsNumber: true,
-                                        required: 'This is required',
-                                        min: {value: 0.01, message: 'Should be more than 0.00'},
-                                    })}
-                                />
                                 <FormErrorMessage>
                                     {errors.amount && errors.amount.message}
                                 </FormErrorMessage>

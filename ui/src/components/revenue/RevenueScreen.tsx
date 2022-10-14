@@ -36,6 +36,7 @@ export const RevenueScreen = () => {
     }
 
     const onSubmit = async (revenue: RevenueRequest) => {
+        // alert(JSON.stringify(revenue, null, 2))
         if (modal.value?.id) await updateRevenue({id: modal.value.id, revenueRequest: revenue})
         else await saveRevenue({revenueRequest: revenue})
     }
