@@ -1,13 +1,7 @@
-import {Control} from "react-hook-form";
 import {NumberFormField} from "../form/NumberFormField";
+import {FieldProps} from "./types";
 
-interface Props {
-    control: Control,
-    name?: string,
-    label?: string
-}
-
-export const AmountField = (props: Props) => {
+export const AmountField = (props: FieldProps) => {
     const {control, name, label} = props
     return (
         <NumberFormField

@@ -1,10 +1,6 @@
 import {
     Box,
     Button,
-    FormControl,
-    FormErrorMessage,
-    FormLabel,
-    Input,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -12,15 +8,11 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
-    Select,
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
-import {RevenueRequest, useReadPersonQuery} from "../../redux/generated/redux-api";
+import {RevenueRequest} from "../../redux/generated/redux-api";
 import {FormModalStateType} from "../../utils/Hooks";
-import {NumberFormField} from "../util/form/NumberFormField";
-import {SelectFormField} from "../util/form/SelectFormField";
-import {TextFormField} from "../util/form/TextFormField";
 import {PersonField} from "../util/fields/PersonField";
 import {AmountField} from "../util/fields/AmountField";
 import {NameField} from "../util/fields/NameField";
@@ -71,7 +63,10 @@ export const RevenueForm = (props: Props) => {
                         <ModalBody pb={6}>
                             <NameField control={control}/>
                             <AmountField control={control}/>
-                            <PersonField control={control}/>
+                            <PersonField
+                                required
+                                control={control}
+                            />
                         </ModalBody>
 
                         <ModalFooter>

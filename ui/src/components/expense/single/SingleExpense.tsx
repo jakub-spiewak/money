@@ -6,11 +6,14 @@ import {
     SingleExpenseResponse, useCreateSingleExpenseMutation, useDeleteSingleExpenseMutation,
     useReadSingleExpenseQuery, useUpdateSingleExpenseMutation
 } from "../../../redux/generated/redux-api";
-import {useFormModalStateType} from "../../../utils/Hooks";
+import {FormModalStateType} from "../../../utils/Hooks";
 
-export const SingleExpense = () => {
+interface Props {
+    modal: FormModalStateType<SingleExpenseRequest>
+}
 
-    const modal = useFormModalStateType<SingleExpenseRequest>()
+export const SingleExpense = (props: Props) => {
+    const {modal} = props
 
     const {data, isLoading, isFetching} = useReadSingleExpenseQuery()
     const [createExpense] = useCreateSingleExpenseMutation()
@@ -44,7 +47,6 @@ export const SingleExpense = () => {
             <Center>
                 <SingleExpenseTable
                     expenses={data || []}
-                    onAdd={modal.open}
                     onEdit={onEdit}
                     onDelete={onDelete}
                     isLoading={isLoading && isFetching}

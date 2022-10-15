@@ -1,10 +1,6 @@
 import {
     Box,
     Button,
-    FormControl,
-    FormErrorMessage,
-    FormLabel,
-    Input,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -18,6 +14,7 @@ import {useEffect} from "react";
 import {SubmitButton} from "../util/SubmitButton";
 import {PersonRequest} from "../../redux/generated/redux-api";
 import {FormModalStateType} from "../../utils/Hooks";
+import {NameField} from "../util/fields/NameField";
 
 interface Props {
     state: FormModalStateType<PersonRequest>
@@ -29,8 +26,8 @@ export const PersonForm = (props: Props) => {
 
     const {
         handleSubmit,
-        register,
-        formState: {errors, isSubmitting},
+        control,
+        formState: {isSubmitting},
         reset
     } = useForm<PersonRequest>()
 
@@ -55,38 +52,16 @@ export const PersonForm = (props: Props) => {
                         <ModalHeader>Add person</ModalHeader>
                         <ModalCloseButton/>
                         <ModalBody pb={6}>
-                            <FormControl isInvalid={!!errors.firstName}>
-                                <FormLabel>First name</FormLabel>
-                                <Input
-                                    placeholder='First name'
-                                    {...register('firstName', {
-                                        required: 'This is required',
-                                        minLength: {value: 4, message: 'Minimum length should be 4'},
-                                        maxLength: {value: 32, message: 'Maximum length should be 32'}
-                                    })}
-                                />
-                                <FormErrorMessage>
-                                    {errors.firstName && errors.firstName.message}
-                                </FormErrorMessage>
-                            </FormControl>
-
-                            <FormControl
-                                mt={4}
-                                isInvalid={!!errors.lastName}
-                            >
-                                <FormLabel>Last name</FormLabel>
-                                <Input
-                                    placeholder='Last name'
-                                    {...register('lastName', {
-                                        required: 'This is required',
-                                        minLength: {value: 4, message: 'Minimum length should be 4'},
-                                        maxLength: {value: 32, message: 'Maximum length should be 32'}
-                                    })}
-                                />
-                                <FormErrorMessage>
-                                    {errors.lastName && errors.lastName.message}
-                                </FormErrorMessage>
-                            </FormControl>
+                            <NameField
+                                name={"firstName"}
+                                label={"First name"}
+                                control={control}
+                            />
+                            <NameField
+                                name={"lastName"}
+                                label={"Last name"}
+                                control={control}
+                            />
                         </ModalBody>
 
                         <ModalFooter>

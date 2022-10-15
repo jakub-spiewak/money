@@ -1,10 +1,6 @@
 import {
     Box,
     Button,
-    FormControl,
-    FormErrorMessage,
-    FormLabel,
-    Input,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -18,6 +14,7 @@ import {useEffect} from "react";
 import {TagRequest} from "../../redux/generated/redux-api";
 import {FormModalStateType} from "../../utils/Hooks";
 import {SubmitButton} from "../util/SubmitButton";
+import {NameField} from "../util/fields/NameField";
 
 interface Props {
     state: FormModalStateType<TagRequest>
@@ -29,8 +26,8 @@ export const TagForm = (props: Props) => {
 
     const {
         handleSubmit,
-        register,
-        formState: {errors, isSubmitting},
+        control,
+        formState: {isSubmitting},
         reset
     } = useForm<TagRequest>()
 
@@ -55,23 +52,7 @@ export const TagForm = (props: Props) => {
                         <ModalHeader>Add tag</ModalHeader>
                         <ModalCloseButton/>
                         <ModalBody pb={6}>
-                            <FormControl
-                                mt={4}
-                                isInvalid={!!errors.name}
-                            >
-                                <FormLabel>Name</FormLabel>
-                                <Input
-                                    placeholder='Name'
-                                    {...register('name', {
-                                        required: 'This is required',
-                                        minLength: {value: 3, message: 'Minimum length should be 3'},
-                                        maxLength: {value: 32, message: 'Maximum length should be 32'}
-                                    })}
-                                />
-                                <FormErrorMessage>
-                                    {errors.name && errors.name.message}
-                                </FormErrorMessage>
-                            </FormControl>
+                            <NameField control={control}/>
                         </ModalBody>
 
                         <ModalFooter>

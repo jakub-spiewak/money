@@ -1,8 +1,6 @@
 import {
-    Box,
     Button,
     HStack,
-    IconButton,
     Table,
     TableCaption,
     TableContainer,
@@ -14,11 +12,11 @@ import {
     Tr,
     useDisclosure, VStack,
 } from "@chakra-ui/react";
-import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";
 import {DeleteAlertDialog} from "../util/DeleteAlertDialog";
 import {RevenueResponse} from "../../redux/generated/redux-api";
 import {LoadingDataTable} from "../util/LoadingDataTable";
+import {ActionButtonsTableCell} from "../util/ActionButtonsTableCell";
 
 interface Props {
     revenues: RevenueResponse[],
@@ -27,6 +25,15 @@ interface Props {
     onDelete: (revenue: RevenueResponse) => void,
     isLoading?: boolean
 }
+
+const TableHeadings = () => (
+    <Tr>
+        <Th>Name</Th>
+        <Th>Person</Th>
+        <Th isNumeric>Amount</Th>
+        <Th isNumeric>Actions</Th>
+    </Tr>
+)
 
 export const RevenueTable = (props: Props) => {
     const {isLoading, revenues, onEdit, onDelete: onDeleteFromProps, onAdd} = props
@@ -55,12 +62,7 @@ export const RevenueTable = (props: Props) => {
                             Revenues
                         </TableCaption>
                         <Thead>
-                            <Tr>
-                                <Th>Name</Th>
-                                <Th>Person</Th>
-                                <Th isNumeric>Amount</Th>
-                                <Th isNumeric>Actions</Th>
-                            </Tr>
+                            <TableHeadings/>
                         </Thead>
                         <Tbody>
                             {
@@ -74,21 +76,10 @@ export const RevenueTable = (props: Props) => {
                                                 <Td>{`${person?.firstName} ${person?.lastName}`}</Td>
                                                 <Td isNumeric><b>{revenue.amount?.toFixed?.(2)}</b></Td>
                                                 <Td isNumeric>
-                                                    <Box>
-                                                        <IconButton
-                                                            aria-label={'edit'}
-                                                            icon={<EditIcon/>}
-                                                            colorScheme={'teal'}
-                                                            mr={2}
-                                                            onClick={() => onEdit(revenue)}
-                                                        />
-                                                        <IconButton
-                                                            aria-label={'delete'}
-                                                            icon={<DeleteIcon/>}
-                                                            colorScheme={'red'}
-                                                            onClick={() => onDelete(revenue)}
-                                                        />
-                                                    </Box>
+                                                    <ActionButtonsTableCell
+                                                        onEdit={() => onEdit(revenue)}
+                                                        onDelete={() => onDelete(revenue)}
+                                                    />
                                                 </Td>
                                             </Tr>
                                         )
@@ -96,12 +87,7 @@ export const RevenueTable = (props: Props) => {
                             }
                         </Tbody>
                         <Tfoot>
-                            <Tr>
-                                <Th>Name</Th>
-                                <Th>Person</Th>
-                                <Th isNumeric>Amount</Th>
-                                <Th isNumeric>Actions</Th>
-                            </Tr>
+                            <TableHeadings/>
                         </Tfoot>
                     </Table>
                 </TableContainer>

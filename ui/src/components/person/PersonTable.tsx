@@ -1,8 +1,6 @@
 import {
-    Box,
     Button,
     HStack,
-    IconButton,
     Table,
     TableCaption,
     TableContainer,
@@ -14,12 +12,12 @@ import {
     Tr,
     useDisclosure, VStack,
 } from "@chakra-ui/react";
-import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";
 import {DeleteAlertDialog} from "../util/DeleteAlertDialog";
 import {LoadingDataTable} from "../util/LoadingDataTable";
 import {PersonResponse} from "../../redux/generated/redux-api";
 import {theme} from "../../theme";
+import {ActionButtonsTableCell} from "../util/ActionButtonsTableCell";
 
 interface Props {
     persons: PersonResponse[],
@@ -28,6 +26,14 @@ interface Props {
     onDelete: (person: PersonResponse) => void,
     isLoading?: boolean
 }
+
+const TableHeadings = () => (
+    <Tr>
+        <Th>First name</Th>
+        <Th>Last name</Th>
+        <Th isNumeric>Actions</Th>
+    </Tr>
+)
 
 export const PersonTable = (props: Props) => {
     const {persons, onEdit, onDelete: onDeleteFromProps, onAdd, isLoading} = props
@@ -58,11 +64,7 @@ export const PersonTable = (props: Props) => {
                             Persons
                         </TableCaption>
                         <Thead>
-                            <Tr>
-                                <Th>First name</Th>
-                                <Th>Last name</Th>
-                                <Th isNumeric>Actions</Th>
-                            </Tr>
+                            <TableHeadings/>
                         </Thead>
                         <Tbody>
                             {
@@ -74,21 +76,10 @@ export const PersonTable = (props: Props) => {
                                                 <Td>{person.firstName}</Td>
                                                 <Td>{person.lastName}</Td>
                                                 <Td isNumeric>
-                                                    <Box>
-                                                        <IconButton
-                                                            aria-label={'edit'}
-                                                            icon={<EditIcon/>}
-                                                            colorScheme={'teal'}
-                                                            mr={2}
-                                                            onClick={() => onEdit(person)}
-                                                        />
-                                                        <IconButton
-                                                            aria-label={'delete'}
-                                                            icon={<DeleteIcon/>}
-                                                            colorScheme={'red'}
-                                                            onClick={() => onDelete(person)}
-                                                        />
-                                                    </Box>
+                                                    <ActionButtonsTableCell
+                                                        onEdit={() => onEdit(person)}
+                                                        onDelete={() => onDelete(person)}
+                                                    />
                                                 </Td>
                                             </Tr>
                                         )
@@ -96,11 +87,7 @@ export const PersonTable = (props: Props) => {
                             }
                         </Tbody>
                         <Tfoot>
-                            <Tr>
-                                <Th>First name</Th>
-                                <Th>Last name</Th>
-                                <Th isNumeric>Actions</Th>
-                            </Tr>
+                            <TableHeadings/>
                         </Tfoot>
                     </Table>
                 </TableContainer>

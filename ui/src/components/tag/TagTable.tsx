@@ -1,8 +1,6 @@
 import {
-    Box,
     Button,
     HStack,
-    IconButton,
     Table,
     TableCaption,
     TableContainer,
@@ -15,13 +13,12 @@ import {
     useDisclosure,
     VStack,
 } from "@chakra-ui/react";
-import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useState} from "react";
 import {DeleteAlertDialog} from "../util/DeleteAlertDialog";
-import {useGlobalContext} from "../../utils/Context";
 import {TagRequest, TagResponse} from "../../redux/generated/redux-api";
 import {LoadingDataTable} from "../util/LoadingDataTable";
 import {theme} from "../../theme";
+import {ActionButtonsTableCell} from "../util/ActionButtonsTableCell";
 
 interface Props {
     tags: TagResponse[],
@@ -31,12 +28,18 @@ interface Props {
     isLoading?: boolean,
 }
 
+const TableHeadings = () => (
+    <Tr>
+        <Th>Name</Th>
+        <Th isNumeric>Actions</Th>
+    </Tr>
+)
+
 export const TagTable = (props: Props) => {
     const {isLoading, tags, onEdit, onDelete: onDeleteFromProps, onAdd} = props
 
     const {isOpen, onClose, onOpen} = useDisclosure()
     const [deleteValue, setDeleteValue] = useState<TagResponse>()
-    const {expenses} = useGlobalContext()
 
     const onDelete = (tag: TagResponse) => {
         setDeleteValue(tag)
@@ -59,10 +62,7 @@ export const TagTable = (props: Props) => {
                             Tags
                         </TableCaption>
                         <Thead>
-                            <Tr>
-                                <Th>Name</Th>
-                                <Th isNumeric>Actions</Th>
-                            </Tr>
+                            <TableHeadings/>
                         </Thead>
                         <Tbody>
                             {
@@ -73,22 +73,10 @@ export const TagTable = (props: Props) => {
                                             <Tr key={`tag_${index}`}>
                                                 <Td>{tag.name}</Td>
                                                 <Td isNumeric>
-                                                    <Box>
-                                                        <IconButton
-                                                            aria-label={'edit'}
-                                                            icon={<EditIcon/>}
-                                                            colorScheme={'teal'}
-                                                            mr={2}
-                                                            onClick={() => onEdit(tag)}
-                                                        />
-                                                        <IconButton
-                                                            aria-label={'delete'}
-                                                            icon={<DeleteIcon/>}
-                                                            colorScheme={'red'}
-                                                            onClick={() => onDelete(tag)}
-                                                            disabled={expenses.findIndex(e => e.tagsIds.includes(tag.id || "")) >= 0}
-                                                        />
-                                                    </Box>
+                                                    <ActionButtonsTableCell
+                                                        onEdit={() => onEdit(tag)}
+                                                        onDelete={() => onDelete(tag)}
+                                                    />
                                                 </Td>
                                             </Tr>
                                         )
@@ -96,10 +84,7 @@ export const TagTable = (props: Props) => {
                             }
                         </Tbody>
                         <Tfoot>
-                            <Tr>
-                                <Th>Name</Th>
-                                <Th isNumeric>Actions</Th>
-                            </Tr>
+                            <TableHeadings/>
                         </Tfoot>
                     </Table>
                 </TableContainer>

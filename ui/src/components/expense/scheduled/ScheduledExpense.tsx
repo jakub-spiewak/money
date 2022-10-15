@@ -1,5 +1,5 @@
 import {ScheduledExpenseForm} from "./ScheduledExpenseForm";
-import {useFormModalStateType} from "../../../utils/Hooks";
+import {FormModalStateType} from "../../../utils/Hooks";
 import {
     ScheduledExpenseRequest, ScheduledExpenseResponse,
     useCreateScheduledExpenseMutation, useDeleteScheduledExpenseMutation,
@@ -8,9 +8,12 @@ import {
 import {Center} from "@chakra-ui/react";
 import {ScheduledExpenseTable} from "./ScheduledExpenseTable";
 
-export const ScheduledExpense = () => {
+interface Props {
+    modal: FormModalStateType<ScheduledExpenseRequest>
+}
 
-    const modal = useFormModalStateType<ScheduledExpenseRequest>()
+export const ScheduledExpense = (props: Props) => {
+    const {modal} = props
 
     const {data, isLoading, isFetching} = useReadScheduledExpenseQuery()
     const [createExpense] = useCreateScheduledExpenseMutation()
@@ -43,7 +46,6 @@ export const ScheduledExpense = () => {
             <Center>
                 <ScheduledExpenseTable
                     expenses={data || []}
-                    onAdd={modal.open}
                     onEdit={onEdit}
                     onDelete={onDelete}
                     isLoading={isLoading && isFetching}

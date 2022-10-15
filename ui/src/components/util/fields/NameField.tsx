@@ -1,13 +1,7 @@
-import {Control} from "react-hook-form";
 import {TextFormField} from "../form/TextFormField";
+import {FieldProps} from "./types";
 
-interface Props {
-    control: Control,
-    name?: string,
-    label?: string
-}
-
-export const NameField = (props: Props) => {
+export const NameField = (props: FieldProps) => {
     const {control, name, label} = props
     return (
         <TextFormField

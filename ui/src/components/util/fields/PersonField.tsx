@@ -1,15 +1,13 @@
-import {Control} from "react-hook-form";
 import {SelectFormField} from "../form/SelectFormField";
 import {useReadPersonQuery} from "../../../redux/generated/redux-api";
+import {FieldProps} from "./types";
 
-interface Props {
-    control: Control,
-    name?: string,
-    label?: string
+interface Props extends FieldProps{
+    required?: boolean
 }
 
 export const PersonField = (props: Props) => {
-    const {control, name, label} = props
+    const {control, name, label, required} = props
     const {data: persons = []} = useReadPersonQuery()
 
     return (
@@ -18,7 +16,7 @@ export const PersonField = (props: Props) => {
             name={name || "personId"}
             label={label || "Person"}
             rules={{
-                required: 'This is required'
+                required: required ? 'This is required' : undefined
             }}
         >
             {
