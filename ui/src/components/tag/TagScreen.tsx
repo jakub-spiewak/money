@@ -39,7 +39,7 @@ export const TagScreen = () => {
         <>
             <Center>
                 <TagTable
-                    tags={data || []}
+                    data={data || []}
                     onAdd={modal.open}
                     onEdit={onEdit}
                     onDelete={onDelete}

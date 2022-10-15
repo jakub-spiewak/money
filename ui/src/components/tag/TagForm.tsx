@@ -1,5 +1,4 @@
 import {
-    Box,
     Button,
     Modal,
     ModalBody,
@@ -13,7 +12,7 @@ import {useForm} from "react-hook-form";
 import {useEffect} from "react";
 import {TagRequest} from "../../redux/generated/redux-api";
 import {FormModalStateType} from "../../utils/Hooks";
-import {SubmitButton} from "../util/SubmitButton";
+import {SubmitButton} from "../util/form/SubmitButton";
 import {NameField} from "../util/fields/NameField";
 
 interface Props {
@@ -41,27 +40,25 @@ export const TagForm = (props: Props) => {
     }, [reset, value, isOpen])
 
     return (
-        <Box>
-            <Modal
-                isOpen={isOpen}
-                onClose={close}
-            >
-                <ModalOverlay/>
-                <ModalContent>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <ModalHeader>Add tag</ModalHeader>
-                        <ModalCloseButton/>
-                        <ModalBody pb={6}>
-                            <NameField control={control}/>
-                        </ModalBody>
+        <Modal
+            isOpen={isOpen}
+            onClose={close}
+        >
+            <ModalOverlay/>
+            <ModalContent>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <ModalHeader>Add tag</ModalHeader>
+                    <ModalCloseButton/>
+                    <ModalBody pb={6}>
+                        <NameField control={control}/>
+                    </ModalBody>
 
-                        <ModalFooter>
-                            <SubmitButton isLoading={isSubmitting}/>
-                            <Button onClick={close}>Cancel</Button>
-                        </ModalFooter>
-                    </form>
-                </ModalContent>
-            </Modal>
-        </Box>
+                    <ModalFooter>
+                        <SubmitButton isLoading={isSubmitting}/>
+                        <Button onClick={close}>Cancel</Button>
+                    </ModalFooter>
+                </form>
+            </ModalContent>
+        </Modal>
     )
 }

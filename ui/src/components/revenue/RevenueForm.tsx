@@ -1,5 +1,4 @@
 import {
-    Box,
     Button,
     Modal,
     ModalBody,
@@ -16,7 +15,7 @@ import {FormModalStateType} from "../../utils/Hooks";
 import {PersonField} from "../util/fields/PersonField";
 import {AmountField} from "../util/fields/AmountField";
 import {NameField} from "../util/fields/NameField";
-import {SubmitButton} from "../util/SubmitButton";
+import {SubmitButton} from "../util/form/SubmitButton";
 
 interface Props {
     state: FormModalStateType<RevenueRequest>,
@@ -36,7 +35,7 @@ export const RevenueForm = (props: Props) => {
         defaultValues: {
             name: undefined,
             amount: undefined,
-            personId: undefined
+            person: undefined
         }
     })
 
@@ -46,39 +45,38 @@ export const RevenueForm = (props: Props) => {
     }
 
     useEffect(() => {
-        if (isOpen) reset(value?.request || {amount: undefined, personId: undefined})
+        if (isOpen) reset(value?.request || {amount: undefined, person: undefined})
     }, [reset, value, isOpen])
 
     return (
-        <Box>
-            <Modal
-                isOpen={isOpen}
-                onClose={close}
-            >
-                <ModalOverlay/>
-                <ModalContent>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <ModalHeader>Add revenue</ModalHeader>
-                        <ModalCloseButton/>
-                        <ModalBody pb={6}>
-                            <NameField control={control}/>
-                            <AmountField control={control}/>
-                            <PersonField
-                                required
-                                control={control}
-                            />
-                        </ModalBody>
+        <Modal
+            isOpen={isOpen}
+            onClose={close}
+        >
+            <ModalOverlay/>
+            <ModalContent>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <ModalHeader>Add revenue</ModalHeader>
+                    <ModalCloseButton/>
+                    <ModalBody pb={6}>
+                        <NameField control={control}/>
+                        <AmountField control={control}/>
+                        <PersonField
+                            required
+                            control={control}
+                            defaultValue={value?.request?.person}
+                        />
+                    </ModalBody>
 
-                        <ModalFooter>
-                            <SubmitButton
-                                isLoading={isSubmitting}
-                                control={control}
-                            />
-                            <Button onClick={close}>Cancel</Button>
-                        </ModalFooter>
-                    </form>
-                </ModalContent>
-            </Modal>
-        </Box>
+                    <ModalFooter>
+                        <SubmitButton
+                            isLoading={isSubmitting}
+                            control={control}
+                        />
+                        <Button onClick={close}>Cancel</Button>
+                    </ModalFooter>
+                </form>
+            </ModalContent>
+        </Modal>
     )
 }

@@ -40,7 +40,7 @@ export const PersonScreen = () => {
         <>
             <Center px={0}>
                 <PersonTable
-                    persons={data || []}
+                    data={data || []}
                     onAdd={modal.open}
                     onEdit={onEdit}
                     onDelete={onDelete}

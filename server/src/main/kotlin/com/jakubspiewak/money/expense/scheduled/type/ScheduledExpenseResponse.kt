@@ -5,9 +5,9 @@ import com.jakubspiewak.money.tag.type.TagResponse
 import java.math.BigDecimal
 
 data class ScheduledExpenseResponse(
-    val id: String,
-    val name: String,
-    val amount: BigDecimal,
-    val person: PersonResponse?,
-    val tags: List<TagResponse>
+        val id: String,
+        val name: String,
+        val amount: BigDecimal,
+        val person: PersonResponse?,
+        val tags: List<TagResponse>
 )

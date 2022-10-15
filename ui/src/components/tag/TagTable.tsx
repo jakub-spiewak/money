@@ -12,18 +12,11 @@ import {
     Tr,
     VStack,
 } from "@chakra-ui/react";
-import {TagRequest, TagResponse} from "../../redux/generated/redux-api";
-import {LoadingDataTable} from "../util/LoadingDataTable";
+import {TagResponse} from "../../redux/generated/redux-api";
+import {LoadingDataTable} from "../util/table/LoadingDataTable";
 import {theme} from "../../theme";
-import {ActionButtonsTableCell} from "../util/ActionButtonsTableCell";
-
-interface Props {
-    tags: TagResponse[],
-    onAdd: () => void;
-    onEdit: (tag: TagResponse) => void,
-    onDelete: (tag: TagRequest) => Promise<void>,
-    isLoading?: boolean,
-}
+import {ActionButtonsTableCell} from "../util/table/ActionButtonsTableCell";
+import {SimpleTableProps} from "../util/table/types";
 
 const TableHeadings = () => (
     <Tr>
@@ -32,8 +25,8 @@ const TableHeadings = () => (
     </Tr>
 )
 
-export const TagTable = (props: Props) => {
-    const {isLoading, tags, onEdit, onDelete, onAdd} = props
+export const TagTable = (props: SimpleTableProps<TagResponse>) => {
+    const {isLoading, data, onEdit, onDelete, onAdd} = props
 
     return (
         <VStack maxW={"100vh"}>
@@ -52,7 +45,7 @@ export const TagTable = (props: Props) => {
                         {
                             isLoading ?
                                 <LoadingDataTable size={2}/> :
-                                tags.map((tag, index) => {
+                                data.map((tag, index) => {
                                     return (
                                         <Tr key={`tag_${index}`}>
                                             <Td>{tag.name}</Td>

@@ -26,7 +26,7 @@ export const RevenueScreen = () => {
             request: {
                 name: revenue.name,
                 amount: revenue.amount,
-                personId: revenue.person?.id
+                person: revenue.person?.id
             }
         })
     }
@@ -45,7 +45,7 @@ export const RevenueScreen = () => {
         <>
             <Center>
                 <RevenueTable
-                    revenues={data || []}
+                    data={data || []}
                     onAdd={modal.open}
                     onEdit={onEdit}
                     onDelete={onDelete}

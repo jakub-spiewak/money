@@ -1,8 +1,8 @@
 import {ScheduledExpenseResponse} from "../../../../redux/generated/redux-api";
-import {ActionButtonsTableCell} from "../../../util/ActionButtonsTableCell";
+import {ActionButtonsTableCell} from "../../../util/table/ActionButtonsTableCell";
 import {Td, Tr} from "@chakra-ui/react";
-import {AmountTableCell} from "../../../util/AmountTableCell";
-import {PersonTableCell} from "../../../util/PersonTableCell";
+import {AmountTableCell} from "../../../util/table/AmountTableCell";
+import {PersonTableCell} from "../../../util/table/PersonTableCell";
 import {ExpenseTableTagsCell} from "../../ExpenseTableTagsCell";
 import {ExpenseTableContentProps} from "../../types";
 

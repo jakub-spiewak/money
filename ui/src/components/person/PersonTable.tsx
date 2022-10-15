@@ -12,18 +12,11 @@ import {
     Tr,
     VStack,
 } from "@chakra-ui/react";
-import {LoadingDataTable} from "../util/LoadingDataTable";
+import {LoadingDataTable} from "../util/table/LoadingDataTable";
 import {PersonResponse} from "../../redux/generated/redux-api";
 import {theme} from "../../theme";
-import {ActionButtonsTableCell} from "../util/ActionButtonsTableCell";
-
-interface Props {
-    persons: PersonResponse[],
-    onAdd: () => void;
-    onEdit: (person: PersonResponse) => void,
-    onDelete: (person: PersonResponse) => Promise<void>,
-    isLoading?: boolean
-}
+import {ActionButtonsTableCell} from "../util/table/ActionButtonsTableCell";
+import {SimpleTableProps} from "../util/table/types";
 
 const TableHeadings = () => (
     <Tr>
@@ -33,8 +26,8 @@ const TableHeadings = () => (
     </Tr>
 )
 
-export const PersonTable = (props: Props) => {
-    const {persons, onEdit, onDelete, onAdd, isLoading} = props
+export const PersonTable = (props: SimpleTableProps<PersonResponse>) => {
+    const {data, onEdit, onDelete, onAdd, isLoading} = props
 
     return (
         <VStack maxW={"100vw"}>
@@ -55,7 +48,7 @@ export const PersonTable = (props: Props) => {
                         {
                             isLoading ?
                                 <LoadingDataTable size={3}/> :
-                                persons.map((person, index) => {
+                                data.map((person, index) => {
                                     return (
                                         <Tr key={`person_${index}`}>
                                             <Td>{person.firstName}</Td>

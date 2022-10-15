@@ -284,7 +284,7 @@ export type TagRequest = {
 export type RevenueRequest = {
   name?: string;
   amount?: number;
-  personId?: string;
+  person?: string;
 };
 export type PersonRequest = {
   firstName?: string;

@@ -9,7 +9,7 @@ import {
     Tr, useBreakpointValue,
 } from "@chakra-ui/react";
 import {ScheduledExpenseResponse} from "../../../redux/generated/redux-api";
-import {LoadingDataTable} from "../../util/LoadingDataTable";
+import {LoadingDataTable} from "../../util/table/LoadingDataTable";
 import {useMemo} from "react";
 import {ScheduledExpenseMobileTableContent} from "./table/ScheduledExpenseMobileTableContent";
 import {ScheduledExpenseDesktopTableContent} from "./table/ScheduledExpenseDesktopTableContent";

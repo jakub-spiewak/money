@@ -1,4 +1,4 @@
-import {PersonResponse} from "../../redux/generated/redux-api";
+import {PersonResponse} from "../../../redux/generated/redux-api";
 import {AiOutlineHome} from "react-icons/ai";
 import {Box, Flex} from "@chakra-ui/react";
 

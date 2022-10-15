@@ -13,16 +13,9 @@ import {
     VStack,
 } from "@chakra-ui/react";
 import {RevenueResponse} from "../../redux/generated/redux-api";
-import {LoadingDataTable} from "../util/LoadingDataTable";
-import {ActionButtonsTableCell} from "../util/ActionButtonsTableCell";
-
-interface Props {
-    revenues: RevenueResponse[],
-    onAdd: () => void;
-    onEdit: (revenue: RevenueResponse) => void,
-    onDelete: (revenue: RevenueResponse) => Promise<void>,
-    isLoading?: boolean
-}
+import {LoadingDataTable} from "../util/table/LoadingDataTable";
+import {ActionButtonsTableCell} from "../util/table/ActionButtonsTableCell";
+import {SimpleTableProps} from "../util/table/types";
 
 const TableHeadings = () => (
     <Tr>
@@ -33,8 +26,8 @@ const TableHeadings = () => (
     </Tr>
 )
 
-export const RevenueTable = (props: Props) => {
-    const {isLoading, revenues, onEdit, onDelete, onAdd} = props
+export const RevenueTable = (props: SimpleTableProps<RevenueResponse>) => {
+    const {isLoading, data, onEdit, onDelete, onAdd} = props
 
     return (
         <VStack maxW={"100vw"}>
@@ -53,7 +46,7 @@ export const RevenueTable = (props: Props) => {
                         {
                             isLoading ?
                                 <LoadingDataTable size={4}/> :
-                                revenues.map((revenue, index) => {
+                                data.map((revenue, index) => {
                                     const {person} = revenue
                                     return (
                                         <Tr key={`revenue_${index}`}>

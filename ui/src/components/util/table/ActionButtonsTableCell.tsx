@@ -1,6 +1,6 @@
 import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {Box, IconButton, useDisclosure} from "@chakra-ui/react";
-import {DeleteAlertDialog} from "./DeleteAlertDialog";
+import {DeleteAlertDialog} from "../DeleteAlertDialog";
 
 interface Props {
     onEdit: () => void,

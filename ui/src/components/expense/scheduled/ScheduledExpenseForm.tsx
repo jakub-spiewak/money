@@ -15,7 +15,7 @@ import {FormModalStateType} from "../../../utils/Hooks";
 import {
     ScheduledExpenseRequest,
 } from "../../../redux/generated/redux-api";
-import {SubmitButton} from "../../util/SubmitButton";
+import {SubmitButton} from "../../util/form/SubmitButton";
 import {AmountField} from "../../util/fields/AmountField";
 import {PersonField} from "../../util/fields/PersonField";
 import {TagsField} from "../../util/fields/TagsField";
@@ -62,7 +62,10 @@ export const ScheduledExpenseForm = (props: ExpenseProps) => {
                         <ModalBody pb={6}>
                             <NameField control={control}/>
                             <AmountField control={control}/>
-                            <PersonField control={control}/>
+                            <PersonField
+                                control={control}
+                                defaultValue={value?.request?.person}
+                            />
                             <TagsField control={control}/>
                         </ModalBody>
 

@@ -4,8 +4,8 @@ import com.jakubspiewak.money.person.type.PersonResponse
 import java.math.BigDecimal
 
 data class RevenueResponse(
-    val id: String,
-    val name: String,
-    val amount: BigDecimal,
-    val person: PersonResponse
+        val id: String,
+        val name: String,
+        val amount: BigDecimal,
+        val person: PersonResponse
 )

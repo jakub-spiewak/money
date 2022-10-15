@@ -16,7 +16,7 @@ import {
     SingleExpenseRequest,
     useReadTagQuery
 } from "../../../redux/generated/redux-api";
-import {SubmitButton} from "../../util/SubmitButton";
+import {SubmitButton} from "../../util/form/SubmitButton";
 import {AmountField} from "../../util/fields/AmountField";
 import {PersonField} from "../../util/fields/PersonField";
 import {TagsField} from "../../util/fields/TagsField";
@@ -66,7 +66,10 @@ export const SingleExpenseForm = (props: Props) => {
                             <NameField control={control}/>
                             <AmountField control={control}/>
                             <DateField control={control}/>
-                            <PersonField control={control}/>
+                            <PersonField
+                                control={control}
+                                defaultValue={value?.request?.person}
+                            />
                             <TagsField control={control}/>
                         </ModalBody>
 

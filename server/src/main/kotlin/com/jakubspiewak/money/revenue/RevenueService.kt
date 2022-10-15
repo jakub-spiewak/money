@@ -27,7 +27,7 @@ class RevenueService(private val repository: RevenueRepository, private val pers
             }.sort { o1, o2 -> o2.amount.compareTo(o1.amount) }
 
     fun create(request: RevenueRequest): Mono<Unit> =
-        personRepository.findById(ObjectId(request.personId)).flatMap { person ->
+        personRepository.findById(ObjectId(request.person)).flatMap { person ->
                 repository.save(
                     RevenueDocument(
                         name = request.name, amount = request.amount, person = person.id
@@ -36,7 +36,7 @@ class RevenueService(private val repository: RevenueRepository, private val pers
             }.map { }
 
     fun update(id: String, request: RevenueRequest): Mono<Unit> =
-        personRepository.findById(ObjectId(request.personId)).flatMap { person ->
+        personRepository.findById(ObjectId(request.person)).flatMap { person ->
                 repository.save(
                     RevenueDocument(
                         id = ObjectId(id), name = request.name, amount = request.amount, person = person.id

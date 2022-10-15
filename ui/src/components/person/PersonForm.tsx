@@ -1,5 +1,4 @@
 import {
-    Box,
     Button,
     Modal,
     ModalBody,
@@ -11,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
-import {SubmitButton} from "../util/SubmitButton";
+import {SubmitButton} from "../util/form/SubmitButton";
 import {PersonRequest} from "../../redux/generated/redux-api";
 import {FormModalStateType} from "../../utils/Hooks";
 import {NameField} from "../util/fields/NameField";
@@ -41,36 +40,34 @@ export const PersonForm = (props: Props) => {
     }, [reset, value, isOpen])
 
     return (
-        <Box>
-            <Modal
-                isOpen={isOpen}
-                onClose={close}
-            >
-                <ModalOverlay/>
-                <ModalContent>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <ModalHeader>Add person</ModalHeader>
-                        <ModalCloseButton/>
-                        <ModalBody pb={6}>
-                            <NameField
-                                name={"firstName"}
-                                label={"First name"}
-                                control={control}
-                            />
-                            <NameField
-                                name={"lastName"}
-                                label={"Last name"}
-                                control={control}
-                            />
-                        </ModalBody>
+        <Modal
+            isOpen={isOpen}
+            onClose={close}
+        >
+            <ModalOverlay/>
+            <ModalContent>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <ModalHeader>Add person</ModalHeader>
+                    <ModalCloseButton/>
+                    <ModalBody pb={6}>
+                        <NameField
+                            name={"firstName"}
+                            label={"First name"}
+                            control={control}
+                        />
+                        <NameField
+                            name={"lastName"}
+                            label={"Last name"}
+                            control={control}
+                        />
+                    </ModalBody>
 
-                        <ModalFooter>
-                            <SubmitButton isLoading={isSubmitting}/>
-                            <Button onClick={close}>Cancel</Button>
-                        </ModalFooter>
-                    </form>
-                </ModalContent>
-            </Modal>
-        </Box>
+                    <ModalFooter>
+                        <SubmitButton isLoading={isSubmitting}/>
+                        <Button onClick={close}>Cancel</Button>
+                    </ModalFooter>
+                </form>
+            </ModalContent>
+        </Modal>
     )
 }

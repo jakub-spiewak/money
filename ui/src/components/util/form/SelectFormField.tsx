@@ -8,7 +8,7 @@ interface Props extends FormFieldProps {
 }
 
 export const SelectFormField = (props: Props) => {
-    const {label, name, rules, control, children} = props
+    const {label, name, rules, control, defaultValue, children} = props
     return (
         <Controller
             name={name}
@@ -28,6 +28,7 @@ export const SelectFormField = (props: Props) => {
                     <Select
                         ref={ref}
                         placeholder={label}
+                        defaultValue={defaultValue}
                         value={value}
                         onChange={onChange}
                         onBlur={onBlur}

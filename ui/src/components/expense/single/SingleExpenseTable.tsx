@@ -10,7 +10,7 @@ import {
     useBreakpointValue,
 } from "@chakra-ui/react";
 import {SingleExpenseResponse} from "../../../redux/generated/redux-api";
-import {LoadingDataTable} from "../../util/LoadingDataTable";
+import {LoadingDataTable} from "../../util/table/LoadingDataTable";
 import {SingleExpenseDesktopTableContent} from "./table/SingleExpenseDesktopTableContent";
 import {useMemo} from "react";
 import {SingleExpenseMobileTableContent} from "./table/SingleExpenseMobileTableContent";
