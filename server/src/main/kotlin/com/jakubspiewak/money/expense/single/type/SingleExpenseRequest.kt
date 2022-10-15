@@ -7,6 +7,7 @@ import java.util.*
 data class SingleExpenseRequest(
         val name: String,
         val amount: BigDecimal,
+        val parentExpense: String?,
         val person: String?,
         @JsonFormat(pattern = "yyyy-MM-dd")
         val date: Date,

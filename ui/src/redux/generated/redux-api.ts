@@ -293,6 +293,7 @@ export type PersonRequest = {
 export type SingleExpenseRequest = {
   name?: string;
   amount?: number;
+  parentExpense?: string;
   person?: string;
   date?: string;
   tags?: string[];
@@ -318,19 +319,20 @@ export type RevenueResponse = {
   amount?: number;
   person?: PersonResponse;
 };
-export type SingleExpenseResponse = {
-  id?: string;
-  name?: string;
-  amount?: number;
-  person?: PersonResponse;
-  date?: string;
-  tags?: TagResponse[];
-};
 export type ScheduledExpenseResponse = {
   id?: string;
   name?: string;
   amount?: number;
   person?: PersonResponse;
+  tags?: TagResponse[];
+};
+export type SingleExpenseResponse = {
+  id?: string;
+  name?: string;
+  amount?: number;
+  parentExpense?: ScheduledExpenseResponse;
+  person?: PersonResponse;
+  date?: string;
   tags?: TagResponse[];
 };
 export type ExpenseSummaryFromTag = {

@@ -19,6 +19,7 @@ const TableDesktopHeading = () => (
     <Tr>
         <Th>Name</Th>
         <Th isNumeric>Amount</Th>
+        <Th>Parent expense</Th>
         <Th>Date</Th>
         <Th>Person</Th>
         <Th>Tags</Th>
@@ -51,7 +52,8 @@ export const SingleExpenseTable = (props: ExpenseTableProps<SingleExpenseRespons
             <Tbody>
                 {
                     isLoading ?
-                        <LoadingDataTable size={5}/> :
+                        // TODO: if it is mobile then 7 is too large size span
+                        <LoadingDataTable size={7}/> :
                         <TableContent
                             expenses={expenses}
                             onEdit={onEdit}

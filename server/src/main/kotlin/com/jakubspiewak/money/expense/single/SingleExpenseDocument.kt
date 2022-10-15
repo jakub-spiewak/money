@@ -19,6 +19,8 @@ class SingleExpenseDocument(
         var name: String = "",
         @Field(name = AMOUNT_FIELD, targetType = FieldType.DECIMAL128)
         var amount: BigDecimal = BigDecimal.ZERO,
+        @Field(name = PARENT_EXPENSE_FIELD, targetType = FieldType.OBJECT_ID)
+        var parentExpense: ObjectId?,
         @Field(name = PERSON_FIELD, targetType = FieldType.OBJECT_ID)
         var person: ObjectId?,
         @Field(name = DATE, targetType = FieldType.DATE_TIME)
@@ -31,6 +33,7 @@ class SingleExpenseDocument(
 
         const val NAME_FIELD = "name"
         const val AMOUNT_FIELD = "amount"
+        const val PARENT_EXPENSE_FIELD = "parent_expense"
         const val PERSON_FIELD = "person"
         const val TAGS_FIELD = "tags"
         const val DATE = "date"

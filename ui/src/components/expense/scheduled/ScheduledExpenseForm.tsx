@@ -44,7 +44,12 @@ export const ScheduledExpenseForm = (props: ExpenseProps) => {
 
     useEffect(() => {
         if (isOpen) {
-            reset(value?.request || {amount: undefined, person: undefined, name: undefined, tags: undefined})
+            reset(value?.request || {
+                amount: undefined,
+                person: undefined,
+                name: undefined,
+                tags: undefined
+            })
         }
     }, [reset, value, isOpen])
 

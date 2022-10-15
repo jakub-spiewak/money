@@ -18,7 +18,7 @@ export const PersonField = (props: Props) => {
             label={label || "Person"}
             defaultValue={defaultValue}
             rules={{
-                required: required ? 'This is required' : undefined
+                required: required ? 'This is required' : undefined,
             }}
         >
             {

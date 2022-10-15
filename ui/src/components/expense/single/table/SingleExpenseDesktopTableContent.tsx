@@ -6,6 +6,7 @@ import {DateTableCell} from "../../../util/table/DateTableCell";
 import {PersonTableCell} from "../../../util/table/PersonTableCell";
 import {ExpenseTableTagsCell} from "../../ExpenseTableTagsCell";
 import {ExpenseTableContentProps} from "../../types";
+import {ExpenseParentTableCell} from "../../../util/table/ExpenseParentTableCell";
 
 export const SingleExpenseDesktopTableContent = (props: ExpenseTableContentProps<SingleExpenseResponse>) => {
     const {expenses, onEdit, onDelete} = props
@@ -19,6 +20,9 @@ export const SingleExpenseDesktopTableContent = (props: ExpenseTableContentProps
                             <Td>{expense.name}</Td>
                             <Td isNumeric>
                                 <AmountTableCell amount={expense.amount}/>
+                            </Td>
+                            <Td>
+                                <ExpenseParentTableCell expense={expense.parentExpense}/>
                             </Td>
                             <Td>
                                 <DateTableCell date={expense.date}/>

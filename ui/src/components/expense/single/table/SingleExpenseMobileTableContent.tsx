@@ -3,10 +3,11 @@ import {Box, Collapse, Fade, Heading, HStack, IconButton, Td, Text, Tr, VStack} 
 import {AmountTableCell} from "../../../util/table/AmountTableCell";
 import {visualizePerson} from "../../../util/table/PersonTableCell";
 import {ExpenseTableTagsCell} from "../../ExpenseTableTagsCell";
-import {ChevronDownIcon}  from "@chakra-ui/icons";
+import {ChevronDownIcon} from "@chakra-ui/icons";
 import {useState} from "react";
 import {ExpenseTableContentProps} from "../../types";
 import {SingleExpenseResponse} from "../../../../redux/generated/redux-api";
+import {ExpenseParentTableCell} from "../../../util/table/ExpenseParentTableCell";
 
 export const SingleExpenseMobileTableContent = (props: ExpenseTableContentProps<SingleExpenseResponse>) => {
     const [currentItemIndex, setCurrentItemIndex] = useState<string>()
@@ -70,12 +71,22 @@ export const SingleExpenseMobileTableContent = (props: ExpenseTableContentProps<
                                                     name={expense.name || ''}
                                                 />
                                             </HStack>
-                                            <VStack alignItems={"start"}>
+                                            <VStack
+                                                gap={1}
+                                                alignItems={"start"}
+                                                pt={4}
+                                            >
                                                 <HStack>
                                                     <Text as={"b"}>
                                                         Person:
                                                     </Text>
                                                     <Box>{visualizePerson(expense.person)}</Box>
+                                                </HStack>
+                                                <HStack>
+                                                    <Text as={"b"}>
+                                                        Parent expense:
+                                                    </Text>
+                                                    <ExpenseParentTableCell expense={expense.parentExpense}/>
                                                 </HStack>
                                                 <HStack>
                                                     <Text as={"b"}>

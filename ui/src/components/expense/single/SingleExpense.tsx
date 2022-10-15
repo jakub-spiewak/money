@@ -27,6 +27,7 @@ export const SingleExpense = (props: Props) => {
                 name: expense.name,
                 amount: expense.amount,
                 person: expense.person?.id,
+                parentExpense: expense.parentExpense?.id,
                 tags: expense.tags?.map(tag => tag.id || "") || [],
                 date: expense.date
             }
