@@ -1,6 +1,6 @@
 import React from 'react';
 import "./App.css"
-import {ChakraProvider, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react";
+import {ChakraProvider, Tab, TabList, TabPanels, Tabs} from "@chakra-ui/react";
 import {GlobalContextProvider} from "./utils/Context"
 import {PersonScreen} from "./components/person/PersonScreen";
 import {TagScreen} from "./components/tag/TagScreen";
@@ -10,6 +10,7 @@ import {AnalyzeScreen} from "./components/analyze/AnalyzeScreen";
 import {Provider} from "react-redux";
 import {store} from "./redux/store";
 import {theme} from "./theme";
+import {ScreenTabPanel} from "./components/util/ScreenTabPanel";
 
 function App() {
     return (
@@ -29,21 +30,21 @@ function App() {
                             <Tab>Analyze</Tab>
                         </TabList>
                         <TabPanels maxW={"100vw"}>
-                            <TabPanel p={0}>
+                            <ScreenTabPanel>
                                 <PersonScreen/>
-                            </TabPanel>
-                            <TabPanel p={0}>
+                            </ScreenTabPanel>
+                            <ScreenTabPanel>
                                 <TagScreen/>
-                            </TabPanel>
-                            <TabPanel p={0}>
+                            </ScreenTabPanel>
+                            <ScreenTabPanel>
                                 <RevenueScreen/>
-                            </TabPanel>
-                            <TabPanel p={0}>
+                            </ScreenTabPanel>
+                            <ScreenTabPanel>
                                 <ExpenseScreen/>
-                            </TabPanel>
-                            <TabPanel p={0}>
+                            </ScreenTabPanel>
+                            <ScreenTabPanel>
                                 <AnalyzeScreen/>
-                            </TabPanel>
+                            </ScreenTabPanel>
                         </TabPanels>
                     </Tabs>
                 </GlobalContextProvider>

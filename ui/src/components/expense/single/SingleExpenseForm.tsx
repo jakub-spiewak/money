@@ -20,7 +20,7 @@ import {TagsField} from "../../util/fields/TagsField";
 import {NameField} from "../../util/fields/NameField";
 import {DateField} from "../../util/fields/DateField";
 import {ExpenseField} from "../../util/fields/ExpenseField";
-import {sanitizeFormValue} from "../../../utils/util";
+import {sanitizeFormValues} from "../../../utils/util";
 
 interface Props {
     state: FormModalStateType<SingleExpenseRequest>,
@@ -38,7 +38,7 @@ export const SingleExpenseForm = (props: Props) => {
     } = useForm<SingleExpenseRequest>()
 
     const onSubmit = async (expense: SingleExpenseRequest) => {
-        await onSubmitFromProps(sanitizeFormValue(expense))
+        await onSubmitFromProps(sanitizeFormValues(expense))
         close()
     }
 

@@ -15,9 +15,7 @@ export const PersonTableCell = (props: Props) => {
 
     if (!person) return (
         <Center>
-            <>-</>
             <AiOutlineHome/>
-            <>-</>
         </Center>
     )
 

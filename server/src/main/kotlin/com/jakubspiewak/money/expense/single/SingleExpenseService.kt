@@ -1,7 +1,7 @@
 package com.jakubspiewak.money.expense.single
 
 import com.jakubspiewak.money.expense.scheduled.ScheduledExpenseService
-import com.jakubspiewak.money.expense.scheduled.type.ScheduledExpenseResponse
+import com.jakubspiewak.money.expense.single.type.SingleExpenseParentResponse
 import com.jakubspiewak.money.expense.single.type.SingleExpenseRequest
 import com.jakubspiewak.money.expense.single.type.SingleExpenseResponse
 import com.jakubspiewak.money.person.PersonRepository
@@ -37,12 +37,10 @@ class SingleExpenseService(
             val tagsDocuments = data.t3
 
             val parentExpense = parentExpenseDocument.map {
-                ScheduledExpenseResponse(
+                SingleExpenseParentResponse(
                         id = it.id,
                         name = it.name,
                         amount = it.amount,
-                        person = it.person,
-                        tags = it.tags
                 )
             }.orElse(null)
 

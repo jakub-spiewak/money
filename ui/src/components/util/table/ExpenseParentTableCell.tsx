@@ -1,9 +1,9 @@
-import {ScheduledExpenseResponse} from "../../../redux/generated/redux-api";
+import {SingleExpenseParentResponse} from "../../../redux/generated/redux-api";
 import {Center, Text} from "@chakra-ui/react";
 import {BsCalendar4Event} from "react-icons/bs";
 
 interface Props {
-    expense?: ScheduledExpenseResponse
+    expense?: SingleExpenseParentResponse
 }
 
 export const ExpenseParentTableCell = (props: Props) => {
@@ -11,9 +11,7 @@ export const ExpenseParentTableCell = (props: Props) => {
 
     if (!expense) return (
         <Center>
-            <>-</>
             <BsCalendar4Event/>
-            <>-</>
         </Center>
     )
 

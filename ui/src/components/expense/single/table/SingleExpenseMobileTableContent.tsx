@@ -102,7 +102,6 @@ export const SingleExpenseMobileTableContent = (props: ExpenseTableContentProps<
                                         </Box>
                                     </Collapse>
                                 </Td>
-
                             </Tr>
                         </>
                     )

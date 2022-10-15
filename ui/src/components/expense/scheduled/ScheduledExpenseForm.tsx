@@ -20,6 +20,7 @@ import {AmountField} from "../../util/fields/AmountField";
 import {PersonField} from "../../util/fields/PersonField";
 import {TagsField} from "../../util/fields/TagsField";
 import {NameField} from "../../util/fields/NameField";
+import {sanitizeFormValues} from "../../../utils/util";
 
 interface ExpenseProps {
     state: FormModalStateType<ScheduledExpenseRequest>,
@@ -38,7 +39,7 @@ export const ScheduledExpenseForm = (props: ExpenseProps) => {
 
 
     const onSubmit = async (expense: ScheduledExpenseRequest) => {
-        await onSubmitFromProps(expense)
+        await onSubmitFromProps(sanitizeFormValues(expense))
         close()
     }
 

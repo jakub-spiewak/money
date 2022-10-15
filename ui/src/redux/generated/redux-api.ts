@@ -319,20 +319,25 @@ export type RevenueResponse = {
   amount?: number;
   person?: PersonResponse;
 };
-export type ScheduledExpenseResponse = {
+export type SingleExpenseParentResponse = {
   id?: string;
   name?: string;
   amount?: number;
-  person?: PersonResponse;
-  tags?: TagResponse[];
 };
 export type SingleExpenseResponse = {
   id?: string;
   name?: string;
   amount?: number;
-  parentExpense?: ScheduledExpenseResponse;
+  parentExpense?: SingleExpenseParentResponse;
   person?: PersonResponse;
   date?: string;
+  tags?: TagResponse[];
+};
+export type ScheduledExpenseResponse = {
+  id?: string;
+  name?: string;
+  amount?: number;
+  person?: PersonResponse;
   tags?: TagResponse[];
 };
 export type ExpenseSummaryFromTag = {
