@@ -1,7 +1,5 @@
 import {
-    Table,
     TableCaption,
-    TableContainer,
     Tbody,
     Tfoot,
     Th,
@@ -14,6 +12,7 @@ import {useMemo} from "react";
 import {ScheduledExpenseMobileTableContent} from "./table/ScheduledExpenseMobileTableContent";
 import {ScheduledExpenseDesktopTableContent} from "./table/ScheduledExpenseDesktopTableContent";
 import {ExpenseTableProps} from "../types";
+import {ExpenseTableContainer} from "../ExpenseTableContainer";
 
 const TableDesktopHeading = () => (
     <Tr>
@@ -42,32 +41,27 @@ export const ScheduledExpenseTable = (props: ExpenseTableProps<ScheduledExpenseR
     const TableHeading = useMemo(() => isMobile ? TableMobileHeading : TableDesktopHeading, [isMobile])
 
     return (
-        <TableContainer minW={["100vw", null, "50vw"]}>
-            <Table
-                variant='simple'
-                size={'sm'}
-            >
-                <TableCaption>
-                    Scheduled expenses
-                </TableCaption>
-                <Thead>
-                    <TableHeading/>
-                </Thead>
-                <Tbody>
-                    {
-                        isLoading ?
-                            <LoadingDataTable size={5}/> :
-                            <TableContent
-                                expenses={expenses}
-                                onEdit={onEdit}
-                                onDelete={onDelete}
-                            />
-                    }
-                </Tbody>
-                <Tfoot>
-                    <TableHeading/>
-                </Tfoot>
-            </Table>
-        </TableContainer>
+        <ExpenseTableContainer>
+            <TableCaption>
+                Scheduled expenses
+            </TableCaption>
+            <Thead>
+                <TableHeading/>
+            </Thead>
+            <Tbody>
+                {
+                    isLoading ?
+                        <LoadingDataTable size={5}/> :
+                        <TableContent
+                            expenses={expenses}
+                            onEdit={onEdit}
+                            onDelete={onDelete}
+                        />
+                }
+            </Tbody>
+            <Tfoot>
+                <TableHeading/>
+            </Tfoot>
+        </ExpenseTableContainer>
     )
 }

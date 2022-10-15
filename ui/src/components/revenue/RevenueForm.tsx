@@ -67,7 +67,6 @@ export const RevenueForm = (props: Props) => {
                             defaultValue={value?.request?.person}
                         />
                     </ModalBody>
-
                     <ModalFooter>
                         <SubmitButton
                             isLoading={isSubmitting}

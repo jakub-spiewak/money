@@ -34,7 +34,6 @@ export const TagScreen = () => {
         else await createTag({tagRequest: tag})
     }
 
-
     return (
         <>
             <Center>

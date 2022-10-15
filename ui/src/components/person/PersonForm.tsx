@@ -61,7 +61,6 @@ export const PersonForm = (props: Props) => {
                             control={control}
                         />
                     </ModalBody>
-
                     <ModalFooter>
                         <SubmitButton isLoading={isSubmitting}/>
                         <Button onClick={close}>Cancel</Button>

@@ -16,7 +16,7 @@ function App() {
         <Provider store={store}>
             <ChakraProvider theme={theme}>
                 <GlobalContextProvider>
-                    <Tabs defaultIndex={2}>
+                    <Tabs defaultIndex={0}>
                         <TabList
                             maxW={"100vw"}
                             overflowX={"auto"}
@@ -29,19 +29,19 @@ function App() {
                             <Tab>Analyze</Tab>
                         </TabList>
                         <TabPanels maxW={"100vw"}>
-                            <TabPanel>
+                            <TabPanel p={0}>
                                 <PersonScreen/>
                             </TabPanel>
-                            <TabPanel>
+                            <TabPanel p={0}>
                                 <TagScreen/>
                             </TabPanel>
-                            <TabPanel>
+                            <TabPanel p={0}>
                                 <RevenueScreen/>
                             </TabPanel>
-                            <TabPanel>
+                            <TabPanel p={0}>
                                 <ExpenseScreen/>
                             </TabPanel>
-                            <TabPanel>
+                            <TabPanel p={0}>
                                 <AnalyzeScreen/>
                             </TabPanel>
                         </TabPanels>

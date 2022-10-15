@@ -38,7 +38,7 @@ export const PersonScreen = () => {
 
     return (
         <>
-            <Center px={0}>
+            <Center>
                 <PersonTable
                     data={data || []}
                     onAdd={modal.open}

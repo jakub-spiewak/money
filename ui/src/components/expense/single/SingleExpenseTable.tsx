@@ -1,7 +1,5 @@
 import {
-    Table,
     TableCaption,
-    TableContainer,
     Tbody,
     Tfoot,
     Th,
@@ -15,12 +13,13 @@ import {SingleExpenseDesktopTableContent} from "./table/SingleExpenseDesktopTabl
 import {useMemo} from "react";
 import {SingleExpenseMobileTableContent} from "./table/SingleExpenseMobileTableContent";
 import {ExpenseTableProps} from "../types";
+import {ExpenseTableContainer} from "../ExpenseTableContainer";
 
 const TableDesktopHeading = () => (
     <Tr>
         <Th>Name</Th>
         <Th isNumeric>Amount</Th>
-        <Th isNumeric>Date</Th>
+        <Th>Date</Th>
         <Th>Person</Th>
         <Th>Tags</Th>
         <Th isNumeric>Actions</Th>
@@ -44,30 +43,25 @@ export const SingleExpenseTable = (props: ExpenseTableProps<SingleExpenseRespons
     const TableHeading = useMemo(() => isMobile ? TableMobileHeading : TableDesktopHeading, [isMobile])
 
     return (
-        <TableContainer minW={["100vw", null, "50vw"]}>
-            <Table
-                variant='simple'
-                size={'sm'}
-            >
-                <TableCaption>Single expenses</TableCaption>
-                <Thead>
-                    <TableHeading/>
-                </Thead>
-                <Tbody>
-                    {
-                        isLoading ?
-                            <LoadingDataTable size={5}/> :
-                            <TableContent
-                                expenses={expenses}
-                                onEdit={onEdit}
-                                onDelete={onDelete}
-                            />
-                    }
-                </Tbody>
-                <Tfoot>
-                    <TableHeading/>
-                </Tfoot>
-            </Table>
-        </TableContainer>
+        <ExpenseTableContainer>
+            <TableCaption>Single expenses</TableCaption>
+            <Thead>
+                <TableHeading/>
+            </Thead>
+            <Tbody>
+                {
+                    isLoading ?
+                        <LoadingDataTable size={5}/> :
+                        <TableContent
+                            expenses={expenses}
+                            onEdit={onEdit}
+                            onDelete={onDelete}
+                        />
+                }
+            </Tbody>
+            <Tfoot>
+                <TableHeading/>
+            </Tfoot>
+        </ExpenseTableContainer>
     )
 }

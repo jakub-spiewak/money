@@ -52,7 +52,6 @@ export const TagForm = (props: Props) => {
                     <ModalBody pb={6}>
                         <NameField control={control}/>
                     </ModalBody>
-
                     <ModalFooter>
                         <SubmitButton isLoading={isSubmitting}/>
                         <Button onClick={close}>Cancel</Button>
