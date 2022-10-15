@@ -3,28 +3,20 @@ import {
     TableCaption,
     TableContainer,
     Tbody,
-    Td,
     Tfoot,
     Th,
     Thead,
     Tr,
+    useBreakpointValue,
 } from "@chakra-ui/react";
 import {SingleExpenseResponse} from "../../../redux/generated/redux-api";
 import {LoadingDataTable} from "../../util/LoadingDataTable";
-import {ExpenseTableTagsCell} from "../ExpenseTableTagsCell";
-import {ActionButtonsTableCell} from "../../util/ActionButtonsTableCell";
-import {PersonTableCell} from "../../util/PersonTableCell";
-import {AmountTableCell} from "../../util/AmountTableCell";
-import {DateTableCell} from "../../util/DateTableCell";
+import {SingleExpenseDesktopTableContent} from "./table/SingleExpenseDesktopTableContent";
+import {useMemo} from "react";
+import {SingleExpenseMobileTableContent} from "./table/SingleExpenseMobileTableContent";
+import {ExpenseTableProps} from "../types";
 
-interface Props {
-    expenses: SingleExpenseResponse[],
-    onEdit: (expense: SingleExpenseResponse) => void,
-    onDelete: (expense: SingleExpenseResponse) => void,
-    isLoading?: boolean
-}
-
-const TableHeading = () => (
+const TableDesktopHeading = () => (
     <Tr>
         <Th>Name</Th>
         <Th isNumeric>Amount</Th>
@@ -35,18 +27,29 @@ const TableHeading = () => (
     </Tr>
 )
 
-export const SingleExpenseTable = (props: Props) => {
+const TableMobileHeading = () => (
+    <Tr>
+        <Th>Name</Th>
+        <Th isNumeric>Amount</Th>
+        <Th isNumeric>Actions</Th>
+    </Tr>
+)
+
+export const SingleExpenseTable = (props: ExpenseTableProps<SingleExpenseResponse>) => {
     const {isLoading, expenses, onEdit, onDelete} = props
 
+    const isMobile = useBreakpointValue({base: true, md: false}, {fallback: 'md'})
+
+    const TableContent = useMemo(() => isMobile ? SingleExpenseMobileTableContent : SingleExpenseDesktopTableContent, [isMobile])
+    const TableHeading = useMemo(() => isMobile ? TableMobileHeading : TableDesktopHeading, [isMobile])
+
     return (
-        <TableContainer minW={"50vw"}>
+        <TableContainer minW={["100vw", null, "50vw"]}>
             <Table
                 variant='simple'
                 size={'sm'}
             >
-                <TableCaption>
-                    Single expenses
-                </TableCaption>
+                <TableCaption>Single expenses</TableCaption>
                 <Thead>
                     <TableHeading/>
                 </Thead>
@@ -54,32 +57,11 @@ export const SingleExpenseTable = (props: Props) => {
                     {
                         isLoading ?
                             <LoadingDataTable size={5}/> :
-                            expenses.map((expense, index) => {
-                                return (
-                                    <Tr key={`expense${index}`}>
-                                        <Td>{expense.name}</Td>
-                                        <Td isNumeric>
-                                            <AmountTableCell amount={expense.amount}/>
-                                        </Td>
-                                        <Td>
-                                            <DateTableCell date={expense.date}/>
-                                        </Td>
-                                        <Td>
-                                            <PersonTableCell person={expense.person}/>
-                                        </Td>
-                                        <Td>
-                                            <ExpenseTableTagsCell tags={expense.tags || []}/>
-                                        </Td>
-                                        <Td isNumeric>
-                                            <ActionButtonsTableCell
-                                                onEdit={() => onEdit(expense)}
-                                                onDelete={() => onDelete(expense)}
-                                                deleteMessage={`Are you sure to delete ${expense?.name} tag?`}
-                                            />
-                                        </Td>
-                                    </Tr>
-                                )
-                            })
+                            <TableContent
+                                expenses={expenses}
+                                onEdit={onEdit}
+                                onDelete={onDelete}
+                            />
                     }
                 </Tbody>
                 <Tfoot>

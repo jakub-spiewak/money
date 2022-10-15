@@ -20,7 +20,7 @@ interface Props {
     revenues: RevenueResponse[],
     onAdd: () => void;
     onEdit: (revenue: RevenueResponse) => void,
-    onDelete: (revenue: RevenueResponse) => void,
+    onDelete: (revenue: RevenueResponse) => Promise<void>,
     isLoading?: boolean
 }
 
@@ -64,7 +64,7 @@ export const RevenueTable = (props: Props) => {
                                                 <ActionButtonsTableCell
                                                     onEdit={() => onEdit(revenue)}
                                                     onDelete={() => onDelete(revenue)}
-                                                    deleteMessage={`Are you sure to delete ${revenue?.name} tag?`}
+                                                    name={revenue?.name || ''}
                                                 />
                                             </Td>
                                         </Tr>

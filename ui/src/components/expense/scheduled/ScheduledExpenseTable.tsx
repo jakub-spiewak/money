@@ -3,27 +3,19 @@ import {
     TableCaption,
     TableContainer,
     Tbody,
-    Td,
     Tfoot,
     Th,
     Thead,
-    Tr,
+    Tr, useBreakpointValue,
 } from "@chakra-ui/react";
 import {ScheduledExpenseResponse} from "../../../redux/generated/redux-api";
 import {LoadingDataTable} from "../../util/LoadingDataTable";
-import {ExpenseTableTagsCell} from "../ExpenseTableTagsCell";
-import {ActionButtonsTableCell} from "../../util/ActionButtonsTableCell";
-import {PersonTableCell} from "../../util/PersonTableCell";
-import {AmountTableCell} from "../../util/AmountTableCell";
+import {useMemo} from "react";
+import {ScheduledExpenseMobileTableContent} from "./table/ScheduledExpenseMobileTableContent";
+import {ScheduledExpenseDesktopTableContent} from "./table/ScheduledExpenseDesktopTableContent";
+import {ExpenseTableProps} from "../types";
 
-interface Props {
-    expenses: ScheduledExpenseResponse[],
-    onEdit: (expense: ScheduledExpenseResponse) => void,
-    onDelete: (expense: ScheduledExpenseResponse) => void,
-    isLoading?: boolean
-}
-
-const TableHeading = () => (
+const TableDesktopHeading = () => (
     <Tr>
         <Th>Name</Th>
         <Th isNumeric>Amount</Th>
@@ -33,11 +25,24 @@ const TableHeading = () => (
     </Tr>
 )
 
-export const ScheduledExpenseTable = (props: Props) => {
+const TableMobileHeading = () => (
+    <Tr>
+        <Th>Name</Th>
+        <Th isNumeric>Amount</Th>
+        <Th isNumeric>Actions</Th>
+    </Tr>
+)
+
+export const ScheduledExpenseTable = (props: ExpenseTableProps<ScheduledExpenseResponse>) => {
     const {isLoading, expenses, onEdit, onDelete} = props
 
+    const isMobile = useBreakpointValue({base: true, md: false}, {fallback: 'md'})
+
+    const TableContent = useMemo(() => isMobile ? ScheduledExpenseMobileTableContent : ScheduledExpenseDesktopTableContent, [isMobile])
+    const TableHeading = useMemo(() => isMobile ? TableMobileHeading : TableDesktopHeading, [isMobile])
+
     return (
-        <TableContainer minW={"50vw"}>
+        <TableContainer minW={["100vw", null, "50vw"]}>
             <Table
                 variant='simple'
                 size={'sm'}
@@ -52,29 +57,11 @@ export const ScheduledExpenseTable = (props: Props) => {
                     {
                         isLoading ?
                             <LoadingDataTable size={5}/> :
-                            expenses.map((expense, index) => {
-                                return (
-                                    <Tr key={`expense${index}`}>
-                                        <Td>{expense.name}</Td>
-                                        <Td isNumeric>
-                                            <AmountTableCell amount={expense.amount}/>
-                                        </Td>
-                                        <Td>
-                                            <PersonTableCell person={expense.person}/>
-                                        </Td>
-                                        <Td>
-                                            <ExpenseTableTagsCell tags={expense.tags || []}/>
-                                        </Td>
-                                        <Td isNumeric>
-                                            <ActionButtonsTableCell
-                                                onEdit={() => onEdit(expense)}
-                                                onDelete={() => onDelete(expense)}
-                                                deleteMessage={`Are you sure to delete ${expense?.name} tag?`}
-                                            />
-                                        </Td>
-                                    </Tr>
-                                )
-                            })
+                            <TableContent
+                                expenses={expenses}
+                                onEdit={onEdit}
+                                onDelete={onDelete}
+                            />
                     }
                 </Tbody>
                 <Tfoot>

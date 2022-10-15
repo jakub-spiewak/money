@@ -27,8 +27,8 @@ export const PersonScreen = () => {
         person.id && modal.open({id: person.id, request: person})
     }
 
-    const onDelete = (person: PersonResponse) => {
-        person.id && deletePerson({id: person.id})
+    const onDelete = async (person: PersonResponse) => {
+        person.id && await deletePerson({id: person.id})
     }
 
     const onSubmit = async (person: PersonRequest) => {

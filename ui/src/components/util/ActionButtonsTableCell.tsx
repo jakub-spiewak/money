@@ -4,12 +4,12 @@ import {DeleteAlertDialog} from "./DeleteAlertDialog";
 
 interface Props {
     onEdit: () => void,
-    onDelete: () => void,
-    deleteMessage: string,
+    onDelete: () => Promise<void>,
+    name: string,
 }
 
 export const ActionButtonsTableCell = (props: Props) => {
-    const {onEdit, onDelete, deleteMessage} = props
+    const {onEdit, onDelete, name} = props
     const {onClose, isOpen, onOpen} = useDisclosure()
     return (
         <>
@@ -32,7 +32,7 @@ export const ActionButtonsTableCell = (props: Props) => {
                 isOpen={isOpen}
                 onClose={onClose}
                 onYes={onDelete}
-                message={deleteMessage}
+                name={name}
             />
         </>
     )

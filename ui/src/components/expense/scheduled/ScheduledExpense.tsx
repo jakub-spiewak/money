@@ -32,8 +32,8 @@ export const ScheduledExpense = (props: Props) => {
         })
     }
 
-    const onDelete = (expense: ScheduledExpenseResponse) => {
-        expense.id && deleteExpense({id: expense.id})
+    const onDelete = async (expense: ScheduledExpenseResponse) => {
+        expense.id && await deleteExpense({id: expense.id})
     }
 
     const onSubmit = async (expense: ScheduledExpenseRequest) => {

@@ -21,7 +21,7 @@ interface Props {
     tags: TagResponse[],
     onAdd: () => void;
     onEdit: (tag: TagResponse) => void,
-    onDelete: (tag: TagRequest) => void,
+    onDelete: (tag: TagRequest) => Promise<void>,
     isLoading?: boolean,
 }
 
@@ -60,7 +60,7 @@ export const TagTable = (props: Props) => {
                                                 <ActionButtonsTableCell
                                                     onEdit={() => onEdit(tag)}
                                                     onDelete={() => onDelete(tag)}
-                                                    deleteMessage={`Are you sure to delete ${tag?.name} tag?`}
+                                                    name={tag.name || ''}
                                                 />
                                             </Td>
                                         </Tr>

@@ -31,8 +31,8 @@ export const RevenueScreen = () => {
         })
     }
 
-    const onDelete = (revenue: RevenueResponse) => {
-        revenue.id && deleteRevenue({id: revenue.id})
+    const onDelete = async (revenue: RevenueResponse) => {
+        revenue.id && await deleteRevenue({id: revenue.id})
     }
 
     const onSubmit = async (revenue: RevenueRequest) => {

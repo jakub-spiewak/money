@@ -6,12 +6,15 @@ interface Props {
     person?: PersonResponse
 }
 
+export const visualizePerson = (person?: PersonResponse) => (person ? `${person.firstName} ${person.lastName}` : <AiOutlineHome/>)
+
+
 export const PersonTableCell = (props: Props) => {
     const {person} = props
     return (
         <Flex w={"full"}>
             <Box mx={"auto"}>
-                {person ? `${person.firstName} ${person.lastName}` : <AiOutlineHome/>}
+                {visualizePerson(person)}
             </Box>
         </Flex>
     )

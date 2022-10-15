@@ -21,7 +21,7 @@ interface Props {
     persons: PersonResponse[],
     onAdd: () => void;
     onEdit: (person: PersonResponse) => void,
-    onDelete: (person: PersonResponse) => void,
+    onDelete: (person: PersonResponse) => Promise<void>,
     isLoading?: boolean
 }
 
@@ -64,7 +64,7 @@ export const PersonTable = (props: Props) => {
                                                 <ActionButtonsTableCell
                                                     onEdit={() => onEdit(person)}
                                                     onDelete={() => onDelete(person)}
-                                                    deleteMessage={`Are sure to delete ${person?.firstName} ${person?.lastName}?`}
+                                                    name={person?.firstName || ''}
                                                 />
                                             </Td>
                                         </Tr>

@@ -2,14 +2,15 @@ import {Box, Flex, Tag, TagLabel} from "@chakra-ui/react";
 import {TagResponse} from "../../redux/generated/redux-api";
 
 interface Props {
+    mobile?: boolean,
     tags: TagResponse[]
 }
 
 export const ExpenseTableTagsCell = (props: Props) => {
-    const {tags} = props
+    const {tags, mobile} = props
     return (
         <Box
-            width={"3xs"}
+            maxW={mobile ? undefined : "3xs"}
         >
             <Flex
                 wrap={'wrap'}

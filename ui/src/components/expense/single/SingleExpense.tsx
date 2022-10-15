@@ -33,8 +33,8 @@ export const SingleExpense = (props: Props) => {
         })
     }
 
-    const onDelete = (expense: SingleExpenseResponse) => {
-        expense.id && deleteExpense({id: expense.id})
+    const onDelete = async (expense: SingleExpenseResponse) => {
+        expense.id && await deleteExpense({id: expense.id})
     }
 
     const onSubmit = async (expense: SingleExpenseRequest) => {

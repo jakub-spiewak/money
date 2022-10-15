@@ -25,8 +25,8 @@ export const TagScreen = () => {
         tag.id && modal.open({id: tag.id, request: tag})
     }
 
-    const onDelete = (tag: TagResponse) => {
-        tag.id && deleteTag({id: tag.id})
+    const onDelete = async (tag: TagResponse) => {
+        tag.id && await deleteTag({id: tag.id})
     }
 
     const onSubmit = async (tag: TagRequest) => {
