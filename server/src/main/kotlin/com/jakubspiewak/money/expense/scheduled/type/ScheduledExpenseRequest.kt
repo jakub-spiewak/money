@@ -1,10 +1,10 @@
 package com.jakubspiewak.money.expense.scheduled.type
 
-import java.math.BigDecimal
+import com.jakubspiewak.money.common.types.Amount
 
 data class ScheduledExpenseRequest(
         val name: String,
-        val amount: BigDecimal,
+        val amount: Amount,
         val person: String?,
         val tags: List<String>
 )

@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Field
 import org.springframework.stereotype.Indexed
 
 @Indexed
-@Document
+@Document(PersonDocument.COLLECTION)
 class PersonDocument(
         @Id
         var id: ObjectId = ObjectId.get(),
@@ -17,6 +17,8 @@ class PersonDocument(
         var lastName: String = "",
 ) {
     companion object {
+        const val COLLECTION = "person"
+
         const val FIRST_NAME_FIELD = "firstName"
         const val LAST_NAME_FIELD = "lastName"
     }

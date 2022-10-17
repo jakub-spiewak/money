@@ -13,7 +13,7 @@ import {useForm} from "react-hook-form";
 import {useEffect} from "react";
 import {FormModalStateType} from "../../../utils/Hooks";
 import {SingleExpenseRequest} from "../../../redux/generated/redux-api";
-import {SubmitButton} from "../../util/form/SubmitButton";
+import {SubmitButton} from "../../util/controls/SubmitButton";
 import {AmountField} from "../../util/fields/AmountField";
 import {PersonField} from "../../util/fields/PersonField";
 import {TagsField} from "../../util/fields/TagsField";

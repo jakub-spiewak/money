@@ -15,11 +15,11 @@ import {FormModalStateType} from "../../../utils/Hooks";
 import {
     ScheduledExpenseRequest,
 } from "../../../redux/generated/redux-api";
-import {SubmitButton} from "../../util/form/SubmitButton";
-import {AmountField} from "../../util/fields/AmountField";
+import {SubmitButton} from "../../util/controls/SubmitButton";
 import {PersonField} from "../../util/fields/PersonField";
 import {TagsField} from "../../util/fields/TagsField";
 import {NameField} from "../../util/fields/NameField";
+import {AmountRangeField} from "../../util/fields/AmountRangeField";
 import {sanitizeFormValues} from "../../../utils/util";
 
 interface ExpenseProps {
@@ -39,7 +39,15 @@ export const ScheduledExpenseForm = (props: ExpenseProps) => {
 
 
     const onSubmit = async (expense: ScheduledExpenseRequest) => {
-        await onSubmitFromProps(sanitizeFormValues(expense))
+        const request: ScheduledExpenseRequest = {
+            ...expense,
+            amount: {
+                ...expense.amount,
+                type: "RANGE"
+            }
+        }
+        await onSubmitFromProps(sanitizeFormValues(request))
+        // alert(JSON.stringify(request, null, 4))
         close()
     }
 
@@ -67,7 +75,7 @@ export const ScheduledExpenseForm = (props: ExpenseProps) => {
                         <ModalCloseButton/>
                         <ModalBody pb={6}>
                             <NameField control={control}/>
-                            <AmountField control={control}/>
+                            <AmountRangeField control={control}/>
                             <PersonField
                                 control={control}
                                 defaultValue={value?.request?.person}

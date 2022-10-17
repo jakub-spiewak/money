@@ -1,6 +1,6 @@
 import {useReadScheduledExpenseQuery} from "../../../redux/generated/redux-api";
 import {FieldProps} from "./types";
-import {SelectFormField} from "../form/SelectFormField";
+import {SelectFormField} from "../controls/SelectFormField";
 
 interface ExpenseFieldProps extends FieldProps {
     defaultValue?: string
@@ -24,7 +24,7 @@ export const ExpenseField = (props: ExpenseFieldProps) => {
                 >
                     {expense.name}
                     {' - '}
-                    {expense.amount?.toLocaleString(undefined, {minimumFractionDigits: 2})}
+                    {expense.amount?.data?.value?.toLocaleString(undefined, {minimumFractionDigits: 2})}
                 </option>
             ))}
         </SelectFormField>

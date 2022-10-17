@@ -19,7 +19,14 @@ export const SingleExpenseDesktopTableContent = (props: ExpenseTableContentProps
                         <Tr key={`expense${index}`}>
                             <Td>{expense.name}</Td>
                             <Td isNumeric>
-                                <AmountTableCell amount={expense.amount}/>
+                                <AmountTableCell
+                                    amount={{
+                                        type: "CONSTANT",
+                                        data: {
+                                            value: expense.amount
+                                        }
+                                    }}
+                                />
                             </Td>
                             <Td>
                                 <ExpenseParentTableCell expense={expense.parentExpense}/>

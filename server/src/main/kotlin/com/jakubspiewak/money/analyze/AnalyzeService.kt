@@ -13,59 +13,66 @@ import reactor.core.publisher.Mono
 
 @Service
 class AnalyzeService(
-    private val revenueService: RevenueService,
-    private val expenseService: ScheduledExpenseService,
-    private val tagService: TagService
+        private val revenueService: RevenueService,
+        private val expenseService: ScheduledExpenseService,
+        private val tagService: TagService
 ) {
 
     fun analyze(): Mono<AnalyzeResponse> {
         return Mono.zip(
-            revenueService.readAll().collectList(),
-            expenseService.readAll().collectList(),
-            tagService.readAll().collectList()
+                revenueService.readAll().collectList(),
+                expenseService.readAll().collectList(),
+                tagService.readAll().collectList()
         ).map { data ->
-                val revenueList = data.t1
-                val expenseList = data.t2
-                val tagList = data.t3
+            val revenueList = data.t1
+            val expenseList = data.t2
+            val tagList = data.t3
 
-                val revenueAmountSum = revenueList.sumOf { it.amount.toDouble() }
-                val expenseAmountSum = expenseList.sumOf { it.amount.toDouble() }
-                val savingAmountSum = (revenueAmountSum - expenseAmountSum)
+            val revenueAmountSum = revenueList.sumOf { it.amount.toDouble() }
+            val expenseAmountSum = expenseList.sumOf {
+                it.amount.data.value?.toDouble()
+                ?: 0.0
+            }
+            val savingAmountSum = (revenueAmountSum - expenseAmountSum)
 
-                val savingPart = savingAmountSum.div(revenueAmountSum)
-                val expensePart = expenseAmountSum.div(revenueAmountSum)
+            val savingPart = savingAmountSum.div(revenueAmountSum)
+            val expensePart = expenseAmountSum.div(revenueAmountSum)
 
-                val tags = tagList.map { tag ->
-                        val expensesWithCurrentTag = expenseList.filter { expense -> expense.tags.contains(tag) }
-                        val currentTagExpenseSum = expensesWithCurrentTag.sumOf { it.amount.toDouble() }
+            val tags = tagList.map { tag ->
+                val expensesWithCurrentTag = expenseList.filter { expense -> expense.tags.contains(tag) }
+                val currentTagExpenseSum = expensesWithCurrentTag.sumOf {
+                    it.amount.data.value?.toDouble()
+                    ?: 0.0
+                }
 
-                        val currentTagExpensesSummary = expensesWithCurrentTag.map { tagExpense ->
-                                val amount = tagExpense.amount.toDouble()
-                                ExpenseSummaryFromTag(
-                                    name = tagExpense.name,
-                                    amount = amount.toBigDecimal2(),
-                                    part = amount.div(currentTagExpenseSum).toBigDecimalPercentage()
-                                )
-                            }.sortedByDescending { it.amount }
+                val currentTagExpensesSummary = expensesWithCurrentTag.map { tagExpense ->
+                    val amount = tagExpense.amount.data.value?.toDouble()
+                                 ?: 0.0
+                    ExpenseSummaryFromTag(
+                            name = tagExpense.name,
+                            amount = amount.toBigDecimal2(),
+                            part = amount.div(currentTagExpenseSum).toBigDecimalPercentage()
+                    )
+                }.sortedByDescending { it.amount }
 
-                        TagSummary(
-                            name = tag.name,
-                            amount = currentTagExpenseSum.toBigDecimal2(),
-                            partOfRevenues = currentTagExpenseSum.div(revenueAmountSum).toBigDecimalPercentage(),
-                            partOfExpenses = currentTagExpenseSum.div(expenseAmountSum).toBigDecimalPercentage(),
-                            expenses = currentTagExpensesSummary
-                        )
-                    }.sortedByDescending { it.amount }
+                TagSummary(
+                        name = tag.name,
+                        amount = currentTagExpenseSum.toBigDecimal2(),
+                        partOfRevenues = currentTagExpenseSum.div(revenueAmountSum).toBigDecimalPercentage(),
+                        partOfExpenses = currentTagExpenseSum.div(expenseAmountSum).toBigDecimalPercentage(),
+                        expenses = currentTagExpensesSummary
+                )
+            }.sortedByDescending { it.amount }
 
-                AnalyzeResponse(
+            AnalyzeResponse(
                     revenueAmountSum = revenueAmountSum.toBigDecimal2(),
                     expensesAmountSum = expenseAmountSum.toBigDecimal2(),
                     savingAmountSum = savingAmountSum.toBigDecimal2(),
                     savingPart = savingPart.toBigDecimalPercentage(),
                     expensesPart = expensePart.toBigDecimalPercentage(),
                     tags = tags
-                )
-            }
+            )
+        }
     }
 
 }

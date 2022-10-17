@@ -1,4 +1,4 @@
-import {TextFormField} from "../form/TextFormField";
+import {TextFormField} from "../controls/TextFormField";
 import {FieldProps} from "./types";
 
 export const NameField = (props: FieldProps) => {

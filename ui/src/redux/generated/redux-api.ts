@@ -298,9 +298,20 @@ export type SingleExpenseRequest = {
   date?: string;
   tags?: string[];
 };
+export type AmountType = "RANGE" | "CONSTANT" | "UNKNOWN";
+export type AmountData = {
+  value?: number;
+  min?: number;
+  max?: number;
+  percentage?: number;
+};
+export type Amount = {
+  type?: AmountType;
+  data?: AmountData;
+};
 export type ScheduledExpenseRequest = {
   name?: string;
-  amount?: number;
+  amount?: Amount;
   person?: string;
   tags?: string[];
 };
@@ -336,7 +347,7 @@ export type SingleExpenseResponse = {
 export type ScheduledExpenseResponse = {
   id?: string;
   name?: string;
-  amount?: number;
+  amount?: Amount;
   person?: PersonResponse;
   tags?: TagResponse[];
 };

@@ -32,7 +32,14 @@ export const SingleExpenseMobileTableContent = (props: ExpenseTableContentProps<
                                 </Td>
                                 <Td isNumeric>
                                     <Fade in={!isDetailsOpen}>
-                                        <AmountTableCell amount={expense.amount}/>
+                                        <AmountTableCell
+                                            amount={{
+                                                type: "CONSTANT",
+                                                data: {
+                                                    value: expense.amount
+                                                }
+                                            }}
+                                        />
                                     </Fade>
                                 </Td>
                                 <Td isNumeric>

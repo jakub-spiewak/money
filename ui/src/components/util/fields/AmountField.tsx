@@ -1,4 +1,4 @@
-import {NumberFormField} from "../form/NumberFormField";
+import {NumberFormField} from "../controls/NumberFormField";
 import {FieldProps} from "./types";
 
 export const AmountField = (props: FieldProps) => {

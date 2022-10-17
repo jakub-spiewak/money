@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
-import {SubmitButton} from "../util/form/SubmitButton";
+import {SubmitButton} from "../util/controls/SubmitButton";
 import {PersonRequest} from "../../redux/generated/redux-api";
 import {FormModalStateType} from "../../utils/Hooks";
 import {NameField} from "../util/fields/NameField";

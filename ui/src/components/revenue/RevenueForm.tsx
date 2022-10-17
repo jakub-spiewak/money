@@ -15,7 +15,7 @@ import {FormModalStateType} from "../../utils/Hooks";
 import {PersonField} from "../util/fields/PersonField";
 import {AmountField} from "../util/fields/AmountField";
 import {NameField} from "../util/fields/NameField";
-import {SubmitButton} from "../util/form/SubmitButton";
+import {SubmitButton} from "../util/controls/SubmitButton";
 
 interface Props {
     state: FormModalStateType<RevenueRequest>,

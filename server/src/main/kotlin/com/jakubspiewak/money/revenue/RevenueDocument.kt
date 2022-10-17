@@ -9,7 +9,7 @@ import org.springframework.stereotype.Indexed
 import java.math.BigDecimal
 
 @Indexed
-@Document
+@Document(RevenueDocument.COLLECTION)
 class RevenueDocument(
         @Id
         var id: ObjectId = ObjectId.get(),
@@ -21,6 +21,8 @@ class RevenueDocument(
         var person: ObjectId,
 ) {
     companion object {
+        const val COLLECTION = "revenue"
+
         const val NAME_FIELD = "name"
         const val AMOUNT_FIELD = "amount"
         const val PERSON_FIELD = "person"

@@ -1,4 +1,4 @@
-import {SelectFormField} from "../form/SelectFormField";
+import {SelectFormField} from "../controls/SelectFormField";
 import {useReadPersonQuery} from "../../../redux/generated/redux-api";
 import {FieldProps} from "./types";
 

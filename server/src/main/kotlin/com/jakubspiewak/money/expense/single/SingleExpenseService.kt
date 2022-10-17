@@ -12,6 +12,7 @@ import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.math.BigDecimal.ZERO
 import java.util.*
 
 @Service
@@ -40,7 +41,8 @@ class SingleExpenseService(
                 SingleExpenseParentResponse(
                         id = it.id,
                         name = it.name,
-                        amount = it.amount,
+                        amount = it.amount.data.value
+                                 ?: ZERO,
                 )
             }.orElse(null)
 

@@ -20,7 +20,7 @@ class ScheduledExpenseService(
 ) {
     fun readAll(): Flux<ScheduledExpenseResponse> = repository.findAll().flatMap {
         mapToResponse(it)
-    }.sort { o1, o2 -> o2.amount.compareTo(o1.amount) }
+    }
 
     fun readById(id: ObjectId): Mono<ScheduledExpenseResponse> = repository.findById(id).flatMap {
         mapToResponse(it)
@@ -33,13 +33,15 @@ class ScheduledExpenseService(
                                      tags = request.tags.map { ObjectId(it) })
     ).map { }
 
-    fun update(id: String, request: ScheduledExpenseRequest): Mono<Unit> = repository.save(
-            ScheduledExpenseDocument(id = ObjectId(id),
-                                     name = request.name,
-                                     amount = request.amount,
-                                     person = request.person?.let { ObjectId(it) },
-                                     tags = request.tags.map { ObjectId(it) })
-    ).map { }
+    fun update(id: String, request: ScheduledExpenseRequest): Mono<Unit> {
+        return repository.save(
+                ScheduledExpenseDocument(id = ObjectId(id),
+                                         name = request.name,
+                                         amount = request.amount,
+                                         person = request.person?.let { ObjectId(it) },
+                                         tags = request.tags.map { ObjectId(it) })
+        ).map { }
+    }
 
     fun delete(id: String): Mono<Unit> = repository.deleteById(ObjectId(id)).map { }
 
