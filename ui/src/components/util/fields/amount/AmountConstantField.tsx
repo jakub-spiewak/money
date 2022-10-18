@@ -1,12 +1,12 @@
-import {NumberFormField} from "../controls/NumberFormField";
-import {FieldProps} from "./types";
+import {NumberFormController} from "../../controller/NumberFormController";
+import {FieldProps} from "../types";
 
-export const AmountField = (props: FieldProps) => {
+export const AmountConstantField = (props: FieldProps) => {
     const {control, name, label} = props
     return (
-        <NumberFormField
+        <NumberFormController
             control={control}
-            name={name || "amount"}
+            name={`${name || 'amount'}.data.value`}
             label={label || "Amount"}
             rules={{
                 required: 'This is required',

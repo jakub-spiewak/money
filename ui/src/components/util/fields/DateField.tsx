@@ -1,10 +1,10 @@
 import {FieldProps} from "./types";
-import {DateFormField} from "../controls/DateFormField";
+import {DateFormController} from "../controller/DateFormController";
 
 export const DateField = (props: FieldProps) => {
     const {control, name, label} = props
     return (
-        <DateFormField
+        <DateFormController
             control={control}
             name={name || "date"}
             label={label || "Date"}

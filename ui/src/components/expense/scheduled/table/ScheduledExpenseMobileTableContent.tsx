@@ -63,7 +63,9 @@ export const ScheduledExpenseMobileTableContent = (props: ExpenseTableContentPro
                                                 justifyContent={"space-between"}
                                                 gap={8}
                                             >
-                                                <Heading>{expense.amount?.data?.value?.toLocaleString(undefined, {minimumFractionDigits: 2})}</Heading>
+                                                <Heading>
+                                                    <AmountTableCell amount={expense.amount}/>
+                                                </Heading>
                                                 <ActionButtonsTableCell
                                                     onEdit={() => onEdit(expense)}
                                                     onDelete={() => onDelete(expense)}
@@ -85,7 +87,6 @@ export const ScheduledExpenseMobileTableContent = (props: ExpenseTableContentPro
                                         </Box>
                                     </Collapse>
                                 </Td>
-
                             </Tr>
                         </>
                     )

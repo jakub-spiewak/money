@@ -1,8 +1,8 @@
-import {FormFieldProps} from "./types";
+import {FormControllerProps} from "./types";
 import {FormControl, FormErrorMessage, FormLabel, Input} from "@chakra-ui/react";
 import {Controller} from "react-hook-form";
 
-export const TextFormField = (props: FormFieldProps) => {
+export const DateFormController = (props: FormControllerProps) => {
     const {label, name, rules, control} = props
     return (
         <Controller
@@ -22,6 +22,8 @@ export const TextFormField = (props: FormFieldProps) => {
                     <FormLabel>{label}</FormLabel>
                     <Input
                         ref={ref}
+                        type={'date'}
+                        inputMode={"text"}
                         placeholder={label}
                         value={value}
                         onChange={onChange}

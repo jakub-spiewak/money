@@ -1,13 +1,13 @@
-import {FormFieldProps} from "./types";
+import {FormControllerProps} from "./types";
 import {FormControl, FormErrorMessage, FormLabel, Select} from "@chakra-ui/react";
 import {Controller} from "react-hook-form";
 import {ReactNode} from "react";
 
-interface Props extends FormFieldProps {
+interface Props extends FormControllerProps {
     children?: ReactNode | ReactNode[]
 }
 
-export const SelectFormField = (props: Props) => {
+export const SelectFormController = (props: Props) => {
     const {label, name, rules, control, defaultValue, children} = props
     return (
         <Controller

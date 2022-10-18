@@ -12,7 +12,7 @@ import {useForm} from "react-hook-form";
 import {useEffect} from "react";
 import {TagRequest} from "../../redux/generated/redux-api";
 import {FormModalStateType} from "../../utils/Hooks";
-import {SubmitButton} from "../util/controls/SubmitButton";
+import {SubmitButton} from "../util/controller/SubmitButton";
 import {NameField} from "../util/fields/NameField";
 
 interface Props {

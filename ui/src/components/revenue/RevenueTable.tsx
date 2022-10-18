@@ -16,6 +16,7 @@ import {ActionButtonsTableCell} from "../util/table/ActionButtonsTableCell";
 import {SimpleTableProps} from "../util/table/types";
 import {theme} from "../../theme";
 import {SimpleTableContainer} from "../util/table/SimpleTableContainer";
+import {NoDataTable} from "../util/table/NoDataTable";
 
 const TableHeadings = () => (
     <Tr>
@@ -42,23 +43,25 @@ export const RevenueTable = (props: SimpleTableProps<RevenueResponse>) => {
                     {
                         isLoading ?
                             <LoadingDataTable size={4}/> :
-                            data.map((revenue, index) => {
-                                const {person} = revenue
-                                return (
-                                    <Tr key={`revenue_${index}`}>
-                                        <Td>{revenue.name}</Td>
-                                        <Td>{`${person?.firstName} ${person?.lastName}`}</Td>
-                                        <Td isNumeric><b>{revenue.amount?.toFixed?.(2)}</b></Td>
-                                        <Td isNumeric>
-                                            <ActionButtonsTableCell
-                                                onEdit={() => onEdit(revenue)}
-                                                onDelete={() => onDelete(revenue)}
-                                                name={revenue?.name || ''}
-                                            />
-                                        </Td>
-                                    </Tr>
-                                )
-                            })
+                            data.length === 0 ?
+                                <NoDataTable size={4}/> :
+                                data.map((revenue, index) => {
+                                    const {person} = revenue
+                                    return (
+                                        <Tr key={`revenue_${index}`}>
+                                            <Td>{revenue.name}</Td>
+                                            <Td>{`${person?.firstName} ${person?.lastName}`}</Td>
+                                            <Td isNumeric><b>{revenue.amount?.toFixed?.(2)}</b></Td>
+                                            <Td isNumeric>
+                                                <ActionButtonsTableCell
+                                                    onEdit={() => onEdit(revenue)}
+                                                    onDelete={() => onDelete(revenue)}
+                                                    name={revenue?.name || ''}
+                                                />
+                                            </Td>
+                                        </Tr>
+                                    )
+                                })
                     }
                 </Tbody>
                 <Tfoot>

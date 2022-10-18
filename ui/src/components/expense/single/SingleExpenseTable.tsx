@@ -14,6 +14,7 @@ import {useMemo} from "react";
 import {SingleExpenseMobileTableContent} from "./table/SingleExpenseMobileTableContent";
 import {ExpenseTableProps} from "../types";
 import {ExpenseTableContainer} from "../ExpenseTableContainer";
+import {NoDataTable} from "../../util/table/NoDataTable";
 
 const TableDesktopHeading = () => (
     <Tr>
@@ -50,15 +51,14 @@ export const SingleExpenseTable = (props: ExpenseTableProps<SingleExpenseRespons
                 <TableHeading/>
             </Thead>
             <Tbody>
+                {isLoading && <LoadingDataTable size={7}/>}
+                {expenses.length === 0 && <NoDataTable size={7}/>}
                 {
-                    isLoading ?
-                        // TODO: if it is mobile then 7 is too large size span
-                        <LoadingDataTable size={7}/> :
-                        <TableContent
-                            expenses={expenses}
-                            onEdit={onEdit}
-                            onDelete={onDelete}
-                        />
+                    <TableContent
+                        expenses={expenses}
+                        onEdit={onEdit}
+                        onDelete={onDelete}
+                    />
                 }
             </Tbody>
             <Tfoot>

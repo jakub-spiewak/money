@@ -16,6 +16,7 @@ import {theme} from "../../theme";
 import {ActionButtonsTableCell} from "../util/table/ActionButtonsTableCell";
 import {SimpleTableProps} from "../util/table/types";
 import {SimpleTableContainer} from "../util/table/SimpleTableContainer";
+import {NoDataTable} from "../util/table/NoDataTable";
 
 const TableHeadings = () => (
     <Tr>
@@ -40,20 +41,22 @@ export const TagTable = (props: SimpleTableProps<TagResponse>) => {
                     {
                         isLoading ?
                             <LoadingDataTable size={2}/> :
-                            data.map((tag, index) => {
-                                return (
-                                    <Tr key={`tag_${index}`}>
-                                        <Td>{tag.name}</Td>
-                                        <Td isNumeric>
-                                            <ActionButtonsTableCell
-                                                onEdit={() => onEdit(tag)}
-                                                onDelete={() => onDelete(tag)}
-                                                name={tag.name || ''}
-                                            />
-                                        </Td>
-                                    </Tr>
-                                )
-                            })
+                            data.length === 0 ?
+                                <NoDataTable size={2}/> :
+                                data.map((tag, index) => {
+                                    return (
+                                        <Tr key={`tag_${index}`}>
+                                            <Td>{tag.name}</Td>
+                                            <Td isNumeric>
+                                                <ActionButtonsTableCell
+                                                    onEdit={() => onEdit(tag)}
+                                                    onDelete={() => onDelete(tag)}
+                                                    name={tag.name || ''}
+                                                />
+                                            </Td>
+                                        </Tr>
+                                    )
+                                })
                     }
                 </Tbody>
                 <Tfoot>

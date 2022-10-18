@@ -5,7 +5,7 @@ import java.math.BigDecimal
 
 @Schema(enumAsRef = true)
 enum class AmountType {
-    RANGE, CONSTANT, UNKNOWN
+    RANGE, CONSTANT, PERCENTAGE, UNKNOWN
 }
 
 data class AmountData(

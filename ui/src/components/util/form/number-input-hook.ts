@@ -90,7 +90,7 @@ export const useCustomNumberInput = (args?: UseCustomNumberInputPropsArgs): UseC
     }, [update])
 
     const wheelHandler: WheelEventHandler<HTMLInputElement> = useCallback((event) => {
-        if (event.deltaY > 0) {
+        if (event.deltaY < 0) {
             increment(PRECISION)
         } else {
             decrement(PRECISION)

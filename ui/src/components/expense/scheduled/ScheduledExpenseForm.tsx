@@ -15,12 +15,12 @@ import {FormModalStateType} from "../../../utils/Hooks";
 import {
     ScheduledExpenseRequest,
 } from "../../../redux/generated/redux-api";
-import {SubmitButton} from "../../util/controls/SubmitButton";
+import {SubmitButton} from "../../util/controller/SubmitButton";
 import {PersonField} from "../../util/fields/PersonField";
 import {TagsField} from "../../util/fields/TagsField";
 import {NameField} from "../../util/fields/NameField";
-import {AmountRangeField} from "../../util/fields/AmountRangeField";
 import {sanitizeFormValues} from "../../../utils/util";
+import {TypedAmountField} from "../../util/fields/TypedAmountField";
 
 interface ExpenseProps {
     state: FormModalStateType<ScheduledExpenseRequest>,
@@ -35,19 +35,12 @@ export const ScheduledExpenseForm = (props: ExpenseProps) => {
         formState: {isSubmitting},
         control,
         reset,
-    } = useForm<ScheduledExpenseRequest>()
-
+        setValue,
+        watch
+    } = useForm<ScheduledExpenseRequest, any>()
 
     const onSubmit = async (expense: ScheduledExpenseRequest) => {
-        const request: ScheduledExpenseRequest = {
-            ...expense,
-            amount: {
-                ...expense.amount,
-                type: "RANGE"
-            }
-        }
-        await onSubmitFromProps(sanitizeFormValues(request))
-        // alert(JSON.stringify(request, null, 4))
+        await onSubmitFromProps(sanitizeFormValues(expense))
         close()
     }
 
@@ -62,6 +55,12 @@ export const ScheduledExpenseForm = (props: ExpenseProps) => {
         }
     }, [reset, value, isOpen])
 
+    const amountType = watch('amount.type')
+
+    useEffect(() => {
+        setValue('amount.data', {})
+    }, [amountType, setValue])
+
     return (
         <Box>
             <Modal
@@ -75,7 +74,7 @@ export const ScheduledExpenseForm = (props: ExpenseProps) => {
                         <ModalCloseButton/>
                         <ModalBody pb={6}>
                             <NameField control={control}/>
-                            <AmountRangeField control={control}/>
+                            <TypedAmountField control={control}/>
                             <PersonField
                                 control={control}
                                 defaultValue={value?.request?.person}

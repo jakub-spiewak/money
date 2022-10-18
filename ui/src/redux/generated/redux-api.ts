@@ -298,7 +298,7 @@ export type SingleExpenseRequest = {
   date?: string;
   tags?: string[];
 };
-export type AmountType = "RANGE" | "CONSTANT" | "UNKNOWN";
+export type AmountType = "RANGE" | "CONSTANT" | "PERCENTAGE" | "UNKNOWN";
 export type AmountData = {
   value?: number;
   min?: number;

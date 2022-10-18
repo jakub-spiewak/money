@@ -1,4 +1,4 @@
-import {SelectFormField} from "../controls/SelectFormField";
+import {SelectFormController} from "../controller/SelectFormController";
 import {useReadPersonQuery} from "../../../redux/generated/redux-api";
 import {FieldProps} from "./types";
 
@@ -12,7 +12,7 @@ export const PersonField = (props: Props) => {
     const {data: persons} = useReadPersonQuery()
 
     return (
-        <SelectFormField
+        <SelectFormController
             control={control}
             name={name || "person"}
             label={label || "Person"}
@@ -31,6 +31,6 @@ export const PersonField = (props: Props) => {
                     </option>
                 ))
             }
-        </SelectFormField>
+        </SelectFormController>
     )
 }

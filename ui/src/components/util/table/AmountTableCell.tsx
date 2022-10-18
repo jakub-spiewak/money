@@ -1,5 +1,4 @@
 import {Amount} from "../../../redux/generated/redux-api";
-import {SimpleGrid} from "@chakra-ui/react";
 
 interface Props {
     amount?: Amount
@@ -16,12 +15,24 @@ export const AmountTableCell = (props: Props) => {
 
     if (type === "CONSTANT") return <b>{number2string(data.value)}</b>
     if (type === "RANGE") return (
-        <SimpleGrid columns={2}>
-            <div>From:</div>
-            <b>{number2string(data.min)}</b>
-            <div>To:</div>
-            <b>{number2string(data.max)}</b>
-        </SimpleGrid>
+        <div>
+            <b>{data.min?.toLocaleString(undefined, {minimumFractionDigits: 2})}</b>
+            <span> - </span>
+            <b>{data.max?.toLocaleString(undefined, {minimumFractionDigits: 2})}</b>
+        </div>
+        // <SimpleGrid columns={2}>
+        //     <div>From:</div>
+        //     <b>{number2string(data.min)}</b>
+        //     <div>To:</div>
+        //     <b>{number2string(data.max)}</b>
+        // </SimpleGrid>
+    )
+    if (type === "PERCENTAGE") return (
+        <div>
+            <b>{data.value}</b>
+            <span> ± </span>
+            <b>{data.percentage?.toLocaleString()}%</b>
+        </div>
     )
 
     return (

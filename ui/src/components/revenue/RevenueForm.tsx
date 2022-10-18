@@ -13,9 +13,9 @@ import {useEffect} from "react";
 import {RevenueRequest} from "../../redux/generated/redux-api";
 import {FormModalStateType} from "../../utils/Hooks";
 import {PersonField} from "../util/fields/PersonField";
-import {AmountField} from "../util/fields/AmountField";
+import {AmountField} from "../util/fields/amount/AmountField";
 import {NameField} from "../util/fields/NameField";
-import {SubmitButton} from "../util/controls/SubmitButton";
+import {SubmitButton} from "../util/controller/SubmitButton";
 
 interface Props {
     state: FormModalStateType<RevenueRequest>,

@@ -13,6 +13,7 @@ import {ScheduledExpenseMobileTableContent} from "./table/ScheduledExpenseMobile
 import {ScheduledExpenseDesktopTableContent} from "./table/ScheduledExpenseDesktopTableContent";
 import {ExpenseTableProps} from "../types";
 import {ExpenseTableContainer} from "../ExpenseTableContainer";
+import {NoDataTable} from "../../util/table/NoDataTable";
 
 const TableDesktopHeading = () => (
     <Tr>
@@ -49,14 +50,14 @@ export const ScheduledExpenseTable = (props: ExpenseTableProps<ScheduledExpenseR
                 <TableHeading/>
             </Thead>
             <Tbody>
+                {isLoading && <LoadingDataTable size={5}/>}
+                {expenses.length === 0 && <NoDataTable size={5}/>}
                 {
-                    isLoading ?
-                        <LoadingDataTable size={5}/> :
-                        <TableContent
-                            expenses={expenses}
-                            onEdit={onEdit}
-                            onDelete={onDelete}
-                        />
+                    <TableContent
+                        expenses={expenses}
+                        onEdit={onEdit}
+                        onDelete={onDelete}
+                    />
                 }
             </Tbody>
             <Tfoot>

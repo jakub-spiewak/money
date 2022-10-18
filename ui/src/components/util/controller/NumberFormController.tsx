@@ -15,7 +15,7 @@ import {
     NumberInputStepper, useBreakpointValue, useCounter,
 } from "@chakra-ui/react"
 import {Controller} from "react-hook-form";
-import {FormFieldProps} from "./types";
+import {FormControllerProps} from "./types";
 
 const FLOATING_POINT_REGEX = /^[0-9.,]$/
 const FLOATING_POINT_SEPARATORS = [",", "."]
@@ -49,6 +49,7 @@ const DesktopNumberInput: NumberInputComponentType = forwardRef((props, ref) => 
             <NumberInput
                 min={min}
                 max={max}
+                allowMouseWheel
                 precision={2}
                 step={0.01}
                 defaultValue={value}
@@ -159,7 +160,7 @@ const MobileNumberInput: NumberInputComponentType = forwardRef((props, ref) => {
 })
 
 
-export const NumberFormField: FC<FormFieldProps> = (props) => {
+export const NumberFormController: FC<FormControllerProps> = (props) => {
     const {control, name, label, rules} = props
     const isMobile = useBreakpointValue({base: true, md: false}, {fallback: 'md'})
 

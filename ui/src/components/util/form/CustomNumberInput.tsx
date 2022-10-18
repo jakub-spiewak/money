@@ -57,14 +57,18 @@ interface CustomNumberInputProps {
     onBlur?: () => void,
     value: number | string,
     inputStyle?: CSSProperties,
+    containerStyle?: CSSProperties,
     placeholder?: string,
-    error?: FieldError
+    error?: FieldError,
+    min?: number,
+    max?: number,
+    inputSuffix?: string
 }
 
 export const CustomNumberInput = (props: CustomNumberInputProps) => {
-    const {onBlur, onChange, inputStyle, placeholder, value, error} = props
+    const {onBlur, onChange, inputSuffix, inputStyle, containerStyle, placeholder, value, error, max, min} = props
 
-    const numberInput = useCustomNumberInput({min: 0, value})
+    const numberInput = useCustomNumberInput({min, value, max})
 
     useEffect(() => {
         onChange?.(numberInput.value)
@@ -75,7 +79,8 @@ export const CustomNumberInput = (props: CustomNumberInputProps) => {
             style={{
                 position: "relative",
                 width: "100%",
-                marginInline: 0
+                marginInline: 0,
+                ...containerStyle,
             }}
             onBlur={onBlur}
         >
@@ -86,7 +91,7 @@ export const CustomNumberInput = (props: CustomNumberInputProps) => {
                 onKeyDown={numberInput.keyDownHandler}
                 onChange={numberInput.changeHandler}
                 onBlur={numberInput.blurHandler}
-                value={numberInput.value}
+                value={`${numberInput.value}${inputSuffix || ''}`}
                 inputMode={"decimal"}
                 placeholder={placeholder}
             />

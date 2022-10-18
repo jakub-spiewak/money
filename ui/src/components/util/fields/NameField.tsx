@@ -1,10 +1,10 @@
-import {TextFormField} from "../controls/TextFormField";
+import {TextFormController} from "../controller/TextFormController";
 import {FieldProps} from "./types";
 
 export const NameField = (props: FieldProps) => {
     const {control, name, label} = props
     return (
-        <TextFormField
+        <TextFormController
             control={control}
             name={name || "name"}
             label={label || "Name"}

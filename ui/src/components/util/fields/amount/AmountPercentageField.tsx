@@ -4,26 +4,25 @@ import {
     FormLabel, FormErrorMessage
 } from "@chakra-ui/react";
 import {Controller, FieldError} from "react-hook-form";
-import {FieldProps} from "./types";
-import {CustomNumberInput} from "../form/CustomNumberInput";
+import {FieldProps} from "../types";
+import {CustomNumberInput} from "../../form/CustomNumberInput";
 import {useState} from "react";
 
 
-export const AmountRangeField = (props: FieldProps) => {
+export const AmountPercentageField = (props: FieldProps) => {
     const {control, name, label} = props
-    const [minError, setMinError] = useState<FieldError>()
-    const [maxError, setMaxError] = useState<FieldError>()
-    const [minValue, setMinValue] = useState<string>()
+    const [valueError, setValueError] = useState<FieldError>()
+    const [percentageError, setPercentageError] = useState<FieldError>()
 
     return (
         <FormControl
             pt={4}
-            isInvalid={!!(minError || maxError)}
+            isInvalid={!!(valueError || percentageError)}
         >
             <FormLabel>{label || "Amount"}</FormLabel>
             <HStack>
                 <Controller
-                    name={`${name || 'amount'}.data.min`}
+                    name={`${name || 'amount'}.data.value`}
                     control={control}
                     rules={{
                         required: 'This is required',
@@ -33,8 +32,7 @@ export const AmountRangeField = (props: FieldProps) => {
                         const {value, onBlur, onChange} = field
                         const {error} = fieldState
 
-                        setMinError(error)
-                        setMinValue(value)
+                        setValueError(error)
 
                         return (
                             <CustomNumberInput
@@ -46,27 +44,27 @@ export const AmountRangeField = (props: FieldProps) => {
                                     borderTopRightRadius: 0,
                                     borderBottomRightRadius: 0,
                                 }}
+                                containerStyle={{
+                                    width: "70%"
+                                }}
                                 error={error}
                             />
                         )
                     }}
                 />
                 <Controller
-                    name={`${name || 'amount'}.data.max`}
+                    name={`${name || 'amount'}.data.percentage`}
                     control={control}
                     rules={{
                         required: 'This is required',
-                        min: {value: 0.01, message: 'Should be more than 0.00'},
-                        validate: value => {
-                            if (Number(value) < Number(minValue)) return 'Max value should be more than min value'
-                            return true
-                        }
+                        min: {value: 0.01, message: 'Should be more than 0.00%'},
+                        max: {value: 100.0, message: 'Should be less than 100.00%'},
                     }}
                     render={({field, fieldState}) => {
                         const {value, onBlur, onChange} = field
                         const {error} = fieldState
 
-                        setMaxError(error)
+                        setPercentageError(error)
 
                         return (
                             <CustomNumberInput
@@ -78,13 +76,18 @@ export const AmountRangeField = (props: FieldProps) => {
                                     borderTopLeftRadius: 0,
                                     borderBottomLeftRadius: 0,
                                 }}
+                                containerStyle={{
+                                    width: "30%"
+                                }}
                                 error={error}
+                                min={0}
+                                max={100.0}
                             />
                         )
                     }}
                 />
             </HStack>
-            <FormErrorMessage>{minError?.message || maxError?.message}</FormErrorMessage>
+            <FormErrorMessage>{valueError?.message || percentageError?.message}</FormErrorMessage>
         </FormControl>
     )
 }
