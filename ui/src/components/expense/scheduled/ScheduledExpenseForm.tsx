@@ -21,6 +21,7 @@ import {TagsField} from "../../util/fields/TagsField";
 import {NameField} from "../../util/fields/NameField";
 import {sanitizeFormValues} from "../../../utils/util";
 import {TypedAmountField} from "../../util/fields/TypedAmountField";
+import {DateRangeField} from "../../util/fields/DateRangeField";
 
 interface ExpenseProps {
     state: FormModalStateType<ScheduledExpenseRequest>,
@@ -35,8 +36,6 @@ export const ScheduledExpenseForm = (props: ExpenseProps) => {
         formState: {isSubmitting},
         control,
         reset,
-        setValue,
-        watch
     } = useForm<ScheduledExpenseRequest, any>()
 
     const onSubmit = async (expense: ScheduledExpenseRequest) => {
@@ -47,19 +46,20 @@ export const ScheduledExpenseForm = (props: ExpenseProps) => {
     useEffect(() => {
         if (isOpen) {
             reset(value?.request || {
-                amount: undefined,
+                amount: {
+                    type: undefined,
+                    data: undefined
+                },
                 person: undefined,
                 name: undefined,
-                tags: undefined
+                tags: undefined,
+                date: {
+                    from: undefined,
+                    to: undefined
+                }
             })
         }
     }, [reset, value, isOpen])
-
-    const amountType = watch('amount.type')
-
-    useEffect(() => {
-        setValue('amount.data', {})
-    }, [amountType, setValue])
 
     return (
         <Box>
@@ -75,10 +75,8 @@ export const ScheduledExpenseForm = (props: ExpenseProps) => {
                         <ModalBody pb={6}>
                             <NameField control={control}/>
                             <TypedAmountField control={control}/>
-                            <PersonField
-                                control={control}
-                                defaultValue={value?.request?.person}
-                            />
+                            <DateRangeField control={control}/>
+                            <PersonField control={control}/>
                             <TagsField control={control}/>
                         </ModalBody>
 

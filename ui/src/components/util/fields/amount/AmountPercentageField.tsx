@@ -27,6 +27,7 @@ export const AmountPercentageField = (props: FieldProps) => {
                     rules={{
                         required: 'This is required',
                         min: {value: 0.01, message: 'Should be more than 0.00'},
+                        shouldUnregister: true
                     }}
                     render={({field, fieldState}) => {
                         const {value, onBlur, onChange} = field

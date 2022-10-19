@@ -10,7 +10,8 @@ export const AmountField = (props: FieldProps) => {
             label={label || "Amount"}
             rules={{
                 required: 'This is required',
-                min: {value: 0.01, message: 'Should be more than 0.00'}
+                min: {value: 0.01, message: 'Should be more than 0.00'},
+                shouldUnregister: true
             }}
         />
     )

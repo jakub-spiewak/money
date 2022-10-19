@@ -11,6 +11,8 @@ export const PersonField = (props: Props) => {
     const {control, name, label, required, defaultValue} = props
     const {data: persons} = useReadPersonQuery()
 
+    if (!persons || persons.length === 0) return null
+
     return (
         <SelectFormController
             control={control}

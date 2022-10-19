@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.math.BigDecimal.ZERO
+import java.time.YearMonth
 import java.util.*
 
 @Service
@@ -65,6 +66,55 @@ class SingleExpenseService(
             )
         }
     }.sort { o1, o2 -> o2.amount.compareTo(o1.amount) }
+
+    fun readAllByDate(yearMonth: YearMonth) = repository.findAllInMonth(
+            yearMonth.monthValue, yearMonth.year
+    ).flatMap { expense ->
+        val personMono = expense.person?.let { personRepository.findById(it) }?.map { Optional.of(it) }
+                         ?: Mono.just(Optional.empty())
+
+        val parentExpenseMono = expense.parentExpense?.let { scheduledExpenseService.readById(it) }?.map {
+            Optional.of(it)
+        }
+                                ?: Mono.just(Optional.empty())
+
+        val tagsMono = tagRepository.findAllById(expense.tags).collectList()
+
+        Mono.zip(personMono, parentExpenseMono, tagsMono).map { data ->
+            val personDocument = data.t1
+            val parentExpenseDocument = data.t2
+            val tagsDocuments = data.t3
+
+            val person = personDocument.map {
+                PersonResponse(
+                        id = it.id.toString(), firstName = it.firstName, lastName = it.lastName
+                )
+            }.orElse(null)
+
+            val parentExpense = parentExpenseDocument.map {
+                SingleExpenseParentResponse(
+                        id = it.id,
+                        name = it.name,
+                        amount = it.amount.data.value
+                                 ?: ZERO,
+                )
+            }.orElse(null)
+
+            val tags = tagsDocuments.map { tag ->
+                TagResponse(id = tag.id.toString(), name = tag.name)
+            }
+
+            SingleExpenseResponse(
+                    id = expense.id.toString(),
+                    name = expense.name,
+                    amount = expense.amount,
+                    person = person,
+                    parentExpense = parentExpense,
+                    date = expense.date,
+                    tags = tags
+            )
+        }
+    }
 
     fun create(request: SingleExpenseRequest): Mono<Unit> = repository.save(
             SingleExpenseDocument(name = request.name,

@@ -9,7 +9,7 @@ interface ExpenseFieldProps extends FieldProps {
 
 export const ExpenseField = (props: ExpenseFieldProps) => {
     const {control, name, label, defaultValue} = props
-    const {data} = useReadScheduledExpenseQuery()
+    const {data} = useReadScheduledExpenseQuery({})
 
     return (
         <SelectFormController

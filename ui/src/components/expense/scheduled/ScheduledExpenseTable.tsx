@@ -20,6 +20,7 @@ const TableDesktopHeading = () => (
         <Th>Name</Th>
         <Th isNumeric>Amount</Th>
         <Th>Person</Th>
+        <Th>Date</Th>
         <Th>Tags</Th>
         <Th isNumeric>Actions</Th>
     </Tr>

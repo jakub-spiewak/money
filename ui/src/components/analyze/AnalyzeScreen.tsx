@@ -9,7 +9,7 @@ import {AnalyzeExpenseChart} from "./AnalyzeExpensesChart";
 export const AnalyzeScreen = () => {
 
     const {data} = useAnalyzeQuery()
-    const {data: expenses = []} = useReadScheduledExpenseQuery()
+    const {data: expenses = []} = useReadScheduledExpenseQuery({})
 
     if (!data) return null
 

@@ -15,7 +15,7 @@ interface Props {
 export const ScheduledExpense = (props: Props) => {
     const {modal} = props
 
-    const {data, isLoading, isFetching} = useReadScheduledExpenseQuery()
+    const {data, isLoading, isFetching} = useReadScheduledExpenseQuery({})
     const [createExpense] = useCreateScheduledExpenseMutation()
     const [updateExpense] = useUpdateScheduledExpenseMutation()
     const [deleteExpense] = useDeleteScheduledExpenseMutation()
@@ -27,6 +27,7 @@ export const ScheduledExpense = (props: Props) => {
                 name: expense.name,
                 amount: expense.amount,
                 person: expense.person?.id,
+                date: expense.date,
                 tags: expense.tags?.map(tag => tag.id || "") || []
             }
         })

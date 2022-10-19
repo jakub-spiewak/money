@@ -1,5 +1,6 @@
 package com.jakubspiewak.money.expense.scheduled
 
+import com.jakubspiewak.money.common.types.DateRange
 import com.jakubspiewak.money.expense.scheduled.type.ScheduledExpenseRequest
 import com.jakubspiewak.money.expense.scheduled.type.ScheduledExpenseResponse
 import com.jakubspiewak.money.person.PersonRepository
@@ -29,17 +30,24 @@ class ScheduledExpenseService(
     fun create(request: ScheduledExpenseRequest): Mono<Unit> = repository.save(
             ScheduledExpenseDocument(name = request.name,
                                      amount = request.amount,
+                                     dateFrom = request.date.from,
+                                     dateTo = request.date.to,
                                      person = request.person?.let { ObjectId(it) },
-                                     tags = request.tags.map { ObjectId(it) })
+                                     tags = request.tags.map { ObjectId(it) }
+            )
     ).map { }
 
     fun update(id: String, request: ScheduledExpenseRequest): Mono<Unit> {
         return repository.save(
-                ScheduledExpenseDocument(id = ObjectId(id),
-                                         name = request.name,
-                                         amount = request.amount,
-                                         person = request.person?.let { ObjectId(it) },
-                                         tags = request.tags.map { ObjectId(it) })
+                ScheduledExpenseDocument(
+                        id = ObjectId(id),
+                        name = request.name,
+                        amount = request.amount,
+                        person = request.person?.let { ObjectId(it) },
+                        tags = request.tags.map { ObjectId(it) },
+                        dateFrom = request.date.from,
+                        dateTo = request.date.to
+                )
         ).map { }
     }
 
@@ -69,6 +77,10 @@ class ScheduledExpenseService(
                     id = document.id.toString(),
                     name = document.name,
                     amount = document.amount,
+                    date = DateRange(
+                            from = document.dateFrom,
+                            to = document.dateTo
+                    ),
                     person = person,
                     tags = tags
             )

@@ -25,16 +25,16 @@ export const CurrentDateComponent = () => {
             borderRadius={8}
             w={"min-content"}
         >
-            <Button onClick={onPlusClick}>
-                +
+            <Button onClick={onMinusClick}>
+                -
             </Button>
             <HStack>
                 <Text>{month <= 9 ? `0${month}` : month}</Text>
                 <Text> - </Text>
                 <Text>{year}</Text>
             </HStack>
-            <Button onClick={onMinusClick}>
-                -
+            <Button onClick={onPlusClick}>
+                +
             </Button>
         </HStack>
     )

@@ -18,7 +18,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.11")
+    implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.12")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 

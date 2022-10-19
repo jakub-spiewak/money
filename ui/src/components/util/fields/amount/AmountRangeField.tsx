@@ -27,6 +27,7 @@ export const AmountRangeField = (props: FieldProps) => {
                     control={control}
                     rules={{
                         required: 'This is required',
+                        shouldUnregister: true
                     }}
                     render={({field, fieldState}) => {
                         const {value, onBlur, onChange} = field

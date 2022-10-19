@@ -3,10 +3,13 @@ import {SingleExpenseTable} from "./SingleExpenseTable";
 import {Center} from "@chakra-ui/react";
 import {
     SingleExpenseRequest,
-    SingleExpenseResponse, useCreateSingleExpenseMutation, useDeleteSingleExpenseMutation,
-    useReadSingleExpenseQuery, useUpdateSingleExpenseMutation
+    SingleExpenseResponse,
+    useCreateSingleExpenseMutation,
+    useDeleteSingleExpenseMutation, useReadSingleExpenseQuery,
+    useUpdateSingleExpenseMutation
 } from "../../../redux/generated/redux-api";
 import {FormModalStateType} from "../../../utils/Hooks";
+import {useAppSelector} from "../../../redux/hooks";
 
 interface Props {
     modal: FormModalStateType<SingleExpenseRequest>
@@ -15,7 +18,13 @@ interface Props {
 export const SingleExpense = (props: Props) => {
     const {modal} = props
 
-    const {data, isLoading, isFetching} = useReadSingleExpenseQuery()
+    const {year, month} = useAppSelector(state => state.currentDate)
+
+    const {
+        data,
+        isLoading,
+        isFetching
+    } = useReadSingleExpenseQuery({month: `${year}-${month <= 9 ? `0${month}` : month}`})
     const [createExpense] = useCreateSingleExpenseMutation()
     const [updateExpense] = useUpdateSingleExpenseMutation()
     const [deleteExpense] = useDeleteSingleExpenseMutation()

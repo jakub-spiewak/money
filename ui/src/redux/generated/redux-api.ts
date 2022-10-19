@@ -152,7 +152,10 @@ const injectedRtkApi = api
         ReadSingleExpenseApiResponse,
         ReadSingleExpenseApiArg
       >({
-        query: () => ({ url: `/expense/single` }),
+        query: (queryArg) => ({
+          url: `/expense/single`,
+          params: { month: queryArg.month },
+        }),
         providesTags: ["person", "tag", "expense"],
       }),
       createSingleExpense: build.mutation<
@@ -170,7 +173,10 @@ const injectedRtkApi = api
         ReadScheduledExpenseApiResponse,
         ReadScheduledExpenseApiArg
       >({
-        query: () => ({ url: `/expense/scheduled` }),
+        query: (queryArg) => ({
+          url: `/expense/scheduled`,
+          params: { month: queryArg.month },
+        }),
         providesTags: ["person", "scheduled_expense", "tag"],
       }),
       createScheduledExpense: build.mutation<
@@ -263,14 +269,18 @@ export type CreatePersonApiArg = {
 };
 export type ReadSingleExpenseApiResponse =
   /** status 200 OK */ SingleExpenseResponse[];
-export type ReadSingleExpenseApiArg = void;
+export type ReadSingleExpenseApiArg = {
+  month?: string;
+};
 export type CreateSingleExpenseApiResponse = /** status 200 OK */ Unit;
 export type CreateSingleExpenseApiArg = {
   singleExpenseRequest: SingleExpenseRequest;
 };
 export type ReadScheduledExpenseApiResponse =
   /** status 200 OK */ ScheduledExpenseResponse[];
-export type ReadScheduledExpenseApiArg = void;
+export type ReadScheduledExpenseApiArg = {
+  month?: string;
+};
 export type CreateScheduledExpenseApiResponse = /** status 200 OK */ Unit;
 export type CreateScheduledExpenseApiArg = {
   scheduledExpenseRequest: ScheduledExpenseRequest;
@@ -309,10 +319,15 @@ export type Amount = {
   type?: AmountType;
   data?: AmountData;
 };
+export type DateRange = {
+  from?: string;
+  to?: string;
+};
 export type ScheduledExpenseRequest = {
   name?: string;
   amount?: Amount;
   person?: string;
+  date?: DateRange;
   tags?: string[];
 };
 export type TagResponse = {
@@ -348,6 +363,7 @@ export type ScheduledExpenseResponse = {
   id?: string;
   name?: string;
   amount?: Amount;
+  date?: DateRange;
   person?: PersonResponse;
   tags?: TagResponse[];
 };

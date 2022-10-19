@@ -49,6 +49,7 @@ export const SingleExpenseForm = (props: Props) => {
                 person: undefined,
                 name: undefined,
                 tags: undefined,
+                date: undefined,
                 parentExpense: undefined
             })
         }

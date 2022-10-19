@@ -5,6 +5,7 @@ import {AmountTableCell} from "../../../util/table/AmountTableCell";
 import {PersonTableCell} from "../../../util/table/PersonTableCell";
 import {ExpenseTableTagsCell} from "../../ExpenseTableTagsCell";
 import {ExpenseTableContentProps} from "../../types";
+import {ExpenseDateRangeCell} from "../../../util/table/ExpenseDateRangeCell";
 
 export const ScheduledExpenseDesktopTableContent = (props: ExpenseTableContentProps<ScheduledExpenseResponse>) => {
     const {expenses, onEdit, onDelete} = props
@@ -21,6 +22,9 @@ export const ScheduledExpenseDesktopTableContent = (props: ExpenseTableContentPr
                             </Td>
                             <Td>
                                 <PersonTableCell person={expense.person}/>
+                            </Td>
+                            <Td>
+                                <ExpenseDateRangeCell date={expense.date}/>
                             </Td>
                             <Td>
                                 <ExpenseTableTagsCell tags={expense.tags || []}/>
