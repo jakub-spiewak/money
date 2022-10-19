@@ -16,6 +16,7 @@ interface DateRangeFieldProps {
 
 export const DateRangeField = (props: DateRangeFieldProps) => {
     const {control, name, label} = props
+    const fromValue = useWatch({name: name?.from || 'date.from', control})
     const toValue = useWatch({name: name?.to || 'date.to', control})
 
     return (
@@ -38,6 +39,22 @@ export const DateRangeField = (props: DateRangeFieldProps) => {
                 control={control}
                 name={name?.to || "date.to"}
                 label={label?.to || "To"}
+                rules={{
+                    validate: value => {
+                        if (!fromValue || !value) return true
+                        const fromDate = new Date(fromValue)
+                        const toDate = new Date(value)
+
+                        let months = (toDate.getFullYear() - fromDate.getFullYear()) * 12
+                        months -= fromDate.getMonth()
+                        months += toDate.getMonth()
+
+                        if (months === 1 && fromDate.getDay() - toDate.getDay() > 0) return "Dates should have at least one month break1"
+                        if (months < 1) return "Dates should have at least one month break"
+
+                        return true
+                    }
+                }}
             />
         </HStack>
     )
