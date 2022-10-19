@@ -1,8 +1,10 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
+import currentDateSlice from "./slice/current-date-slice";
 import {api} from "./api";
 
 const reducer = combineReducers({
-    [api.reducerPath]: api.reducer
+    [api.reducerPath]: api.reducer,
+    currentDate: currentDateSlice
 })
 
 export const store = configureStore({
@@ -12,5 +14,5 @@ export const store = configureStore({
     }
 })
 
-export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>

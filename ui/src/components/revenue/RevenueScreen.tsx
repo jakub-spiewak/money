@@ -10,6 +10,7 @@ import {
     useReadRevenueQuery,
     useUpdateRevenueMutation
 } from "../../redux/generated/redux-api";
+import {CurrentDateComponent} from "../util/CurrentDateComponent";
 
 export const RevenueScreen = () => {
 
@@ -42,6 +43,7 @@ export const RevenueScreen = () => {
 
     return (
         <>
+            <CurrentDateComponent/>
             <Center>
                 <RevenueTable
                     data={data || []}

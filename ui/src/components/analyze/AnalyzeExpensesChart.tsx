@@ -8,7 +8,7 @@ interface Props {
 
 const getAmountNumber = (amount?: Amount): number => {
     if (!amount) return 0;
-   
+
     const {data, type} = amount
     switch (type) {
         case "RANGE":

@@ -4,6 +4,7 @@ import {SingleExpense} from "./single/SingleExpense";
 import {useFormModalStateType} from "../../utils/Hooks";
 import {ScheduledExpenseRequest, SingleExpenseRequest} from "../../redux/generated/redux-api";
 import {theme} from "../../theme";
+import {CurrentDateComponent} from "../util/CurrentDateComponent";
 
 export const ExpenseScreen = () => {
 
@@ -11,21 +12,24 @@ export const ExpenseScreen = () => {
     const singleExpenseModal = useFormModalStateType<SingleExpenseRequest>()
 
     return (
-        <Center
-            flexDirection={'column'}
-            gap={8}
-            pt={8}
-        >
-            <ScheduledExpense modal={scheduledExpenseModal}/>
-            <SingleExpense modal={singleExpenseModal}/>
-            <HStack
-                flexDirection={"row"}
-                justifyContent={"end"}
-                minW={["100vw", null, null, theme.breakpoints.lg]}
+        <>
+            <CurrentDateComponent/>
+            <Center
+                flexDirection={'column'}
+                gap={8}
+                pt={8}
             >
-                <Button onClick={() => scheduledExpenseModal.open()}>Add scheduled expense</Button>
-                <Button onClick={() => singleExpenseModal.open()}>Add single expense</Button>
-            </HStack>
-        </Center>
+                <ScheduledExpense modal={scheduledExpenseModal}/>
+                <SingleExpense modal={singleExpenseModal}/>
+                <HStack
+                    flexDirection={"row"}
+                    justifyContent={"end"}
+                    minW={["100vw", null, null, theme.breakpoints.lg]}
+                >
+                    <Button onClick={() => scheduledExpenseModal.open()}>Add scheduled expense</Button>
+                    <Button onClick={() => singleExpenseModal.open()}>Add single expense</Button>
+                </HStack>
+            </Center>
+        </>
     )
 }
