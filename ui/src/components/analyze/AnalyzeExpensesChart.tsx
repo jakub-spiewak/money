@@ -1,9 +1,27 @@
 import {Pie} from "react-chartjs-2"
-import {ScheduledExpenseResponse} from "../../redux/generated/redux-api";
+import {Amount, ScheduledExpenseResponse} from "../../redux/generated/redux-api";
 import {Box} from "@chakra-ui/react";
 
 interface Props {
     expenses: ScheduledExpenseResponse[]
+}
+
+const getAmountNumber = (amount?: Amount): number => {
+    if (!amount) return 0;
+   
+    const {data, type} = amount
+    switch (type) {
+        case "RANGE":
+            return ((data?.min || 0) + (data?.max || 0)) / 2
+        case "PERCENTAGE":
+            return data?.value || 0
+        case "CONSTANT":
+            return data?.value || 0
+        case "UNKNOWN":
+            return 0
+        default:
+            return 0
+    }
 }
 
 const chartColors = ["#fd7f6f", "#7eb0d5", "#b2e061", "#bd7ebe", "#ffb55a", "#ffee65", "#beb9db", "#fdcce5", "#8bd3c7"]
@@ -13,7 +31,7 @@ export const AnalyzeExpenseChart = (props: Props) => {
     const {expenses} = props
 
     const labels = expenses.map((expense) => expense.name)
-    const data = expenses.map((expense) => expense.amount)
+    const data = expenses.map((expense) => getAmountNumber(expense.amount))
     const backgroundColor = expenses.map((_, index) => getColor(index))
 
     return (
