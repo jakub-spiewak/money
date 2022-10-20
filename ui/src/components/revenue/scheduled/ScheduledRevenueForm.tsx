@@ -10,19 +10,19 @@ import {
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
-import {RevenueRequest} from "../../redux/generated/redux-api";
-import {FormModalStateType} from "../../utils/Hooks";
-import {PersonField} from "../util/fields/PersonField";
-import {AmountField} from "../util/fields/amount/AmountField";
-import {NameField} from "../util/fields/NameField";
-import {SubmitButton} from "../util/controller/SubmitButton";
+import {ScheduledRevenueRequest} from "../../../redux/generated/redux-api";
+import {FormModalStateType} from "../../../utils/Hooks";
+import {PersonField} from "../../util/fields/PersonField";
+import {AmountField} from "../../util/fields/amount/AmountField";
+import {NameField} from "../../util/fields/NameField";
+import {SubmitButton} from "../../util/controller/SubmitButton";
 
 interface Props {
-    state: FormModalStateType<RevenueRequest>,
-    onSubmit: (revenue: RevenueRequest) => Promise<void>
+    state: FormModalStateType<ScheduledRevenueRequest>,
+    onSubmit: (revenue: ScheduledRevenueRequest) => Promise<void>
 }
 
-export const RevenueForm = (props: Props) => {
+export const ScheduledRevenueForm = (props: Props) => {
     const {state: {isOpen, close, value}, onSubmit: onSubmitFromProps} = props
 
 
@@ -31,7 +31,7 @@ export const RevenueForm = (props: Props) => {
         formState: {isSubmitting},
         reset,
         control
-    } = useForm<RevenueRequest>({
+    } = useForm<ScheduledRevenueRequest>({
         defaultValues: {
             name: undefined,
             amount: undefined,
@@ -39,7 +39,7 @@ export const RevenueForm = (props: Props) => {
         }
     })
 
-    const onSubmit = async (revenue: RevenueRequest) => {
+    const onSubmit = async (revenue: ScheduledRevenueRequest) => {
         await onSubmitFromProps(revenue)
         close()
     }

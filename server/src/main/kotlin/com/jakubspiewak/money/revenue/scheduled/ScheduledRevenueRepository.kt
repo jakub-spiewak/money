@@ -1,9 +1,9 @@
-package com.jakubspiewak.money.revenue
+package com.jakubspiewak.money.revenue.scheduled
 
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface RevenueRepository : ReactiveMongoRepository<RevenueDocument, ObjectId> {
+interface ScheduledRevenueRepository : ReactiveMongoRepository<ScheduledRevenueDocument, ObjectId> {
 }

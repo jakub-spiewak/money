@@ -6,12 +6,13 @@ import {PersonTableCell} from "../../../util/table/PersonTableCell";
 import {ExpenseTableTagsCell} from "../../ExpenseTableTagsCell";
 import {ExpenseTableContentProps} from "../../types";
 import {ExpenseDateRangeCell} from "../../../util/table/ExpenseDateRangeCell";
+import {Fragment} from "react";
 
 export const ScheduledExpenseDesktopTableContent = (props: ExpenseTableContentProps<ScheduledExpenseResponse>) => {
     const {expenses, onEdit, onDelete} = props
 
     return (
-        <>
+        <Fragment>
             {
                 expenses.map((expense, index) => {
                     return (
@@ -40,6 +41,6 @@ export const ScheduledExpenseDesktopTableContent = (props: ExpenseTableContentPr
                     )
                 })
             }
-        </>
+        </Fragment>
     )
 }

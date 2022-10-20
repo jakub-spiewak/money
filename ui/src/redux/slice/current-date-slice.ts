@@ -7,7 +7,7 @@ interface CurrentDateState {
     year: number
 }
 
-const initialState: CurrentDateState = {
+export const initialState: CurrentDateState = {
     month: currentDate.getUTCMonth() + 1,
     year: currentDate.getUTCFullYear()
 }
@@ -16,6 +16,10 @@ const currentDateSlice = createSlice({
     initialState,
     name: 'current-date',
     reducers: {
+        reset: (state) => {
+            state.month = initialState.month
+            state.year = initialState.year
+        },
         increment: (state) => {
             state.month++
             if (state.month > 12) {
@@ -47,5 +51,5 @@ const currentDateSlice = createSlice({
     }
 })
 
-export const {increment, decrement, setCurrentMonth, setCurrentYear, setCurrentDate} = currentDateSlice.actions
+export const {increment, decrement, reset, setCurrentMonth, setCurrentYear, setCurrentDate} = currentDateSlice.actions
 export default currentDateSlice.reducer

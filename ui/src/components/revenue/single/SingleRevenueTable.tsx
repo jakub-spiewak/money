@@ -1,6 +1,4 @@
 import {
-    Button,
-    HStack,
     TableCaption,
     Tbody,
     Td,
@@ -10,31 +8,32 @@ import {
     Tr,
     VStack,
 } from "@chakra-ui/react";
-import {RevenueResponse} from "../../redux/generated/redux-api";
-import {LoadingDataTable} from "../util/table/LoadingDataTable";
-import {ActionButtonsTableCell} from "../util/table/ActionButtonsTableCell";
-import {SimpleTableProps} from "../util/table/types";
-import {theme} from "../../theme";
-import {SimpleTableContainer} from "../util/table/SimpleTableContainer";
-import {NoDataTable} from "../util/table/NoDataTable";
+import {SingleRevenueResponse} from "../../../redux/generated/redux-api";
+import {LoadingDataTable} from "../../util/table/LoadingDataTable";
+import {ActionButtonsTableCell} from "../../util/table/ActionButtonsTableCell";
+import {SimpleTableProps} from "../../util/table/types";
+import {theme} from "../../../theme";
+import {SimpleTableContainer} from "../../util/table/SimpleTableContainer";
+import {NoDataTable} from "../../util/table/NoDataTable";
 
 const TableHeadings = () => (
     <Tr>
         <Th>Name</Th>
         <Th>Person</Th>
         <Th isNumeric>Amount</Th>
+        <Th>Date</Th>
         <Th isNumeric>Actions</Th>
     </Tr>
 )
 
-export const RevenueTable = (props: SimpleTableProps<RevenueResponse>) => {
-    const {isLoading, data, onEdit, onDelete, onAdd} = props
+export const SingleRevenueTable = (props: SimpleTableProps<SingleRevenueResponse>) => {
+    const {isLoading, data, onEdit, onDelete} = props
 
     return (
-        <VStack width={["100vw", theme.breakpoints.sm]}>
+        <VStack width={["100vw", theme.breakpoints.md]}>
             <SimpleTableContainer>
                 <TableCaption>
-                    Revenues
+                    SingleRevenues
                 </TableCaption>
                 <Thead>
                     <TableHeadings/>
@@ -52,6 +51,7 @@ export const RevenueTable = (props: SimpleTableProps<RevenueResponse>) => {
                                             <Td>{revenue.name}</Td>
                                             <Td>{`${person?.firstName} ${person?.lastName}`}</Td>
                                             <Td isNumeric><b>{revenue.amount?.toFixed?.(2)}</b></Td>
+                                            <Td>{revenue.date && new Date(revenue.date).toLocaleDateString()}</Td>
                                             <Td isNumeric>
                                                 <ActionButtonsTableCell
                                                     onEdit={() => onEdit(revenue)}
@@ -68,13 +68,6 @@ export const RevenueTable = (props: SimpleTableProps<RevenueResponse>) => {
                     <TableHeadings/>
                 </Tfoot>
             </SimpleTableContainer>
-            <HStack
-                width={"full"}
-                flexDirection={"column-reverse"}
-                alignItems={"end"}
-            >
-                <Button onClick={onAdd}>Add revenue</Button>
-            </HStack>
         </VStack>
     )
 }

@@ -1,62 +1,35 @@
-import {RevenueForm} from "./RevenueForm";
-import {RevenueTable} from "./RevenueTable";
-import {Center} from "@chakra-ui/react";
-import {useFormModalStateType} from "../../utils/Hooks";
-import {
-    RevenueRequest,
-    RevenueResponse,
-    useCreateRevenueMutation,
-    useDeleteRevenueMutation,
-    useReadRevenueQuery,
-    useUpdateRevenueMutation
-} from "../../redux/generated/redux-api";
 import {CurrentDateComponent} from "../util/CurrentDateComponent";
+import {Button, Center, HStack} from "@chakra-ui/react";
+import {theme} from "../../theme";
+import {useFormModalStateType} from "../../utils/Hooks";
+import {ScheduledRevenueRequest, SingleRevenueRequest} from "../../redux/generated/redux-api";
+import {ScheduledRevenue} from "./scheduled/ScheduledRevenue";
+import {SingleRevenue} from "./single/SingleRevenue";
 
 export const RevenueScreen = () => {
 
-    const modal = useFormModalStateType<RevenueRequest>()
-
-    const {data, isLoading, isFetching} = useReadRevenueQuery()
-    const [saveRevenue] = useCreateRevenueMutation()
-    const [updateRevenue] = useUpdateRevenueMutation()
-    const [deleteRevenue] = useDeleteRevenueMutation()
-
-    const onEdit = (revenue: RevenueResponse) => {
-        revenue.id && modal.open({
-            id: revenue.id,
-            request: {
-                name: revenue.name,
-                amount: revenue.amount,
-                person: revenue.person?.id
-            }
-        })
-    }
-
-    const onDelete = async (revenue: RevenueResponse) => {
-        revenue.id && await deleteRevenue({id: revenue.id})
-    }
-
-    const onSubmit = async (revenue: RevenueRequest) => {
-        if (modal.value?.id) await updateRevenue({id: modal.value.id, revenueRequest: revenue})
-        else await saveRevenue({revenueRequest: revenue})
-    }
+    const scheduledRevenueModal = useFormModalStateType<ScheduledRevenueRequest>()
+    const singleRevenueModal = useFormModalStateType<SingleRevenueRequest>()
 
     return (
         <>
             <CurrentDateComponent/>
-            <Center>
-                <RevenueTable
-                    data={data || []}
-                    onAdd={modal.open}
-                    onEdit={onEdit}
-                    onDelete={onDelete}
-                    isLoading={isLoading || isFetching}
-                />
+            <Center
+                flexDirection={'column'}
+                gap={8}
+                pt={8}
+            >
+                <ScheduledRevenue modal={scheduledRevenueModal}/>
+                <SingleRevenue modal={singleRevenueModal}/>
+                <HStack
+                    flexDirection={"row"}
+                    justifyContent={"end"}
+                    minW={["100vw", null, null, theme.breakpoints.lg]}
+                >
+                    <Button onClick={() => scheduledRevenueModal.open()}>Add scheduled expense</Button>
+                    <Button onClick={() => singleRevenueModal.open()}>Add single expense</Button>
+                </HStack>
             </Center>
-            <RevenueForm
-                state={modal}
-                onSubmit={onSubmit}
-            />
         </>
     )
 }

@@ -1,21 +1,21 @@
-package com.jakubspiewak.money.revenue
+package com.jakubspiewak.money.revenue.scheduled
 
 import com.jakubspiewak.money.person.PersonRepository
 import com.jakubspiewak.money.person.type.PersonResponse
-import com.jakubspiewak.money.revenue.type.RevenueRequest
-import com.jakubspiewak.money.revenue.type.RevenueResponse
+import com.jakubspiewak.money.revenue.scheduled.type.ScheduledRevenueRequest
+import com.jakubspiewak.money.revenue.scheduled.type.ScheduledRevenueResponse
 import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Service
-class RevenueService(private val repository: RevenueRepository, private val personRepository: PersonRepository) {
+class ScheduledRevenueService(private val repository: ScheduledRevenueRepository, private val personRepository: PersonRepository) {
 
-    fun readAll(): Flux<RevenueResponse> =
+    fun readAll(): Flux<ScheduledRevenueResponse> =
         repository.findAll().flatMap { revenue ->
                 personRepository.findById(revenue.person).map { person ->
-                        RevenueResponse(
+                        ScheduledRevenueResponse(
                             id = revenue.id.toString(),
                             name = revenue.name,
                             amount = revenue.amount,
@@ -26,19 +26,19 @@ class RevenueService(private val repository: RevenueRepository, private val pers
                     }
             }.sort { o1, o2 -> o2.amount.compareTo(o1.amount) }
 
-    fun create(request: RevenueRequest): Mono<Unit> =
+    fun create(request: ScheduledRevenueRequest): Mono<Unit> =
         personRepository.findById(ObjectId(request.person)).flatMap { person ->
                 repository.save(
-                    RevenueDocument(
+                    ScheduledRevenueDocument(
                         name = request.name, amount = request.amount, person = person.id
                     )
                 )
             }.map { }
 
-    fun update(id: String, request: RevenueRequest): Mono<Unit> =
+    fun update(id: String, request: ScheduledRevenueRequest): Mono<Unit> =
         personRepository.findById(ObjectId(request.person)).flatMap { person ->
                 repository.save(
-                    RevenueDocument(
+                    ScheduledRevenueDocument(
                         id = ObjectId(id), name = request.name, amount = request.amount, person = person.id
                     )
                 )

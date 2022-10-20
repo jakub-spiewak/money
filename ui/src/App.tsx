@@ -4,13 +4,13 @@ import {ChakraProvider, Tab, TabList, TabPanels, Tabs} from "@chakra-ui/react";
 import {GlobalContextProvider} from "./utils/Context"
 import {PersonScreen} from "./components/person/PersonScreen";
 import {TagScreen} from "./components/tag/TagScreen";
-import {RevenueScreen} from "./components/revenue/RevenueScreen";
 import {ExpenseScreen} from "./components/expense/ExpenseScreen";
 import {AnalyzeScreen} from "./components/analyze/AnalyzeScreen";
 import {Provider} from "react-redux";
 import {store} from "./redux/store";
 import {theme} from "./theme";
 import {ScreenTabPanel} from "./components/util/ScreenTabPanel";
+import {RevenueScreen} from "./components/revenue/RevenueScreen";
 
 function App() {
     return (

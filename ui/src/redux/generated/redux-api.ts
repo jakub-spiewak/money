@@ -25,23 +25,44 @@ const injectedRtkApi = api
         query: (queryArg) => ({ url: `/tag/${queryArg.id}`, method: "DELETE" }),
         invalidatesTags: ["tag"],
       }),
-      updateRevenue: build.mutation<
-        UpdateRevenueApiResponse,
-        UpdateRevenueApiArg
+      updateSingleRevenue: build.mutation<
+        UpdateSingleRevenueApiResponse,
+        UpdateSingleRevenueApiArg
       >({
         query: (queryArg) => ({
-          url: `/revenue/${queryArg.id}`,
+          url: `/revenue/single/${queryArg.id}`,
           method: "PUT",
-          body: queryArg.revenueRequest,
+          body: queryArg.singleRevenueRequest,
         }),
         invalidatesTags: ["revenue", "person", "tag"],
       }),
-      deleteRevenue: build.mutation<
-        DeleteRevenueApiResponse,
-        DeleteRevenueApiArg
+      deleteSingleRevenue: build.mutation<
+        DeleteSingleRevenueApiResponse,
+        DeleteSingleRevenueApiArg
       >({
         query: (queryArg) => ({
-          url: `/revenue/${queryArg.id}`,
+          url: `/revenue/single/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["revenue", "person", "tag"],
+      }),
+      updateScheduledRevenue: build.mutation<
+        UpdateScheduledRevenueApiResponse,
+        UpdateScheduledRevenueApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/revenue/scheduled/${queryArg.id}`,
+          method: "PUT",
+          body: queryArg.scheduledRevenueRequest,
+        }),
+        invalidatesTags: ["revenue", "person", "tag"],
+      }),
+      deleteScheduledRevenue: build.mutation<
+        DeleteScheduledRevenueApiResponse,
+        DeleteScheduledRevenueApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/revenue/scheduled/${queryArg.id}`,
           method: "DELETE",
         }),
         invalidatesTags: ["revenue", "person", "tag"],
@@ -119,18 +140,42 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["tag"],
       }),
-      readRevenue: build.query<ReadRevenueApiResponse, ReadRevenueApiArg>({
-        query: () => ({ url: `/revenue` }),
-        providesTags: ["revenue", "person", "tag"],
-      }),
-      createRevenue: build.mutation<
-        CreateRevenueApiResponse,
-        CreateRevenueApiArg
+      readSingleRevenue: build.query<
+        ReadSingleRevenueApiResponse,
+        ReadSingleRevenueApiArg
       >({
         query: (queryArg) => ({
-          url: `/revenue`,
+          url: `/revenue/single`,
+          params: { month: queryArg.month },
+        }),
+        providesTags: ["revenue", "person", "tag"],
+      }),
+      createSingleRevenue: build.mutation<
+        CreateSingleRevenueApiResponse,
+        CreateSingleRevenueApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/revenue/single`,
           method: "POST",
-          body: queryArg.revenueRequest,
+          body: queryArg.singleRevenueRequest,
+        }),
+        invalidatesTags: ["revenue", "person", "tag"],
+      }),
+      readScheduledRevenue: build.query<
+        ReadScheduledRevenueApiResponse,
+        ReadScheduledRevenueApiArg
+      >({
+        query: () => ({ url: `/revenue/scheduled` }),
+        providesTags: ["revenue", "person", "tag"],
+      }),
+      createScheduledRevenue: build.mutation<
+        CreateScheduledRevenueApiResponse,
+        CreateScheduledRevenueApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/revenue/scheduled`,
+          method: "POST",
+          body: queryArg.scheduledRevenueRequest,
         }),
         invalidatesTags: ["revenue", "person", "tag"],
       }),
@@ -192,13 +237,7 @@ const injectedRtkApi = api
       }),
       analyze: build.query<AnalyzeApiResponse, AnalyzeApiArg>({
         query: () => ({ url: `/analyze` }),
-        providesTags: [
-          "revenue",
-          "person",
-          "analyze",
-          "scheduled_expense",
-          "tag",
-        ],
+        providesTags: ["person", "analyze", "scheduled_expense", "tag"],
       }),
     }),
     overrideExisting: false,
@@ -213,13 +252,22 @@ export type DeleteTagApiResponse = /** status 200 OK */ Unit;
 export type DeleteTagApiArg = {
   id: string;
 };
-export type UpdateRevenueApiResponse = /** status 200 OK */ Unit;
-export type UpdateRevenueApiArg = {
+export type UpdateSingleRevenueApiResponse = /** status 200 OK */ Unit;
+export type UpdateSingleRevenueApiArg = {
   id: string;
-  revenueRequest: RevenueRequest;
+  singleRevenueRequest: SingleRevenueRequest;
 };
-export type DeleteRevenueApiResponse = /** status 200 OK */ Unit;
-export type DeleteRevenueApiArg = {
+export type DeleteSingleRevenueApiResponse = /** status 200 OK */ Unit;
+export type DeleteSingleRevenueApiArg = {
+  id: string;
+};
+export type UpdateScheduledRevenueApiResponse = /** status 200 OK */ Unit;
+export type UpdateScheduledRevenueApiArg = {
+  id: string;
+  scheduledRevenueRequest: ScheduledRevenueRequest;
+};
+export type DeleteScheduledRevenueApiResponse = /** status 200 OK */ Unit;
+export type DeleteScheduledRevenueApiArg = {
   id: string;
 };
 export type UpdatePersonApiResponse = /** status 200 OK */ Unit;
@@ -255,11 +303,21 @@ export type CreateTagApiResponse = /** status 200 OK */ Unit;
 export type CreateTagApiArg = {
   tagRequest: TagRequest;
 };
-export type ReadRevenueApiResponse = /** status 200 OK */ RevenueResponse[];
-export type ReadRevenueApiArg = void;
-export type CreateRevenueApiResponse = /** status 200 OK */ Unit;
-export type CreateRevenueApiArg = {
-  revenueRequest: RevenueRequest;
+export type ReadSingleRevenueApiResponse =
+  /** status 200 OK */ SingleRevenueResponse[];
+export type ReadSingleRevenueApiArg = {
+  month?: string;
+};
+export type CreateSingleRevenueApiResponse = /** status 200 OK */ Unit;
+export type CreateSingleRevenueApiArg = {
+  singleRevenueRequest: SingleRevenueRequest;
+};
+export type ReadScheduledRevenueApiResponse =
+  /** status 200 OK */ ScheduledRevenueResponse[];
+export type ReadScheduledRevenueApiArg = void;
+export type CreateScheduledRevenueApiResponse = /** status 200 OK */ Unit;
+export type CreateScheduledRevenueApiArg = {
+  scheduledRevenueRequest: ScheduledRevenueRequest;
 };
 export type ReadPersonApiResponse = /** status 200 OK */ PersonResponse[];
 export type ReadPersonApiArg = void;
@@ -291,7 +349,13 @@ export type Unit = object;
 export type TagRequest = {
   name?: string;
 };
-export type RevenueRequest = {
+export type SingleRevenueRequest = {
+  name?: string;
+  amount?: number;
+  date?: string;
+  person?: string;
+};
+export type ScheduledRevenueRequest = {
   name?: string;
   amount?: number;
   person?: string;
@@ -339,7 +403,14 @@ export type PersonResponse = {
   firstName?: string;
   lastName?: string;
 };
-export type RevenueResponse = {
+export type SingleRevenueResponse = {
+  id?: string;
+  name?: string;
+  amount?: number;
+  date?: string;
+  person?: PersonResponse;
+};
+export type ScheduledRevenueResponse = {
   id?: string;
   name?: string;
   amount?: number;
@@ -390,8 +461,10 @@ export type AnalyzeResponse = {
 export const {
   useUpdateTagMutation,
   useDeleteTagMutation,
-  useUpdateRevenueMutation,
-  useDeleteRevenueMutation,
+  useUpdateSingleRevenueMutation,
+  useDeleteSingleRevenueMutation,
+  useUpdateScheduledRevenueMutation,
+  useDeleteScheduledRevenueMutation,
   useUpdatePersonMutation,
   useDeletePersonMutation,
   useUpdateSingleExpenseMutation,
@@ -400,8 +473,10 @@ export const {
   useDeleteScheduledExpenseMutation,
   useReadTagQuery,
   useCreateTagMutation,
-  useReadRevenueQuery,
-  useCreateRevenueMutation,
+  useReadSingleRevenueQuery,
+  useCreateSingleRevenueMutation,
+  useReadScheduledRevenueQuery,
+  useCreateScheduledRevenueMutation,
   useReadPersonQuery,
   useCreatePersonMutation,
   useReadSingleExpenseQuery,

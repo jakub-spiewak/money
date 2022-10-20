@@ -1,4 +1,4 @@
-package com.jakubspiewak.money.revenue
+package com.jakubspiewak.money.revenue.scheduled
 
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
@@ -9,8 +9,8 @@ import org.springframework.stereotype.Indexed
 import java.math.BigDecimal
 
 @Indexed
-@Document(RevenueDocument.COLLECTION)
-class RevenueDocument(
+@Document(ScheduledRevenueDocument.COLLECTION)
+class ScheduledRevenueDocument(
         @Id
         var id: ObjectId = ObjectId.get(),
         @Field(NAME_FIELD)
@@ -21,7 +21,7 @@ class RevenueDocument(
         var person: ObjectId,
 ) {
     companion object {
-        const val COLLECTION = "revenue"
+        const val COLLECTION = "scheduled_revenue"
 
         const val NAME_FIELD = "name"
         const val AMOUNT_FIELD = "amount"

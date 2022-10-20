@@ -1,19 +1,25 @@
 import {DateRange} from "../../../redux/generated/redux-api";
 import {Center, Grid, Text} from "@chakra-ui/react";
 import {GiInfinity} from "react-icons/gi";
+import {jsx} from "@emotion/react";
+import JSX = jsx.JSX;
 
 interface Props {
     date?: DateRange
+    emptyDateComponent?: JSX.Element
 }
 
-export const ExpenseDateRangeCell = (props: Props) => {
-    const {date} = props
+export const ExpenseDateRangeCell = (props: Props): JSX.Element => {
+    const {date, emptyDateComponent} = props
 
-    if (!date?.from && !date?.to) return (
-        <Center>
-            <GiInfinity/>
-        </Center>
-    )
+    if (!date?.from && !date?.to) {
+        return emptyDateComponent ? emptyDateComponent :
+            (
+                <Center>
+                    <GiInfinity/>
+                </Center>
+            )
+    }
 
     return (
         <Grid

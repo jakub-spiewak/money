@@ -5,8 +5,9 @@ import {AmountTableCell} from "../../../util/table/AmountTableCell";
 import {visualizePerson} from "../../../util/table/PersonTableCell";
 import {ExpenseTableTagsCell} from "../../ExpenseTableTagsCell";
 import {ChevronDownIcon} from "@chakra-ui/icons";
-import {useState} from "react";
+import {Fragment, useState} from "react";
 import {ExpenseTableContentProps} from "../../types";
+import {ExpenseDateRangeCell} from "../../../util/table/ExpenseDateRangeCell";
 
 export const ScheduledExpenseMobileTableContent = (props: ExpenseTableContentProps<ScheduledExpenseResponse>) => {
     const [currentItemIndex, setCurrentItemIndex] = useState<string>()
@@ -72,7 +73,10 @@ export const ScheduledExpenseMobileTableContent = (props: ExpenseTableContentPro
                                                     name={expense.name || ''}
                                                 />
                                             </HStack>
-                                            <VStack alignItems={"start"}>
+                                            <VStack
+                                                alignItems={"start"}
+                                                gap={3}
+                                            >
                                                 <HStack>
                                                     <Text as={"b"}>
                                                         Person:
@@ -83,6 +87,15 @@ export const ScheduledExpenseMobileTableContent = (props: ExpenseTableContentPro
                                                     mobile
                                                     tags={expense.tags || []}
                                                 />
+                                                <VStack
+                                                    gap={1}
+                                                    alignItems={"start"}
+                                                >
+                                                    <ExpenseDateRangeCell
+                                                        date={expense.date}
+                                                        emptyDateComponent={<Fragment/>}
+                                                    />
+                                                </VStack>
                                             </VStack>
                                         </Box>
                                     </Collapse>
