@@ -51,8 +51,8 @@ export const ScheduledExpenseTable = (props: ExpenseTableProps<ScheduledExpenseR
                 <TableHeading/>
             </Thead>
             <Tbody>
-                {isLoading && <LoadingDataTable size={5}/>}
-                {expenses.length === 0 && <NoDataTable size={5}/>}
+                {isLoading && <LoadingDataTable size={6}/>}
+                {expenses.length === 0 && <NoDataTable size={6}/>}
                 {
                     <TableContent
                         expenses={expenses}

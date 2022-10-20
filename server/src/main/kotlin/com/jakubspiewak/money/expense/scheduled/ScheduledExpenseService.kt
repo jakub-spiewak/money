@@ -11,6 +11,7 @@ import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.time.YearMonth
 import java.util.*
 
 @Service
@@ -22,6 +23,14 @@ class ScheduledExpenseService(
     fun readAll(): Flux<ScheduledExpenseResponse> = repository.findAll().flatMap {
         mapToResponse(it)
     }
+
+    fun readAll(month: YearMonth): Flux<ScheduledExpenseResponse> = repository.findAllIntersects(
+            month.atDay(1),
+            month.atEndOfMonth()
+    )
+            .flatMap {
+                mapToResponse(it)
+            }
 
     fun readById(id: ObjectId): Mono<ScheduledExpenseResponse> = repository.findById(id).flatMap {
         mapToResponse(it)

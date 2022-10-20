@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Field
 import org.springframework.data.mongodb.core.mapping.FieldType
 import org.springframework.stereotype.Indexed
 import java.math.BigDecimal
-import java.time.Instant
+import java.time.LocalDate
 import java.util.*
 
 @Indexed
@@ -24,7 +24,7 @@ class SingleExpenseDocument(
         @Field(name = PERSON_FIELD, targetType = FieldType.OBJECT_ID)
         var person: ObjectId?,
         @Field(name = DATE, targetType = FieldType.DATE_TIME)
-        var date: Date = Date.from(Instant.now()),
+        var date: LocalDate = LocalDate.now(),
         @Field(name = TAGS_FIELD, targetType = FieldType.OBJECT_ID)
         var tags: List<ObjectId> = listOf(),
 ) {

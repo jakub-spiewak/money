@@ -7,6 +7,7 @@ import {
 } from "../../../redux/generated/redux-api";
 import {Center} from "@chakra-ui/react";
 import {ScheduledExpenseTable} from "./ScheduledExpenseTable";
+import {useAppSelector} from "../../../redux/hooks";
 
 interface Props {
     modal: FormModalStateType<ScheduledExpenseRequest>
@@ -15,7 +16,13 @@ interface Props {
 export const ScheduledExpense = (props: Props) => {
     const {modal} = props
 
-    const {data, isLoading, isFetching} = useReadScheduledExpenseQuery({})
+    const {year, month} = useAppSelector(state => state.currentDate)
+    const {
+        data,
+        isLoading,
+        isFetching
+    } = useReadScheduledExpenseQuery({month: `${year}-${month <= 9 ? `0${month}` : month}`})
+
     const [createExpense] = useCreateScheduledExpenseMutation()
     const [updateExpense] = useUpdateScheduledExpenseMutation()
     const [deleteExpense] = useDeleteScheduledExpenseMutation()

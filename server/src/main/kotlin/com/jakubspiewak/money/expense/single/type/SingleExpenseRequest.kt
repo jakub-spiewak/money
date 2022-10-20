@@ -2,7 +2,7 @@ package com.jakubspiewak.money.expense.single.type
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.math.BigDecimal
-import java.util.*
+import java.time.LocalDate
 
 data class SingleExpenseRequest(
         val name: String,
@@ -10,6 +10,6 @@ data class SingleExpenseRequest(
         val parentExpense: String?,
         val person: String?,
         @JsonFormat(pattern = "yyyy-MM-dd")
-        val date: Date,
+        val date: LocalDate,
         val tags: List<String>
 )

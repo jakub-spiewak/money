@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
 import org.springframework.data.mongodb.core.mapping.FieldType
 import org.springframework.stereotype.Indexed
+import java.time.LocalDate
 import java.util.*
 
 @Indexed
@@ -21,9 +22,9 @@ class ScheduledExpenseDocument(
         @Field(name = AMOUNT_FIELD, targetType = FieldType.DECIMAL128)
         var amount: Amount = Amount(AmountType.UNKNOWN, AmountData()),
         @Field(name = DATE_FROM_FIELD, targetType = FieldType.DATE_TIME)
-        var dateFrom: Date?,
+        var dateFrom: LocalDate?,
         @Field(name = DATE_TO_FIELD, targetType = FieldType.DATE_TIME)
-        var dateTo: Date?,
+        var dateTo: LocalDate?,
         @Field(name = PERSON_FIELD, targetType = FieldType.OBJECT_ID)
         var person: ObjectId?,
         @Field(name = TAGS_FIELD, targetType = FieldType.OBJECT_ID)

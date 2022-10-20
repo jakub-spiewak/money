@@ -1,11 +1,11 @@
 package com.jakubspiewak.money.common.types
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import java.util.*
+import java.time.LocalDate
 
 data class DateRange(
         @JsonFormat(pattern = "yyyy-MM-dd")
-        val from: Date?,
+        val from: LocalDate?,
         @JsonFormat(pattern = "yyyy-MM-dd")
-        val to: Date?
+        val to: LocalDate?
 )

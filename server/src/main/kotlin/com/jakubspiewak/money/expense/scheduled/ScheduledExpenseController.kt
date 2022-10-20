@@ -27,7 +27,7 @@ class ScheduledExpenseController(private val service: ScheduledExpenseService) {
             @RequestParam(name = "month", required = false)
             @DateTimeFormat(pattern = "yyyy-MM")
             month: YearMonth?
-    ) = service.readAll()
+    ) = month?.let { service.readAll(month) } ?: service.readAll()
 
     @PutMapping("/{id}")
     fun updateScheduledExpense(@PathVariable("id") id: String, @RequestBody request: ScheduledExpenseRequest) = service.update(id, request)
