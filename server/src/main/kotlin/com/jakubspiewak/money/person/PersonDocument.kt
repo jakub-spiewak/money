@@ -10,7 +10,7 @@ import org.springframework.stereotype.Indexed
 @Document(PersonDocument.COLLECTION)
 class PersonDocument(
         @Id
-        var id: ObjectId = ObjectId.get(),
+        var id: ObjectId? = ObjectId.get(),
         @Field(FIRST_NAME_FIELD)
         var firstName: String = "",
         @Field(LAST_NAME_FIELD)

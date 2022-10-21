@@ -10,7 +10,7 @@ import org.springframework.stereotype.Indexed
 @Document(TagDocument.COLLECTION)
 class TagDocument(
         @Id
-        var id: ObjectId = ObjectId.get(),
+        var id: ObjectId? = ObjectId.get(),
         @Field(NAME_FIELD)
         var name: String = "",
 ) {

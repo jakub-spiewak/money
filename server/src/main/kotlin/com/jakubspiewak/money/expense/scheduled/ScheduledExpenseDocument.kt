@@ -16,7 +16,7 @@ import java.util.*
 @Document(ScheduledExpenseDocument.COLLECTION)
 class ScheduledExpenseDocument(
         @Id
-        var id: ObjectId = ObjectId.get(),
+        var id: ObjectId? = ObjectId.get(),
         @Field(NAME_FIELD)
         var name: String = "",
         @Field(name = AMOUNT_FIELD, targetType = FieldType.DECIMAL128)

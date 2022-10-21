@@ -14,7 +14,7 @@ import java.util.*
 @Document(SingleExpenseDocument.COLLECTION)
 class SingleExpenseDocument(
         @Id
-        var id: ObjectId = ObjectId.get(),
+        var id: ObjectId? = ObjectId.get(),
         @Field(NAME_FIELD)
         var name: String = "",
         @Field(name = AMOUNT_FIELD, targetType = FieldType.DECIMAL128)

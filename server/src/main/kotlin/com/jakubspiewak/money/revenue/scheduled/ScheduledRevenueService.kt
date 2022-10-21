@@ -14,16 +14,18 @@ class ScheduledRevenueService(private val repository: ScheduledRevenueRepository
 
     fun readAll(): Flux<ScheduledRevenueResponse> =
         repository.findAll().flatMap { revenue ->
-                personRepository.findById(revenue.person).map { person ->
-                        ScheduledRevenueResponse(
-                            id = revenue.id.toString(),
-                            name = revenue.name,
-                            amount = revenue.amount,
-                            person = PersonResponse(
-                                id = person.id.toString(), firstName = person.firstName, lastName = person.lastName
-                            )
+            revenue.person?.let {
+                personRepository.findById(it).map { person ->
+                    ScheduledRevenueResponse(
+                        id = revenue.id.toString(),
+                        name = revenue.name,
+                        amount = revenue.amount,
+                        person = PersonResponse(
+                            id = person.id.toString(), firstName = person.firstName, lastName = person.lastName
                         )
-                    }
+                    )
+                }
+            } ?: return@flatMap Flux.error(Exception("WTF XD"))
             }.sort { o1, o2 -> o2.amount.compareTo(o1.amount) }
 
     fun create(request: ScheduledRevenueRequest): Mono<Unit> =

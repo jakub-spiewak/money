@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.0.14.RELEASE"
     kotlin("jvm") version "1.6.21"
     kotlin("plugin.spring") version "1.6.21"
+    kotlin("kapt") version "1.7.20"
 }
 
 group = "com.jakubspiewak"
@@ -21,6 +22,9 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.12")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+    implementation("org.mapstruct:mapstruct:1.5.3.Final")
+    kapt("org.mapstruct:mapstruct-processor:1.5.3.Final")
 
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 

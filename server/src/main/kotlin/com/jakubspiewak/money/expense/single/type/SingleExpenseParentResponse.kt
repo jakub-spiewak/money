@@ -1,9 +1,9 @@
 package com.jakubspiewak.money.expense.single.type
 
-import java.math.BigDecimal
+import com.jakubspiewak.money.common.types.Amount
 
 data class SingleExpenseParentResponse(
         val id: String,
         val name: String,
-        val amount: BigDecimal,
+        val amount: Amount,
 )

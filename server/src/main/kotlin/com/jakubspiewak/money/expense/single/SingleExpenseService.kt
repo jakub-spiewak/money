@@ -1,139 +1,58 @@
 package com.jakubspiewak.money.expense.single
 
 import com.jakubspiewak.money.expense.scheduled.ScheduledExpenseService
-import com.jakubspiewak.money.expense.single.type.SingleExpenseParentResponse
 import com.jakubspiewak.money.expense.single.type.SingleExpenseRequest
 import com.jakubspiewak.money.expense.single.type.SingleExpenseResponse
-import com.jakubspiewak.money.person.PersonRepository
-import com.jakubspiewak.money.person.type.PersonResponse
-import com.jakubspiewak.money.tag.TagRepository
-import com.jakubspiewak.money.tag.type.TagResponse
+import com.jakubspiewak.money.person.PersonService
+import com.jakubspiewak.money.tag.TagService
 import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import java.math.BigDecimal.ZERO
 import java.time.YearMonth
-import java.util.*
 
 @Service
 class SingleExpenseService(
-        private val repository: SingleExpenseRepository,
-        private val personRepository: PersonRepository,
-        private val scheduledExpenseService: ScheduledExpenseService,
-        private val tagRepository: TagRepository
+    private val repository: SingleExpenseRepository,
+    private val personService: PersonService,
+    private val scheduledExpenseService: ScheduledExpenseService,
+    private val tagService: TagService,
+    private val mapper: SingleExpenseMapper
 ) {
-    fun readAll(): Flux<SingleExpenseResponse> = repository.findAll().flatMap { expense ->
-
-        val expenseMono = expense.parentExpense?.let { scheduledExpenseService.readById(it) }?.map { Optional.of(it) }
-                          ?: Mono.just(Optional.empty())
-
-        val personMono = expense.person?.let { personRepository.findById(it) }?.map { Optional.of(it) }
-                         ?: Mono.just(Optional.empty())
-
-        val tagsMono = tagRepository.findAllById(expense.tags).collectList()
-
-        Mono.zip(expenseMono, personMono, tagsMono).map { data ->
-            val parentExpenseDocument = data.t1
-            val personDocument = data.t2
-            val tagsDocuments = data.t3
-
-            val parentExpense = parentExpenseDocument.map {
-                SingleExpenseParentResponse(
-                        id = it.id,
-                        name = it.name,
-                        amount = it.amount.data.value
-                                 ?: ZERO,
-                )
-            }.orElse(null)
-
-            val person = personDocument.map {
-                PersonResponse(id = it.id.toString(), firstName = it.firstName, lastName = it.lastName)
-            }.orElse(null)
-
-            val tags = tagsDocuments.map { tag ->
-                TagResponse(id = tag.id.toString(), name = tag.name)
-            }
-
-            SingleExpenseResponse(
-                    id = expense.id.toString(),
-                    name = expense.name,
-                    amount = expense.amount,
-                    person = person,
-                    parentExpense = parentExpense,
-                    tags = tags,
-                    date = expense.date,
-            )
-        }
-    }.sort { o1, o2 -> o2.amount.compareTo(o1.amount) }
+    fun readAll(): Flux<SingleExpenseResponse> = repository.findAll().flatMap { createResponse(it) }
 
     fun readAllByDate(yearMonth: YearMonth) = repository.findAllInMonth(
-            yearMonth.monthValue, yearMonth.year
-    ).flatMap { expense ->
-        val personMono = expense.person?.let { personRepository.findById(it) }?.map { Optional.of(it) }
-                         ?: Mono.just(Optional.empty())
+        yearMonth.monthValue, yearMonth.year
+    ).flatMap { createResponse(it) }
 
-        val parentExpenseMono = expense.parentExpense?.let { scheduledExpenseService.readById(it) }?.map {
-            Optional.of(it)
-        }
-                                ?: Mono.just(Optional.empty())
-
-        val tagsMono = tagRepository.findAllById(expense.tags).collectList()
-
-        Mono.zip(personMono, parentExpenseMono, tagsMono).map { data ->
-            val personDocument = data.t1
-            val parentExpenseDocument = data.t2
-            val tagsDocuments = data.t3
-
-            val person = personDocument.map {
-                PersonResponse(
-                        id = it.id.toString(), firstName = it.firstName, lastName = it.lastName
-                )
-            }.orElse(null)
-
-            val parentExpense = parentExpenseDocument.map {
-                SingleExpenseParentResponse(
-                        id = it.id,
-                        name = it.name,
-                        amount = it.amount.data.value
-                                 ?: ZERO,
-                )
-            }.orElse(null)
-
-            val tags = tagsDocuments.map { tag ->
-                TagResponse(id = tag.id.toString(), name = tag.name)
-            }
-
-            SingleExpenseResponse(
-                    id = expense.id.toString(),
-                    name = expense.name,
-                    amount = expense.amount,
-                    person = person,
-                    parentExpense = parentExpense,
-                    date = expense.date,
-                    tags = tags
-            )
-        }
-    }
-
-    fun create(request: SingleExpenseRequest): Mono<Unit> = repository.save(
-            SingleExpenseDocument(name = request.name,
-                                  amount = request.amount,
-                                  date = request.date,
-                                  parentExpense = request.parentExpense?.let { ObjectId(it) },
-                                  person = request.person?.let { ObjectId(it) },
-                                  tags = request.tags.map { ObjectId(it) })
-    ).map { }
+    fun create(request: SingleExpenseRequest): Mono<Unit> =
+        repository.save(mapper.fromRequestToDocument(request)).map { }
 
     fun update(id: String, request: SingleExpenseRequest): Mono<Unit> = repository.save(
-            SingleExpenseDocument(id = ObjectId(id),
-                                  name = request.name,
-                                  amount = request.amount,
-                                  date = request.date,
-                                  parentExpense = request.parentExpense?.let { ObjectId(it) },
-                                  person = request.person?.let { ObjectId(it) },
-                                  tags = request.tags.map { ObjectId(it) })
+        mapper.fromRequestToDocument
+            (request, ObjectId(id))
     ).map { }
 
     fun delete(id: String): Mono<Unit> = repository.deleteById(ObjectId(id)).map { }
+
+    fun createResponse(document: SingleExpenseDocument): Mono<SingleExpenseResponse> {
+        val tagsMono = tagService.readAllById(document.tags).collectList()
+
+        val parentExpenseMono = document.parentExpense
+            ?.let { scheduledExpenseService.readById(it) }
+            ?.map { mapper.fromParentExpenseToResponse(it) }
+            ?: Mono.empty()
+
+        val personMono = document.person?.let { personService.readById(it) }
+            ?: Mono.empty()
+
+        return Mono.zip(tagsMono, parentExpenseMono, personMono).map {
+            mapper.fromDocumentToResponse(
+                source = document,
+                tags = it.t1,
+                parentExpense = it.t2,
+                person = it.t3
+            )
+        }
+    }
 }
