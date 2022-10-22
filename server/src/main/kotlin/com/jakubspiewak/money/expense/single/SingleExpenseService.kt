@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.time.YearMonth
+import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class SingleExpenseService(
@@ -29,29 +31,29 @@ class SingleExpenseService(
         repository.save(mapper.fromRequestToDocument(request)).map { }
 
     fun update(id: String, request: SingleExpenseRequest): Mono<Unit> = repository.save(
-        mapper.fromRequestToDocument
-            (request, ObjectId(id))
+        mapper.fromRequestToDocument(request, ObjectId(id))
     ).map { }
 
     fun delete(id: String): Mono<Unit> = repository.deleteById(ObjectId(id)).map { }
 
-    fun createResponse(document: SingleExpenseDocument): Mono<SingleExpenseResponse> {
+    @OptIn(ExperimentalStdlibApi::class)
+    private fun createResponse(document: SingleExpenseDocument): Mono<SingleExpenseResponse> {
+
         val tagsMono = tagService.readAllById(document.tags).collectList()
 
         val parentExpenseMono = document.parentExpense
             ?.let { scheduledExpenseService.readById(it) }
-            ?.map { mapper.fromParentExpenseToResponse(it) }
-            ?: Mono.empty()
+            ?.map { mapper.fromParentExpenseToResponse(it) }?.map { Optional.of(it) }
+            ?: Mono.just(Optional.empty())
 
-        val personMono = document.person?.let { personService.readById(it) }
-            ?: Mono.empty()
+        val personMono = document.person
+            ?.let { personService.readById(it) }
+            ?.map { Optional.of(it) }
+            ?: Mono.just(Optional.empty())
 
         return Mono.zip(tagsMono, parentExpenseMono, personMono).map {
             mapper.fromDocumentToResponse(
-                source = document,
-                tags = it.t1,
-                parentExpense = it.t2,
-                person = it.t3
+                source = document, tags = it.t1, parentExpense = it.t2.getOrNull(), person = it.t3.getOrNull()
             )
         }
     }

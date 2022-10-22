@@ -14,11 +14,11 @@ class ScheduledRevenueDocument(
     @Id
     var id: ObjectId? = ObjectId.get(),
     @Field(NAME_FIELD)
-    var name: String = "",
+    var name: String,
     @Field(name = AMOUNT_FIELD, targetType = FieldType.DECIMAL128)
-    var amount: BigDecimal = BigDecimal.ZERO,
+    var amount: BigDecimal,
     @Field(name = PERSON_FIELD, targetType = FieldType.OBJECT_ID)
-    var person: ObjectId? = null,
+    var person: ObjectId,
 ) {
     companion object {
         const val COLLECTION = "scheduled_revenue"

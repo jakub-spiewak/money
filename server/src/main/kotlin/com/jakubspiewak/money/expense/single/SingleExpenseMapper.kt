@@ -23,9 +23,9 @@ interface SingleExpenseMapper {
     @Mapping(target = "parentExpense", source = "parentExpense")
     fun fromDocumentToResponse(
         source: SingleExpenseDocument,
-        person: PersonResponse,
+        person: PersonResponse?,
         tags: List<TagResponse>,
-        parentExpense: SingleExpenseParentResponse
+        parentExpense: SingleExpenseParentResponse?
     ): SingleExpenseResponse
 
     @Mapping(target = "id", source = "id")

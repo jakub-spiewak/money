@@ -3,13 +3,14 @@ package com.jakubspiewak.money.expense.scheduled
 import com.jakubspiewak.money.expense.scheduled.type.ScheduledExpenseRequest
 import com.jakubspiewak.money.expense.scheduled.type.ScheduledExpenseResponse
 import com.jakubspiewak.money.person.PersonService
-import com.jakubspiewak.money.person.type.PersonResponse
 import com.jakubspiewak.money.tag.TagService
 import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.time.YearMonth
+import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class ScheduledExpenseService(
@@ -21,8 +22,7 @@ class ScheduledExpenseService(
     fun readAll(): Flux<ScheduledExpenseResponse> = repository.findAll().flatMap { createResponse(it) }
 
     fun readAll(month: YearMonth): Flux<ScheduledExpenseResponse> = repository.findAllIntersects(
-        month.atDay(1),
-        month.atEndOfMonth()
+        month.atDay(1), month.atEndOfMonth()
     ).flatMap { createResponse(it) }
 
     fun readById(id: ObjectId): Mono<ScheduledExpenseResponse> = repository.findById(id).flatMap { createResponse(it) }
@@ -36,12 +36,16 @@ class ScheduledExpenseService(
 
     fun delete(id: String): Mono<Unit> = repository.deleteById(ObjectId(id)).map { }
 
+    @OptIn(ExperimentalStdlibApi::class)
     private fun createResponse(document: ScheduledExpenseDocument): Mono<ScheduledExpenseResponse> {
-        val personMono: Mono<PersonResponse> = document.person?.let { personService.readById(it) }
-            ?: Mono.empty()
+        val personMono = document.person
+            ?.let { personService.readById(it) }
+            ?.map { Optional.of(it) }
+            ?: Mono.just(Optional.empty())
+
         val tagsMono = tagService.readAllById(document.tags).collectList()
 
-        return Mono.zip(personMono, tagsMono).map { mapper.fromDocumentToResponse(document, it.t1, it.t2) }
+        return Mono.zip(personMono, tagsMono).map { mapper.fromDocumentToResponse(document, it.t1.getOrNull(), it.t2) }
     }
 
 }

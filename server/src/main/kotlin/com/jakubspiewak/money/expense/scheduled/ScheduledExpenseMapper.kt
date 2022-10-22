@@ -19,7 +19,7 @@ interface ScheduledExpenseMapper {
     @Mapping(target = "date.from", source = "source.dateFrom")
     fun fromDocumentToResponse(
         source: ScheduledExpenseDocument,
-        person: PersonResponse,
+        person: PersonResponse?,
         tags: List<TagResponse>
     ): ScheduledExpenseResponse
 
