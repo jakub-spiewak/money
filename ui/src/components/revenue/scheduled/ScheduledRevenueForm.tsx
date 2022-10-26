@@ -12,10 +12,11 @@ import {useForm} from "react-hook-form";
 import {useEffect} from "react";
 import {ScheduledRevenueRequest} from "../../../redux/generated/redux-api";
 import {FormModalStateType} from "../../../utils/Hooks";
-import {PersonField} from "../../util/fields/PersonField";
-import {AmountField} from "../../util/fields/amount/AmountField";
 import {NameField} from "../../util/fields/NameField";
 import {SubmitButton} from "../../util/controller/SubmitButton";
+import {DateRangeField} from "../../util/fields/DateRangeField";
+import {TypedAmountField} from "../../util/fields/TypedAmountField";
+import {sanitizeFormValues} from "../../../utils/util";
 
 interface Props {
     state: FormModalStateType<ScheduledRevenueRequest>,
@@ -35,17 +36,26 @@ export const ScheduledRevenueForm = (props: Props) => {
         defaultValues: {
             name: undefined,
             amount: undefined,
-            person: undefined
+            date: {
+                from: undefined,
+                to: undefined
+            }
         }
     })
 
     const onSubmit = async (revenue: ScheduledRevenueRequest) => {
-        await onSubmitFromProps(revenue)
+        await onSubmitFromProps(sanitizeFormValues(revenue))
         close()
     }
 
     useEffect(() => {
-        if (isOpen) reset(value?.request || {amount: undefined, person: undefined})
+        if (isOpen) reset(value?.request || {
+            amount: undefined,
+            date: {
+                from: undefined,
+                to: undefined
+            }
+        })
     }, [reset, value, isOpen])
 
     return (
@@ -60,12 +70,8 @@ export const ScheduledRevenueForm = (props: Props) => {
                     <ModalCloseButton/>
                     <ModalBody pb={6}>
                         <NameField control={control}/>
-                        <AmountField control={control}/>
-                        <PersonField
-                            required
-                            control={control}
-                            defaultValue={value?.request?.person}
-                        />
+                        <TypedAmountField control={control}/>
+                        <DateRangeField control={control}/>
                     </ModalBody>
                     <ModalFooter>
                         <SubmitButton

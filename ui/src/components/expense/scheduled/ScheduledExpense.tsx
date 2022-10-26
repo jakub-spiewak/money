@@ -10,11 +10,12 @@ import {ScheduledExpenseTable} from "./ScheduledExpenseTable";
 import {useAppSelector} from "../../../redux/hooks";
 
 interface Props {
-    modal: FormModalStateType<ScheduledExpenseRequest>
+    modal: FormModalStateType<ScheduledExpenseRequest>,
+    currentExpense?: string,
 }
 
 export const ScheduledExpense = (props: Props) => {
-    const {modal} = props
+    const {modal, currentExpense} = props
 
     const {year, month} = useAppSelector(state => state.currentDate)
     const {
@@ -33,7 +34,6 @@ export const ScheduledExpense = (props: Props) => {
             request: {
                 name: expense.name,
                 amount: expense.amount,
-                person: expense.person?.id,
                 date: expense.date,
                 tags: expense.tags?.map(tag => tag.id || "") || []
             }
@@ -57,6 +57,7 @@ export const ScheduledExpense = (props: Props) => {
                     onEdit={onEdit}
                     onDelete={onDelete}
                     isLoading={isLoading && isFetching}
+                    currentExpense={currentExpense}
                 />
             </Center>
             <ScheduledExpenseForm

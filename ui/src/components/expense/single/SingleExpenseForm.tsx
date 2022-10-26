@@ -15,7 +15,6 @@ import {FormModalStateType} from "../../../utils/Hooks";
 import {SingleExpenseRequest} from "../../../redux/generated/redux-api";
 import {SubmitButton} from "../../util/controller/SubmitButton";
 import {AmountField} from "../../util/fields/amount/AmountField";
-import {PersonField} from "../../util/fields/PersonField";
 import {TagsField} from "../../util/fields/TagsField";
 import {NameField} from "../../util/fields/NameField";
 import {DateField} from "../../util/fields/DateField";
@@ -46,7 +45,6 @@ export const SingleExpenseForm = (props: Props) => {
         if (isOpen) {
             reset(value?.request || {
                 amount: undefined,
-                person: undefined,
                 name: undefined,
                 tags: undefined,
                 date: undefined,
@@ -75,10 +73,6 @@ export const SingleExpenseForm = (props: Props) => {
                                 label={"Parent expense"}
                                 control={control}
                                 defaultValue={value?.request?.parentExpense}
-                            />
-                            <PersonField
-                                control={control}
-                                defaultValue={value?.request?.person}
                             />
                             <TagsField control={control}/>
                         </ModalBody>

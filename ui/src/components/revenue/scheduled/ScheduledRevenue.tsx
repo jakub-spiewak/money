@@ -10,6 +10,7 @@ import {
     useReadScheduledRevenueQuery,
     useUpdateScheduledRevenueMutation
 } from "../../../redux/generated/redux-api";
+import {useAppSelector} from "../../../redux/hooks";
 
 interface Props {
     modal: FormModalStateType<ScheduledRevenueRequest>
@@ -19,7 +20,14 @@ export const ScheduledRevenue = (props: Props) => {
 
     const {modal} = props
 
-    const {data, isLoading, isFetching} = useReadScheduledRevenueQuery()
+    const {year, month} = useAppSelector(state => state.currentDate)
+
+    const {
+        data,
+        isLoading,
+        isFetching
+    } = useReadScheduledRevenueQuery({month: `${year}-${month <= 9 ? `0${month}` : month}`})
+
     const [saveScheduledRevenue] = useCreateScheduledRevenueMutation()
     const [updateScheduledRevenue] = useUpdateScheduledRevenueMutation()
     const [deleteScheduledRevenue] = useDeleteScheduledRevenueMutation()
@@ -30,7 +38,6 @@ export const ScheduledRevenue = (props: Props) => {
             request: {
                 name: revenue.name,
                 amount: revenue.amount,
-                person: revenue.person?.id
             }
         })
     }

@@ -25,7 +25,7 @@ export const DateFormController = (props: FormControllerProps) => {
                         type={'date'}
                         inputMode={"text"}
                         placeholder={label}
-                        value={value}
+                        value={value || ''}
                         onChange={onChange}
                         onBlur={onBlur}
                     >

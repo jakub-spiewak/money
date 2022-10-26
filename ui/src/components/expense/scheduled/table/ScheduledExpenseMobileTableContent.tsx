@@ -2,12 +2,11 @@ import {ScheduledExpenseResponse} from "../../../../redux/generated/redux-api";
 import {ActionButtonsTableCell} from "../../../util/table/ActionButtonsTableCell";
 import {Box, Collapse, Fade, Heading, HStack, IconButton, Td, Text, Tr, VStack} from "@chakra-ui/react";
 import {AmountTableCell} from "../../../util/table/AmountTableCell";
-import {visualizePerson} from "../../../util/table/PersonTableCell";
 import {ExpenseTableTagsCell} from "../../ExpenseTableTagsCell";
 import {ChevronDownIcon} from "@chakra-ui/icons";
 import {Fragment, useState} from "react";
 import {ExpenseTableContentProps} from "../../types";
-import {ExpenseDateRangeCell} from "../../../util/table/ExpenseDateRangeCell";
+import {DateRangeTableCell} from "../../../util/table/DateRangeTableCell";
 
 export const ScheduledExpenseMobileTableContent = (props: ExpenseTableContentProps<ScheduledExpenseResponse>) => {
     const [currentItemIndex, setCurrentItemIndex] = useState<string>()
@@ -77,12 +76,6 @@ export const ScheduledExpenseMobileTableContent = (props: ExpenseTableContentPro
                                                 alignItems={"start"}
                                                 gap={3}
                                             >
-                                                <HStack>
-                                                    <Text as={"b"}>
-                                                        Person:
-                                                    </Text>
-                                                    <Box>{visualizePerson(expense.person)}</Box>
-                                                </HStack>
                                                 <ExpenseTableTagsCell
                                                     mobile
                                                     tags={expense.tags || []}
@@ -91,7 +84,7 @@ export const ScheduledExpenseMobileTableContent = (props: ExpenseTableContentPro
                                                     gap={1}
                                                     alignItems={"start"}
                                                 >
-                                                    <ExpenseDateRangeCell
+                                                    <DateRangeTableCell
                                                         date={expense.date}
                                                         emptyDateComponent={<Fragment/>}
                                                     />

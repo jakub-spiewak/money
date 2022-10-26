@@ -9,7 +9,7 @@ class DocumentMapperResolver {
         return id.toString()
     }
 
-    fun stringToObjectId(id: String): ObjectId {
-        return ObjectId(id)
+    fun stringToObjectId(id: String?): ObjectId? {
+        return if (id === null) null else ObjectId(id)
     }
 }

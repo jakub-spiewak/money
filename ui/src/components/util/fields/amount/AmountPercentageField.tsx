@@ -1,28 +1,24 @@
-import {
-    HStack,
-    FormControl,
-    FormLabel, FormErrorMessage
-} from "@chakra-ui/react";
-import {Controller, FieldError} from "react-hook-form";
+import {FormControl, FormErrorMessage, FormLabel, HStack} from "@chakra-ui/react";
+import {Controller, useFormState} from "react-hook-form";
 import {FieldProps} from "../types";
 import {CustomNumberInput} from "../../form/CustomNumberInput";
-import {useState} from "react";
 
 
 export const AmountPercentageField = (props: FieldProps) => {
-    const {control, name, label} = props
-    const [valueError, setValueError] = useState<FieldError>()
-    const [percentageError, setPercentageError] = useState<FieldError>()
+    const {control, name = 'amount', label = "Amount"} = props
+
+    const {errors} = useFormState({control, name: `${name}.data`})
 
     return (
         <FormControl
             pt={4}
-            isInvalid={!!(valueError || percentageError)}
+            // @ts-ignore
+            isInvalid={!!errors[name]?.data}
         >
-            <FormLabel>{label || "Amount"}</FormLabel>
+            <FormLabel>{label}</FormLabel>
             <HStack>
                 <Controller
-                    name={`${name || 'amount'}.data.value`}
+                    name={`${name}.data.value`}
                     control={control}
                     rules={{
                         required: 'This is required',
@@ -33,14 +29,12 @@ export const AmountPercentageField = (props: FieldProps) => {
                         const {value, onBlur, onChange} = field
                         const {error} = fieldState
 
-                        setValueError(error)
-
                         return (
                             <CustomNumberInput
                                 onBlur={onBlur}
                                 onChange={onChange}
                                 value={value}
-                                placeholder={"From"}
+                                placeholder={"Amount"}
                                 inputStyle={{
                                     borderTopRightRadius: 0,
                                     borderBottomRightRadius: 0,
@@ -54,7 +48,7 @@ export const AmountPercentageField = (props: FieldProps) => {
                     }}
                 />
                 <Controller
-                    name={`${name || 'amount'}.data.percentage`}
+                    name={`${name}.data.percentage`}
                     control={control}
                     rules={{
                         required: 'This is required',
@@ -65,14 +59,12 @@ export const AmountPercentageField = (props: FieldProps) => {
                         const {value, onBlur, onChange} = field
                         const {error} = fieldState
 
-                        setPercentageError(error)
-
                         return (
                             <CustomNumberInput
                                 onBlur={onBlur}
                                 onChange={onChange}
                                 value={value}
-                                placeholder={"To"}
+                                placeholder={"%"}
                                 inputStyle={{
                                     borderTopLeftRadius: 0,
                                     borderBottomLeftRadius: 0,
@@ -88,7 +80,8 @@ export const AmountPercentageField = (props: FieldProps) => {
                     }}
                 />
             </HStack>
-            <FormErrorMessage>{valueError?.message || percentageError?.message}</FormErrorMessage>
+            {/*@ts-ignore*/}
+            <FormErrorMessage>{errors[name]?.data?.percentage?.message || errors[name]?.data?.value?.message}</FormErrorMessage>
         </FormControl>
     )
 }

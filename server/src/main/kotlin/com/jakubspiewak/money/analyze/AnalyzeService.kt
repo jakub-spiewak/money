@@ -32,7 +32,7 @@ class AnalyzeService(
             val expenseList = data.t2
             val tagList = data.t3
 
-            val revenueAmountSum = revenueList.sumOf { it.amount.toDouble() }
+            val revenueAmountSum = revenueList.sumOf { it.amount.data.value?.toDouble() ?: 0.0 }
             val expenseAmountSum = expenseList.sumOf { getAmountNumberFromExpense(it.amount) }.toDouble()
             val savingAmountSum = (revenueAmountSum - expenseAmountSum)
 

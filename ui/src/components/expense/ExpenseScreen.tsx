@@ -5,11 +5,13 @@ import {useFormModalStateType} from "../../utils/Hooks";
 import {ScheduledExpenseRequest, SingleExpenseRequest} from "../../redux/generated/redux-api";
 import {theme} from "../../theme";
 import {CurrentDateComponent} from "../util/CurrentDateComponent";
+import {useState} from "react";
 
 export const ExpenseScreen = () => {
 
     const scheduledExpenseModal = useFormModalStateType<ScheduledExpenseRequest>()
     const singleExpenseModal = useFormModalStateType<SingleExpenseRequest>()
+    const [currentExpense, setCurrentExpense] = useState<string>()
 
     return (
         <>
@@ -19,8 +21,14 @@ export const ExpenseScreen = () => {
                 gap={8}
                 pt={8}
             >
-                <ScheduledExpense modal={scheduledExpenseModal}/>
-                <SingleExpense modal={singleExpenseModal}/>
+                <ScheduledExpense
+                    modal={scheduledExpenseModal}
+                    currentExpense={currentExpense}
+                />
+                <SingleExpense
+                    modal={singleExpenseModal}
+                    onExpenseClick={setCurrentExpense}
+                />
                 <HStack
                     flexDirection={"row"}
                     justifyContent={"end"}

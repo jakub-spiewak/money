@@ -12,11 +12,11 @@ import {useForm} from "react-hook-form";
 import {useEffect} from "react";
 import {SingleRevenueRequest} from "../../../redux/generated/redux-api";
 import {FormModalStateType} from "../../../utils/Hooks";
-import {PersonField} from "../../util/fields/PersonField";
 import {AmountField} from "../../util/fields/amount/AmountField";
 import {NameField} from "../../util/fields/NameField";
 import {SubmitButton} from "../../util/controller/SubmitButton";
 import {DateField} from "../../util/fields/DateField";
+import {RevenueField} from "../../util/fields/RevenueField";
 
 interface Props {
     state: FormModalStateType<SingleRevenueRequest>,
@@ -36,7 +36,7 @@ export const SingleRevenueForm = (props: Props) => {
         defaultValues: {
             name: undefined,
             amount: undefined,
-            person: undefined
+            parentRevenue: undefined
         }
     })
 
@@ -46,7 +46,7 @@ export const SingleRevenueForm = (props: Props) => {
     }
 
     useEffect(() => {
-        if (isOpen) reset(value?.request || {amount: undefined, person: undefined, date: undefined})
+        if (isOpen) reset(value?.request || {amount: undefined, date: undefined})
     }, [reset, value, isOpen])
 
     return (
@@ -62,12 +62,13 @@ export const SingleRevenueForm = (props: Props) => {
                     <ModalBody pb={6}>
                         <NameField control={control}/>
                         <AmountField control={control}/>
-                        <DateField control={control}/>
-                        <PersonField
-                            required
+                        <RevenueField
+                            name={"parentRevenue"}
+                            label={"Parent revenue"}
                             control={control}
-                            defaultValue={value?.request?.person}
+                            defaultValue={value?.request?.parentRevenue}
                         />
+                        <DateField control={control}/>
                     </ModalBody>
                     <ModalFooter>
                         <SubmitButton

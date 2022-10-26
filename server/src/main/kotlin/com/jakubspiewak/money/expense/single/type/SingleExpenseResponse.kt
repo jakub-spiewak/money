@@ -1,7 +1,6 @@
 package com.jakubspiewak.money.expense.single.type
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import com.jakubspiewak.money.person.type.PersonResponse
 import com.jakubspiewak.money.tag.type.TagResponse
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -11,7 +10,6 @@ data class SingleExpenseResponse(
         val name: String,
         val amount: BigDecimal,
         val parentExpense: SingleExpenseParentResponse?,
-        val person: PersonResponse?,
         @JsonFormat(pattern = "yyyy-MM-dd")
         val date: LocalDate,
         val tags: List<TagResponse>

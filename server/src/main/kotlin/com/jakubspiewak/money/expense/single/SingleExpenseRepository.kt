@@ -15,4 +15,5 @@ interface SingleExpenseRepository : ReactiveMongoRepository<SingleExpenseDocumen
             sort = "{ $NAME_FIELD: 1 }"
     )
     fun findAllInMonth(date_month: Int, date_year: Int): Flux<SingleExpenseDocument>
+
 }

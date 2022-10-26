@@ -5,18 +5,20 @@ import {
     SingleExpenseRequest,
     SingleExpenseResponse,
     useCreateSingleExpenseMutation,
-    useDeleteSingleExpenseMutation, useReadSingleExpenseQuery,
+    useDeleteSingleExpenseMutation,
+    useReadSingleExpenseQuery,
     useUpdateSingleExpenseMutation
 } from "../../../redux/generated/redux-api";
 import {FormModalStateType} from "../../../utils/Hooks";
 import {useAppSelector} from "../../../redux/hooks";
 
 interface Props {
-    modal: FormModalStateType<SingleExpenseRequest>
+    modal: FormModalStateType<SingleExpenseRequest>,
+    onExpenseClick?: (id: string) => void,
 }
 
 export const SingleExpense = (props: Props) => {
-    const {modal} = props
+    const {modal, onExpenseClick} = props
 
     const {year, month} = useAppSelector(state => state.currentDate)
 
@@ -35,7 +37,6 @@ export const SingleExpense = (props: Props) => {
             request: {
                 name: expense.name,
                 amount: expense.amount,
-                person: expense.person?.id,
                 parentExpense: expense.parentExpense?.id,
                 tags: expense.tags?.map(tag => tag.id || "") || [],
                 date: expense.date
@@ -60,6 +61,7 @@ export const SingleExpense = (props: Props) => {
                     onEdit={onEdit}
                     onDelete={onDelete}
                     isLoading={isLoading && isFetching}
+                    onExpenseClick={onExpenseClick}
                 />
             </Center>
             <SingleExpenseForm

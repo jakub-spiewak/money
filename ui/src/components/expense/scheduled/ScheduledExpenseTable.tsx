@@ -1,11 +1,4 @@
-import {
-    TableCaption,
-    Tbody,
-    Tfoot,
-    Th,
-    Thead,
-    Tr, useBreakpointValue,
-} from "@chakra-ui/react";
+import {TableCaption, Tbody, Tfoot, Th, Thead, Tr, useBreakpointValue,} from "@chakra-ui/react";
 import {ScheduledExpenseResponse} from "../../../redux/generated/redux-api";
 import {LoadingDataTable} from "../../util/table/LoadingDataTable";
 import {useMemo} from "react";
@@ -19,7 +12,6 @@ const TableDesktopHeading = () => (
     <Tr>
         <Th>Name</Th>
         <Th isNumeric>Amount</Th>
-        <Th>Person</Th>
         <Th>Date</Th>
         <Th>Tags</Th>
         <Th isNumeric>Actions</Th>
@@ -34,8 +26,8 @@ const TableMobileHeading = () => (
     </Tr>
 )
 
-export const ScheduledExpenseTable = (props: ExpenseTableProps<ScheduledExpenseResponse>) => {
-    const {isLoading, expenses, onEdit, onDelete} = props
+export const ScheduledExpenseTable = (props: ExpenseTableProps<ScheduledExpenseResponse> & { currentExpense?: string }) => {
+    const {isLoading, expenses, onEdit, onDelete, currentExpense} = props
 
     const isMobile = useBreakpointValue({base: true, md: false}, {fallback: 'md'})
 
@@ -58,6 +50,7 @@ export const ScheduledExpenseTable = (props: ExpenseTableProps<ScheduledExpenseR
                         expenses={expenses}
                         onEdit={onEdit}
                         onDelete={onDelete}
+                        currentExpense={currentExpense}
                     />
                 }
             </Tbody>

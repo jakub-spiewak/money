@@ -9,7 +9,7 @@ interface Props {
     emptyDateComponent?: JSX.Element
 }
 
-export const ExpenseDateRangeCell = (props: Props): JSX.Element => {
+export const DateRangeTableCell = (props: Props): JSX.Element => {
     const {date, emptyDateComponent} = props
 
     if (!date?.from && !date?.to) {

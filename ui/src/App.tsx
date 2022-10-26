@@ -2,7 +2,6 @@ import React from 'react';
 import "./App.css"
 import {ChakraProvider, Tab, TabList, TabPanels, Tabs} from "@chakra-ui/react";
 import {GlobalContextProvider} from "./utils/Context"
-import {PersonScreen} from "./components/person/PersonScreen";
 import {TagScreen} from "./components/tag/TagScreen";
 import {ExpenseScreen} from "./components/expense/ExpenseScreen";
 import {AnalyzeScreen} from "./components/analyze/AnalyzeScreen";
@@ -23,16 +22,12 @@ function App() {
                             overflowX={"auto"}
                             overflowY={"hidden"}
                         >
-                            <Tab>Person</Tab>
                             <Tab>Tags</Tab>
                             <Tab>Revenue</Tab>
                             <Tab>Expense</Tab>
                             <Tab>Analyze</Tab>
                         </TabList>
                         <TabPanels maxW={"100vw"}>
-                            <ScreenTabPanel>
-                                <PersonScreen/>
-                            </ScreenTabPanel>
                             <ScreenTabPanel>
                                 <TagScreen/>
                             </ScreenTabPanel>

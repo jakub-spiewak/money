@@ -38,7 +38,7 @@ export const SingleRevenue = (props: Props) => {
                 name: revenue.name,
                 amount: revenue.amount,
                 date: revenue.date,
-                person: revenue.person?.id
+                parentRevenue: revenue.parentRevenue?.id
             }
         })
     }

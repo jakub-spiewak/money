@@ -12,11 +12,8 @@ import {
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
 import {FormModalStateType} from "../../../utils/Hooks";
-import {
-    ScheduledExpenseRequest,
-} from "../../../redux/generated/redux-api";
+import {ScheduledExpenseRequest,} from "../../../redux/generated/redux-api";
 import {SubmitButton} from "../../util/controller/SubmitButton";
-import {PersonField} from "../../util/fields/PersonField";
 import {TagsField} from "../../util/fields/TagsField";
 import {NameField} from "../../util/fields/NameField";
 import {sanitizeFormValues} from "../../../utils/util";
@@ -50,7 +47,6 @@ export const ScheduledExpenseForm = (props: ExpenseProps) => {
                     type: undefined,
                     data: undefined
                 },
-                person: undefined,
                 name: undefined,
                 tags: undefined,
                 date: {
@@ -76,10 +72,8 @@ export const ScheduledExpenseForm = (props: ExpenseProps) => {
                             <NameField control={control}/>
                             <TypedAmountField control={control}/>
                             <DateRangeField control={control}/>
-                            <PersonField control={control}/>
                             <TagsField control={control}/>
                         </ModalBody>
-
                         <ModalFooter>
                             <SubmitButton isLoading={isSubmitting}/>
                             <Button onClick={close}>Cancel</Button>
@@ -89,4 +83,5 @@ export const ScheduledExpenseForm = (props: ExpenseProps) => {
             </Modal>
         </Box>
     )
+
 }

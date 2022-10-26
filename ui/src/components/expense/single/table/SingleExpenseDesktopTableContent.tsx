@@ -3,20 +3,23 @@ import {ActionButtonsTableCell} from "../../../util/table/ActionButtonsTableCell
 import {Td, Tr} from "@chakra-ui/react";
 import {AmountTableCell} from "../../../util/table/AmountTableCell";
 import {DateTableCell} from "../../../util/table/DateTableCell";
-import {PersonTableCell} from "../../../util/table/PersonTableCell";
 import {ExpenseTableTagsCell} from "../../ExpenseTableTagsCell";
 import {ExpenseTableContentProps} from "../../types";
 import {ExpenseParentTableCell} from "../../../util/table/ExpenseParentTableCell";
 
-export const SingleExpenseDesktopTableContent = (props: ExpenseTableContentProps<SingleExpenseResponse>) => {
-    const {expenses, onEdit, onDelete} = props
+export const SingleExpenseDesktopTableContent = (props: ExpenseTableContentProps<SingleExpenseResponse> & { onExpenseClick?: (id: string) => void, }) => {
+    const {expenses, onEdit, onDelete, onExpenseClick} = props
 
     return (
         <>
             {
                 expenses.map((expense, index) => {
                     return (
-                        <Tr key={`expense${index}`}>
+                        <Tr
+                            key={`expense${index}`}
+                            onPointerEnter={() => onExpenseClick?.(expense.parentExpense?.id || '')}
+                            onPointerLeave={() => onExpenseClick?.("")}
+                        >
                             <Td>{expense.name}</Td>
                             <Td isNumeric>
                                 <AmountTableCell
@@ -33,9 +36,6 @@ export const SingleExpenseDesktopTableContent = (props: ExpenseTableContentProps
                             </Td>
                             <Td>
                                 <DateTableCell date={expense.date}/>
-                            </Td>
-                            <Td>
-                                <PersonTableCell person={expense.person}/>
                             </Td>
                             <Td>
                                 <ExpenseTableTagsCell tags={expense.tags || []}/>

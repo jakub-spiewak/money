@@ -1,7 +1,6 @@
 import {ActionButtonsTableCell} from "../../../util/table/ActionButtonsTableCell";
 import {Box, Collapse, Fade, Heading, HStack, IconButton, Td, Text, Tr, VStack} from "@chakra-ui/react";
 import {AmountTableCell} from "../../../util/table/AmountTableCell";
-import {visualizePerson} from "../../../util/table/PersonTableCell";
 import {ExpenseTableTagsCell} from "../../ExpenseTableTagsCell";
 import {ChevronDownIcon} from "@chakra-ui/icons";
 import {useState} from "react";
@@ -83,12 +82,6 @@ export const SingleExpenseMobileTableContent = (props: ExpenseTableContentProps<
                                                 alignItems={"start"}
                                                 pt={4}
                                             >
-                                                <HStack>
-                                                    <Text as={"b"}>
-                                                        Person:
-                                                    </Text>
-                                                    <Box>{visualizePerson(expense.person)}</Box>
-                                                </HStack>
                                                 <HStack>
                                                     <Text as={"b"}>
                                                         Parent expense:

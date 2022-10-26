@@ -22,7 +22,6 @@ const TableDesktopHeading = () => (
         <Th isNumeric>Amount</Th>
         <Th>Parent expense</Th>
         <Th>Date</Th>
-        <Th>Person</Th>
         <Th>Tags</Th>
         <Th isNumeric>Actions</Th>
     </Tr>
@@ -36,8 +35,9 @@ const TableMobileHeading = () => (
     </Tr>
 )
 
-export const SingleExpenseTable = (props: ExpenseTableProps<SingleExpenseResponse>) => {
-    const {isLoading, expenses, onEdit, onDelete} = props
+export const SingleExpenseTable = (props: ExpenseTableProps<SingleExpenseResponse> & {onExpenseClick?: (id: string) => void,}) => {
+
+    const {isLoading, expenses, onEdit, onDelete, onExpenseClick} = props
 
     const isMobile = useBreakpointValue({base: true, md: false}, {fallback: 'md'})
 
@@ -58,6 +58,7 @@ export const SingleExpenseTable = (props: ExpenseTableProps<SingleExpenseRespons
                         expenses={expenses}
                         onEdit={onEdit}
                         onDelete={onDelete}
+                        onExpenseClick={onExpenseClick}
                     />
                 }
             </Tbody>

@@ -3,7 +3,6 @@ package com.jakubspiewak.money.expense.single
 import com.jakubspiewak.money.expense.scheduled.ScheduledExpenseService
 import com.jakubspiewak.money.expense.single.type.SingleExpenseRequest
 import com.jakubspiewak.money.expense.single.type.SingleExpenseResponse
-import com.jakubspiewak.money.person.PersonService
 import com.jakubspiewak.money.tag.TagService
 import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
@@ -16,16 +15,19 @@ import kotlin.jvm.optionals.getOrNull
 @Service
 class SingleExpenseService(
     private val repository: SingleExpenseRepository,
-    private val personService: PersonService,
     private val scheduledExpenseService: ScheduledExpenseService,
     private val tagService: TagService,
     private val mapper: SingleExpenseMapper
 ) {
-    fun readAll(): Flux<SingleExpenseResponse> = repository.findAll().flatMap { createResponse(it) }
+    fun readAll(): Flux<SingleExpenseResponse> = repository.findAll()
+        .flatMap { createResponse(it) }
+        .sort {o1, o2 -> o2.amount.compareTo(o1.amount) }
 
-    fun readAllByDate(yearMonth: YearMonth) = repository.findAllInMonth(
+    fun readAll(yearMonth: YearMonth) = repository.findAllInMonth(
         yearMonth.monthValue, yearMonth.year
-    ).flatMap { createResponse(it) }
+    )
+        .flatMap { createResponse(it) }
+        .sort {o1, o2 -> o2.amount.compareTo(o1.amount) }
 
     fun create(request: SingleExpenseRequest): Mono<Unit> =
         repository.save(mapper.fromRequestToDocument(request)).map { }
@@ -43,18 +45,16 @@ class SingleExpenseService(
 
         val parentExpenseMono = document.parentExpense
             ?.let { scheduledExpenseService.readById(it) }
-            ?.map { mapper.fromParentExpenseToResponse(it) }?.map { Optional.of(it) }
-            ?: Mono.just(Optional.empty())
-
-        val personMono = document.person
-            ?.let { personService.readById(it) }
+            ?.map { mapper.fromParentExpenseToResponse(it) }
             ?.map { Optional.of(it) }
             ?: Mono.just(Optional.empty())
 
-        return Mono.zip(tagsMono, parentExpenseMono, personMono).map {
+        return Mono.zip(tagsMono, parentExpenseMono).map {
             mapper.fromDocumentToResponse(
-                source = document, tags = it.t1, parentExpense = it.t2.getOrNull(), person = it.t3.getOrNull()
+                source = document, tags = it.t1, parentExpense = it.t2.getOrNull()
             )
         }
+
     }
+
 }
