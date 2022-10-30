@@ -6,6 +6,7 @@ import {ScheduledExpenseRequest, SingleExpenseRequest} from "../../redux/generat
 import {theme} from "../../theme";
 import {CurrentDateComponent} from "../util/CurrentDateComponent";
 import {useState} from "react";
+import {Navigation} from "../../App";
 
 export const ExpenseScreen = () => {
 
@@ -15,6 +16,7 @@ export const ExpenseScreen = () => {
 
     return (
         <>
+            <Navigation/>
             <CurrentDateComponent/>
             <Center
                 flexDirection={'column'}

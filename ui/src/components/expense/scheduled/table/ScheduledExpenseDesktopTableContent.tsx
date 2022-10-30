@@ -1,11 +1,12 @@
 import {ScheduledExpenseResponse} from "../../../../redux/generated/redux-api";
 import {ActionButtonsTableCell} from "../../../util/table/ActionButtonsTableCell";
-import {Td, Tr} from "@chakra-ui/react";
+import {HStack, Td, Text, Tr} from "@chakra-ui/react";
 import {AmountTableCell} from "../../../util/table/AmountTableCell";
 import {ExpenseTableTagsCell} from "../../ExpenseTableTagsCell";
 import {ExpenseTableContentProps} from "../../types";
 import {DateRangeTableCell} from "../../../util/table/DateRangeTableCell";
 import {Fragment} from "react";
+import {SmallPercentageChart} from "../../../util/chart/SmallPercentageChart";
 
 export const ScheduledExpenseDesktopTableContent = (props: ExpenseTableContentProps<ScheduledExpenseResponse> & { currentExpense?: string }) => {
     const {expenses, onEdit, onDelete, currentExpense} = props
@@ -20,7 +21,14 @@ export const ScheduledExpenseDesktopTableContent = (props: ExpenseTableContentPr
                             backgroundColor={currentExpense === expense.id ? "teal.800" : undefined}
                             shadow={currentExpense === expense.id ? "2xl" : undefined}
                         >
-                            <Td>{expense.name}</Td>
+                            <Td>
+                                <HStack>
+                                    <SmallPercentageChart value={expense.spentPercentage || 0}/>
+                                    <Text>
+                                        {expense.name}
+                                    </Text>
+                                </HStack>
+                            </Td>
                             <Td isNumeric>
                                 <AmountTableCell amount={expense.amount}/>
                             </Td>

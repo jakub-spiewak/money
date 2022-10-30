@@ -7,6 +7,7 @@ import com.jakubspiewak.money.tag.type.TagResponse
 import org.bson.types.ObjectId
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
+import java.math.BigDecimal
 
 @Mapper(config = CommonMapperConfig::class)
 interface ScheduledExpenseMapper {
@@ -15,9 +16,11 @@ interface ScheduledExpenseMapper {
     @Mapping(target = "tags", source = "tags")
     @Mapping(target = "date.to", source = "source.dateTo")
     @Mapping(target = "date.from", source = "source.dateFrom")
+    @Mapping(target = "spentPercentage", source = "spentPercentage")
     fun fromDocumentToResponse(
         source: ScheduledExpenseDocument,
-        tags: List<TagResponse>
+        tags: List<TagResponse>,
+        spentPercentage: BigDecimal
     ): ScheduledExpenseResponse
 
     @Mapping(target = "dateFrom", source = "source.date.from")

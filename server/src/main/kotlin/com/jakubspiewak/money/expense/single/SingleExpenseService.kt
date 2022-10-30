@@ -1,6 +1,6 @@
 package com.jakubspiewak.money.expense.single
 
-import com.jakubspiewak.money.expense.scheduled.ScheduledExpenseService
+import com.jakubspiewak.money.expense.scheduled.ScheduledExpenseRepository
 import com.jakubspiewak.money.expense.single.type.SingleExpenseRequest
 import com.jakubspiewak.money.expense.single.type.SingleExpenseResponse
 import com.jakubspiewak.money.tag.TagService
@@ -15,19 +15,22 @@ import kotlin.jvm.optionals.getOrNull
 @Service
 class SingleExpenseService(
     private val repository: SingleExpenseRepository,
-    private val scheduledExpenseService: ScheduledExpenseService,
+    private val scheduledExpenseRepository: ScheduledExpenseRepository,
     private val tagService: TagService,
     private val mapper: SingleExpenseMapper
 ) {
     fun readAll(): Flux<SingleExpenseResponse> = repository.findAll()
         .flatMap { createResponse(it) }
-        .sort {o1, o2 -> o2.amount.compareTo(o1.amount) }
+        .sort { o1, o2 -> o2.amount.compareTo(o1.amount) }
 
-    fun readAll(yearMonth: YearMonth) = repository.findAllInMonth(
-        yearMonth.monthValue, yearMonth.year
-    )
+    fun readAll(yearMonth: YearMonth) = repository.findAllIntersects(yearMonth.atDay(1), yearMonth.atEndOfMonth())
         .flatMap { createResponse(it) }
-        .sort {o1, o2 -> o2.amount.compareTo(o1.amount) }
+        .sort { o1, o2 -> o2.amount.compareTo(o1.amount) }
+
+    fun readAllByParent(parentId: ObjectId, month: YearMonth = YearMonth.now()) = repository
+        .findAllByParentExpenseIntersects(parentId, month.atDay(1), month.atEndOfMonth())
+        .flatMap { createResponse(it) }
+        .sort { o1, o2 -> o2.amount.compareTo(o1.amount) }
 
     fun create(request: SingleExpenseRequest): Mono<Unit> =
         repository.save(mapper.fromRequestToDocument(request)).map { }
@@ -44,7 +47,7 @@ class SingleExpenseService(
         val tagsMono = tagService.readAllById(document.tags).collectList()
 
         val parentExpenseMono = document.parentExpense
-            ?.let { scheduledExpenseService.readById(it) }
+            ?.let { scheduledExpenseRepository.findById(it) }
             ?.map { mapper.fromParentExpenseToResponse(it) }
             ?.map { Optional.of(it) }
             ?: Mono.just(Optional.empty())

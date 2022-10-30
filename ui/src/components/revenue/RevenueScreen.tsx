@@ -5,6 +5,7 @@ import {useFormModalStateType} from "../../utils/Hooks";
 import {ScheduledRevenueRequest, SingleRevenueRequest} from "../../redux/generated/redux-api";
 import {ScheduledRevenue} from "./scheduled/ScheduledRevenue";
 import {SingleRevenue} from "./single/SingleRevenue";
+import {Navigation} from "../../App";
 
 export const RevenueScreen = () => {
 
@@ -13,6 +14,7 @@ export const RevenueScreen = () => {
 
     return (
         <>
+            <Navigation/>
             <CurrentDateComponent/>
             <Center
                 flexDirection={'column'}

@@ -5,6 +5,7 @@ export const addTagTypes = [
   "scheduled_revenue",
   "expense",
   "scheduled_expense",
+  "summary-controller",
   "analyze",
 ] as const;
 const injectedRtkApi = api
@@ -205,6 +206,10 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["scheduled_expense", "tag"],
       }),
+      summary: build.query<SummaryApiResponse, SummaryApiArg>({
+        query: () => ({ url: `/summary` }),
+        providesTags: ["summary-controller"],
+      }),
       analyze: build.query<AnalyzeApiResponse, AnalyzeApiArg>({
         query: () => ({ url: `/analyze` }),
         providesTags: [
@@ -305,6 +310,8 @@ export type CreateScheduledExpenseApiResponse = /** status 200 OK */ Unit;
 export type CreateScheduledExpenseApiArg = {
   scheduledExpenseRequest: ScheduledExpenseRequest;
 };
+export type SummaryApiResponse = /** status 200 OK */ SummaryResponse;
+export type SummaryApiArg = void;
 export type AnalyzeApiResponse = /** status 200 OK */ AnalyzeResponse;
 export type AnalyzeApiArg = void;
 export type Unit = object;
@@ -391,6 +398,15 @@ export type ScheduledExpenseResponse = {
   amount?: Amount;
   date?: DateRange;
   tags?: TagResponse[];
+  spentPercentage?: number;
+};
+export type SummaryResponse = {
+  budget?: number;
+  reaming?: number;
+  spent?: number;
+  normalizedReaming?: number;
+  normalizedSpent?: number;
+  revenue?: number;
 };
 export type ExpenseSummaryFromTag = {
   name?: string;
@@ -433,5 +449,6 @@ export const {
   useCreateSingleExpenseMutation,
   useReadScheduledExpenseQuery,
   useCreateScheduledExpenseMutation,
+  useSummaryQuery,
   useAnalyzeQuery,
 } = injectedRtkApi;
