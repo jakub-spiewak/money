@@ -10,7 +10,6 @@ import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import java.math.BigDecimal
 import java.math.RoundingMode.HALF_UP
 import java.time.YearMonth
 
@@ -21,14 +20,19 @@ class ScheduledExpenseService(
     private val singleExpenseService: SingleExpenseService,
     private val mapper: ScheduledExpenseMapper
 ) {
-    fun readAll(): Flux<ScheduledExpenseResponse> = repository.findAll().flatMap { createResponse(it) }
+    fun readAll(): Flux<ScheduledExpenseResponse> = repository.findAll().flatMap { createResponse(it, YearMonth.now()) }
         .sort { o1, o2 -> o2.amount.avg().compareTo(o1.amount.avg()) }
 
     fun readAll(month: YearMonth): Flux<ScheduledExpenseResponse> =
-        repository.findAllIntersects(month.atDay(1), month.atEndOfMonth()).flatMap { createResponse(it) }
+        repository.findAllIntersects(month.atDay(1), month.atEndOfMonth()).flatMap { createResponse(it, month) }
             .sort { o1, o2 -> o2.amount.avg().compareTo(o1.amount.avg()) }
 
-    fun readById(id: ObjectId): Mono<ScheduledExpenseResponse> = repository.findById(id).flatMap { createResponse(it) }
+//    fun readById(id: ObjectId): Mono<ScheduledExpenseResponse> = repository.findById(id).flatMap {
+//        createResponse(
+//            it,
+//            YearMonth.now()
+//        )
+//    }
 
     fun create(request: ScheduledExpenseRequest): Mono<Unit> =
         repository.save(mapper.fromRequestToDocument(request)).map { }
@@ -39,17 +43,21 @@ class ScheduledExpenseService(
 
     fun delete(id: String): Mono<Unit> = repository.deleteById(ObjectId(id)).map { }
 
-    private fun createResponse(document: ScheduledExpenseDocument): Mono<ScheduledExpenseResponse> {
+    private fun createResponse(document: ScheduledExpenseDocument, month: YearMonth): Mono<ScheduledExpenseResponse> {
         val tagsMono = tagService.readAllById(document.tags).collectList()
-        val childExpensesMono = document.id?.let { singleExpenseService.readAllByParent(it).collectList() }
+        val childExpensesMono = document.id?.let { singleExpenseService.readAllByParent(it, month).collectList() }
             ?: Mono.error { throw RuntimeException() }
 
         return Mono.zip(tagsMono, childExpensesMono).map { data ->
-            val spentPercentage = data.t2.sumOf { it.amount }
-                .divide(document.amount.maximum(), HALF_UP)
-                .multiply(BigDecimal(100))
+            val spentSum = data.t2.sumOf { it.amount }
+            val spentFactor = spentSum.divide(document.amount.maximum(), HALF_UP)
 
-            return@map mapper.fromDocumentToResponse(document, tags = data.t1, spentPercentage = spentPercentage)
+            return@map mapper.fromDocumentToResponse(
+                document,
+                tags = data.t1,
+                spentFactor = spentFactor,
+                spentSum = spentSum
+            )
         }
     }
 

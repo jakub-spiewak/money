@@ -1,17 +1,15 @@
 import {Button, Center, HStack} from "@chakra-ui/react";
 import {ScheduledExpense} from "./scheduled/ScheduledExpense";
 import {SingleExpense} from "./single/SingleExpense";
-import {useFormModalStateType} from "../../utils/Hooks";
-import {ScheduledExpenseRequest, SingleExpenseRequest} from "../../redux/generated/redux-api";
 import {theme} from "../../theme";
 import {CurrentDateComponent} from "../util/CurrentDateComponent";
 import {useState} from "react";
 import {Navigation} from "../../App";
+import {useAppDispatch} from "../../redux/hooks";
+import {openModal} from "../../redux/slice/modal-slice";
 
 export const ExpenseScreen = () => {
-
-    const scheduledExpenseModal = useFormModalStateType<ScheduledExpenseRequest>()
-    const singleExpenseModal = useFormModalStateType<SingleExpenseRequest>()
+    const dispatch = useAppDispatch()
     const [currentExpense, setCurrentExpense] = useState<string>()
 
     return (
@@ -24,11 +22,9 @@ export const ExpenseScreen = () => {
                 pt={8}
             >
                 <ScheduledExpense
-                    modal={scheduledExpenseModal}
                     currentExpense={currentExpense}
                 />
                 <SingleExpense
-                    modal={singleExpenseModal}
                     onExpenseClick={setCurrentExpense}
                 />
                 <HStack
@@ -36,8 +32,12 @@ export const ExpenseScreen = () => {
                     justifyContent={"end"}
                     minW={["100vw", null, null, theme.breakpoints.lg]}
                 >
-                    <Button onClick={() => scheduledExpenseModal.open()}>Add scheduled expense</Button>
-                    <Button onClick={() => singleExpenseModal.open()}>Add single expense</Button>
+                    <Button onClick={() => dispatch(openModal({modal: "SCHEDULED_EXPENSE"}))}>
+                        Add scheduled
+                    </Button>
+                    <Button onClick={() => dispatch(openModal({modal: "SINGLE_EXPENSE"}))}>
+                        Add single
+                    </Button>
                 </HStack>
             </Center>
         </>

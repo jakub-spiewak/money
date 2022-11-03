@@ -1,4 +1,5 @@
 import 'chart.js/auto';
+import "./App.css"
 
 import React, {ReactElement} from 'react';
 import {
@@ -28,6 +29,7 @@ import {AnalyzeScreen} from "./components/analyze2/AnalyzeScreen";
 import {CgMore} from "react-icons/cg";
 import {AiOutlineHome, AiOutlineTags} from 'react-icons/ai';
 import {GiPayMoney, GiReceiveMoney} from 'react-icons/gi';
+import {Modals} from "./components/Modals";
 
 const router = createBrowserRouter([
     {
@@ -151,6 +153,7 @@ function App() {
         <Provider store={store}>
             <ChakraProvider theme={theme}>
                 <GlobalContextProvider>
+                    <Modals/>
                     <RouterProvider router={router}/>
                 </GlobalContextProvider>
             </ChakraProvider>

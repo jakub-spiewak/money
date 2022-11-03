@@ -38,6 +38,7 @@ export const ScheduledRevenue = (props: Props) => {
             request: {
                 name: revenue.name,
                 amount: revenue.amount,
+                date: revenue.date
             }
         })
     }

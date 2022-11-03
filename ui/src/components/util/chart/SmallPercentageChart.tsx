@@ -1,5 +1,5 @@
-import { Box } from "@chakra-ui/react";
-import { Doughnut } from "react-chartjs-2";
+import {Box} from "@chakra-ui/react";
+import {Doughnut} from "react-chartjs-2";
 
 interface Props {
     value: number
@@ -10,17 +10,14 @@ export const SmallPercentageChart = (props: Props) => {
     return (
         <Box
             w={"4em"}
-            display={"flex"}
-            alignItems={"center"}
-            justifyContent={"center"}
+            pb={2}
         >
             <Doughnut
                 options={{
                     events: [],
-                    plugins: {
-
-                    },
-                    cutout: 16
+                    plugins: {},
+                    cutout: 16,
+                    responsive: true
                 }}
                 data={{
                     datasets: [{

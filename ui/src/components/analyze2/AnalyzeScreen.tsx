@@ -1,11 +1,37 @@
-import {Box, Center, Flex, Heading, HStack, Text, VStack} from "@chakra-ui/react";
-import {Doughnut} from "react-chartjs-2"
-import {useAppSelector} from "../../redux/hooks";
-import {useReadScheduledExpenseQuery, useSummaryQuery} from "../../redux/generated/redux-api";
+import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import {
+    ScheduledExpenseResponse,
+    SingleExpenseResponse,
+    useReadScheduledExpenseQuery,
+    useReadSingleExpenseQuery,
+    useSummaryQuery
+} from "../../redux/generated/redux-api";
+import {
+    Box,
+    Divider,
+    Flex,
+    IconButton,
+    List,
+    ListItem,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
+    Spacer,
+    Text
+} from "@chakra-ui/react";
+import {Doughnut} from "react-chartjs-2";
+import {SmallPercentageChart} from "../util/chart/SmallPercentageChart";
+import {AmountTableCell} from "../util/table/AmountTableCell";
+import {toCurrencyString} from "../../utils/util";
+import {AddIcon, DeleteIcon, EditIcon, MinusIcon} from "@chakra-ui/icons";
+import {AiOutlineSetting} from "react-icons/ai";
 import {BiHome} from "react-icons/bi";
-import {IoSettingsOutline} from "react-icons/io5";
-import {GiPayMoney, GiReceiveMoney} from "react-icons/gi";
-import {HiOutlinePlus} from "react-icons/hi";
+import {GiTakeMyMoney} from "react-icons/gi";
+import {TfiMore, TfiStatsUp} from "react-icons/tfi";
+import {decrement, increment} from "../../redux/slice/current-date-slice";
+import {openModal} from "../../redux/slice/modal-slice";
+import {askForDelete} from "../../redux/slice/delete-modal-slice";
 
 const chartColors = [
     "#fd7f6f",
@@ -23,236 +49,311 @@ const getColor = (index: number) => chartColors[index % chartColors.length]
 
 export const AnalyzeScreen = () => {
     const {year, month} = useAppSelector(state => state.currentDate)
+    const dispatch = useAppDispatch()
 
-    const {data} = useSummaryQuery()
+    const currentMonthStr = `${year}-${month <= 9 ? `0${month}` : month}`
 
-    const revenueNum = data?.revenue || 0
-    const budgetNum = data?.budget || 0
+    const {data} = useSummaryQuery({month: currentMonthStr})
 
     const reamingNum = data?.reaming || 0
-    const spentNum = data?.spent || 0
+    const budgetNum = data?.budget || 0
 
     const reamingPercentage = (data?.normalizedReaming || 0) * 100
     const spentPercentage = (data?.normalizedSpent || 0) * 100
 
     const {
-        data: expenses,
-    } = useReadScheduledExpenseQuery({month: `${year}-${month <= 9 ? `0${month}` : month}`})
+        data: scheduledExpensesList,
+    } = useReadScheduledExpenseQuery({month: currentMonthStr})
+
+    const {
+        data: singleExpensesList
+    } = useReadSingleExpenseQuery({month: currentMonthStr})
 
     return (
-        <>
-            <Heading
-                px={8}
-                w={"full"}
-                fontSize={"1.3em"}
-                textAlign={"start"}
-                pt={3}
-            >
-                Miesięczny budżet
-            </Heading>
-            <Center
-                display={"flex"}
-                flexDirection={"column"}
-                gap={2}
-                pt={3}
+        <Box>
+            <Box
+                shadow={"2xl"}
+                pb={8}
             >
                 <Box
-                    display={"flex"}
-                    alignItems={"center"}
+                    position={"relative"}
+                    maxW={"32em"}
+                    p={8}
                 >
+                    <Doughnut
+                        data={{
+                            datasets: [{
+                                data: [spentPercentage, reamingPercentage],
+                                backgroundColor: [getColor(0), getColor(1)],
+                                borderRadius: 16,
+                                borderWidth: 4,
+                            }]
+                        }}
+                        options={{
+                            responsive: true,
+                            spacing: 16,
+                            cutout: 96
+                        }}
+                    />
                     <Box
-                        position={"relative"}
-                        maxW={"70vw"}
-                        maxH={"70vw"}
+                        p={4}
+                        position={"absolute"}
+                        top={"50%"}
+                        left={"50%"}
+                        transform={"translate(-50%, -50%)"}
+                        textAlign={"center"}
                     >
-                        <Doughnut
-                            data={{
-                                datasets: [{
-                                    data: [data?.spent, data?.reaming],
-                                    backgroundColor: [chartColors[0], chartColors[1]],
-                                    hoverOffset: 16,
-                                    borderWidth: 2,
-                                    borderRadius: 9999,
-                                    spacing: 8
-                                }],
-                            }}
-                            options={{
-                                cutout: 88,
-                                responsive: true,
-                                layout: {
-                                    padding: 8
-                                },
-                                normalized: true,
-                                plugins: {
-                                    tooltip: {
-                                        enabled: false
-                                    }
-                                },
-                            }}
-                        />
-                        <Box
-                            position={"absolute"}
-                            left={"50%"}
-                            top={"50%"}
-                            transform={"translate(-50%, -50%)"}
-                            fontSize={"2xl"}
-                            fontWeight={"bold"}
-                            display={"flex"}
-                            flexDirection={"column"}
-                            alignItems={"center"}
-                            lineHeight={1.2}
+                        <Text
+                            fontSize={"md"}
+                            fontWeight={"thin"}
                         >
-                            <Text pt={6}>{reamingNum.toFixed(2)} zł</Text>
-                            <Text
-                                fontSize={"md"}
-                                fontWeight={"thin"}
-                            >z</Text>
-                            <Text
-                                fontSize={"md"}
-                                fontWeight={"thin"}
-                            >{spentNum.toFixed(2)} zł</Text>
-                        </Box>
+                            Reaming
+                        </Text>
+                        <Text
+                            fontSize={"3xl"}
+                            fontWeight={"extrabold"}
+                            lineHeight={"1.2em"}
+                        >
+                            {toCurrencyString(reamingNum)}
+                        </Text>
+                        <Text
+                            fontSize={"md"}
+                            fontWeight={"thin"}
+                        >
+                            from
+                        </Text>
+                        <Text
+                            fontSize={"md"}
+                            fontWeight={"thin"}
+                        >
+                            {toCurrencyString(budgetNum, true)}
+                        </Text>
                     </Box>
                 </Box>
-                <HStack
-                    w={"full"}
-                    justifyContent={"space-evenly"}
-                >
-                    <VStack>
-                        <Box
-                            w={12}
-                            h={12}
-                            p={6}
-                            borderRadius={16}
-                            backgroundColor={getColor(0)}
-                            display={"flex"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            fontWeight={"bold"}
-                            color={"white"}
-                            borderWidth={2}
-                            borderColor={"white"}
-                        >
-                            {spentPercentage}%
-                        </Box>
-                        <Text>Wydałeś</Text>
-                    </VStack>
-                    <VStack>
-                        <Box
-                            w={12}
-                            h={12}
-                            p={6}
-                            borderRadius={16}
-                            backgroundColor={getColor(1)}
-                            display={"flex"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            fontWeight={"extrabold"}
-                            color={"white"}
-                            borderWidth={2}
-                            borderColor={"white"}
-                        >
-                            {reamingPercentage}%
-                        </Box>
-                        <Text>Zostało</Text>
-                    </VStack>
-                </HStack>
                 <Flex
-                    pt={3}
-                    w={"100%"}
-                    overflowX={"auto"}
-                    scrollSnapType={"x mandatory"}
-                    px={"1em"}
+                    justifyContent={"space-between"}
+                    alignItems={"center"}
+                    p={4}
+                    borderWidth={1}
+                    borderRadius={16}
+                    mx={8}
                 >
+                    <IconButton
+                        aria-label={"minus"}
+                        icon={<MinusIcon/>}
+                        onClick={() => {
+                            dispatch(decrement())
+                        }}
+                    />
+                    <Text>{currentMonthStr}</Text>
+                    <IconButton
+                        aria-label={"minus"}
+                        icon={<AddIcon/>}
+                        onClick={() => {
+                            dispatch(increment())
+                        }}
+                    />
+                </Flex>
+            </Box>
+            <Box py={8}>
+                <Flex
+                    className={"bg-red"}
+                    px={4}
+                    justifyContent={"space-between"}
+                    fontSize={"2em"}
+                >
+                    <IconButton
+                        aria-label={""}
+                        icon={<BiHome/>}
+                        variant={'ghost'}
+                        fontSize={"1.1em"}
+                    />
+                    <IconButton
+                        aria-label={""}
+                        icon={<TfiStatsUp/>}
+                        variant={'ghost'}
+                        fontSize={"1.1em"}
+                    />
+                    <IconButton
+                        aria-label={""}
+                        icon={<AddIcon/>}
+                        size={'lg'}
+                        shadow={"2xl"}
+                        onClick={() => dispatch(openModal({modal: "SINGLE_EXPENSE"}))}
+                    />
+                    <IconButton
+                        aria-label={""}
+                        icon={<GiTakeMyMoney/>}
+                        variant={'ghost'}
+                        fontSize={"1.1em"}
+                    />
+                    <IconButton
+                        aria-label={""}
+                        icon={<AiOutlineSetting/>}
+                        variant={'ghost'}
+                        fontSize={"1.1em"}
+                    />
+                </Flex>
+            </Box>
+            <Box
+                px={4}
+                pb={4}
+                className={""}
+            >
+                <List className={"bg-red-"}>
                     {
-                        expenses?.map((expense, index) => {
-                            if (!expense) return null
-
+                        scheduledExpensesList?.map((scheduledExpense: ScheduledExpenseResponse) => {
                             return (
-                                <Box
-                                    mx={".5em"}
-                                    scrollSnapAlign={"center"}
-                                    flexGrow={0}
-                                    flexShrink={0}
-                                    flexBasis={"calc(33.33% - 1em)"}
-                                    w={'full'}
-                                    display={"flex"}
-                                    position={"relative"}
-                                    borderRadius={16}
-                                    borderWidth={2}
-                                    alignItems={"center"}
-                                    justifyContent={"center"}
-                                    h={32}
-                                    overflow={"hidden"}
-                                    // ml={index === 0 ? 32 : undefined}
-                                    // mr={index === ((expenses?.length || 0) - 1) ? 32 : undefined}
-                                >
-                                    <Box
-                                        backgroundColor={"teal.500"}
-                                        borderRadius={14}
-                                        h={`${expense.spentPercentage || 0}%`}
-                                        w={"full"}
-                                        position={"absolute"}
-                                        bottom={0}
-                                        zIndex={-2}
-                                    />
-                                    <Text
-                                        p={1}
-                                        py={3}
-                                        fontWeight={"bold"}
-                                        // mixBlendMode={"difference"}
-                                        textAlign={"center"}
-                                        mx={2}
-                                        zIndex={10}
-                                        backgroundColor={(expense.spentPercentage || 0) < 60 ? "gray.800" : undefined}
+                                <>
+                                    <ListItem
+                                        borderWidth={1}
                                         borderRadius={16}
-                                        textOverflow={"ellipsis"}
-                                        overflow={"hidden"}
-                                        whiteSpace={"nowrap"}
+                                        shadow={"xl"}
+                                        mb={2}
                                     >
-                                        {expense.name}
-                                    </Text>
-                                </Box>
+                                        <Flex
+                                            alignItems={"center"}
+                                            justifyContent={"flex-start"}
+                                            py={2}
+                                            pl={2}
+                                        >
+                                            <SmallPercentageChart value={(scheduledExpense.spentFactor || 0) * 100}/>
+                                            <Flex
+                                                pl={2}
+                                                flexDirection={"column"}
+                                            >
+                                                <Text fontWeight={"bold"}>{scheduledExpense.name}</Text>
+                                                <Text>{toCurrencyString(scheduledExpense.spentSum)}</Text>
+                                                <Text fontWeight={"hairline"}>
+                                                    <AmountTableCell amount={scheduledExpense.amount}/>
+                                                </Text>
+                                            </Flex>
+                                            <Spacer/>
+                                            <Menu>
+                                                <MenuButton
+                                                    as={IconButton}
+                                                    variant={'outline'}
+                                                    icon={<TfiMore/>}
+                                                    size={"sm"}
+                                                    mr={4}
+                                                />
+                                                <MenuList>
+                                                    <MenuItem
+                                                        icon={<AddIcon/>}
+                                                        onClick={() => dispatch(openModal({
+                                                                modal: "SINGLE_EXPENSE",
+                                                                value: {
+                                                                    parentExpense: scheduledExpense.id
+                                                                }
+                                                            })
+                                                        )}
+                                                    >
+                                                        Add
+                                                    </MenuItem>
+                                                    <MenuItem
+                                                        icon={<EditIcon/>}
+                                                        onClick={() => dispatch(openModal({
+                                                                modal: "SCHEDULED_EXPENSE",
+                                                                id: scheduledExpense.id,
+                                                                value: {
+                                                                    ...scheduledExpense,
+                                                                    tags: scheduledExpense.tags.map(tag => tag.id),
+                                                                }
+                                                            })
+                                                        )}
+                                                    >
+                                                        Edit
+                                                    </MenuItem>
+                                                    <MenuItem
+                                                        icon={<DeleteIcon/>}
+                                                        onClick={() => {
+                                                            dispatch(askForDelete({
+                                                                type: "SCHEDULED_EXPENSE",
+                                                                id: scheduledExpense.id,
+                                                                name: scheduledExpense.name,
+                                                            }))
+                                                        }}
+                                                    >
+                                                        Delete
+                                                    </MenuItem>
+                                                </MenuList>
+                                            </Menu>
+                                        </Flex>
+                                        {
+                                            singleExpensesList
+                                                ?.filter((singleExpense) => singleExpense.parentExpense?.id === scheduledExpense.id)
+                                                ?.sort((o1, o2) => new Date(o1.date).getTime() - new Date(o2.date).getTime())
+                                                ?.map((singleExpense: SingleExpenseResponse) => {
+                                                    return (
+                                                        <Box px={2}>
+                                                            <Divider/>
+                                                            <Flex
+                                                                alignItems={"center"}
+                                                                gap={2}
+                                                                p={2}
+                                                            >
+                                                                <Flex
+                                                                    gap={2}
+                                                                    w={"full"}
+                                                                >
+                                                                    <Text fontWeight={"bold"}>
+                                                                        {singleExpense.name}
+                                                                    </Text>
+                                                                    <Spacer/>
+                                                                    <Text>
+                                                                        {toCurrencyString(singleExpense.amount)}
+                                                                    </Text>
+                                                                </Flex>
+                                                                <Menu>
+                                                                    <MenuButton
+                                                                        as={IconButton}
+                                                                        variant={'outline'}
+                                                                        icon={<TfiMore/>}
+                                                                        size={"sm"}
+                                                                    />
+                                                                    <MenuList>
+                                                                        <MenuItem
+                                                                            icon={<EditIcon/>}
+                                                                            onClick={() => {
+                                                                                dispatch(openModal({
+                                                                                    modal: "SINGLE_EXPENSE",
+                                                                                    id: singleExpense.id,
+                                                                                    value: {
+                                                                                        ...singleExpense,
+                                                                                        parentExpense: singleExpense.parentExpense?.id,
+                                                                                        tags: singleExpense.tags.map(tag => tag.id)
+                                                                                    }
+                                                                                }))
+                                                                            }}
+                                                                        >
+                                                                            Edit
+                                                                        </MenuItem>
+                                                                        <MenuItem
+                                                                            icon={<DeleteIcon/>}
+                                                                            onClick={() => {
+                                                                                dispatch(askForDelete({
+                                                                                    type: "SINGLE_EXPENSE",
+                                                                                    id: singleExpense.id,
+                                                                                    name: singleExpense.name,
+                                                                                }))
+                                                                            }}
+                                                                        >
+                                                                            Delete
+                                                                        </MenuItem>
+                                                                    </MenuList>
+                                                                </Menu>
+                                                            </Flex>
+                                                        </Box>
+                                                    )
+                                                })
+                                        }
+                                    </ListItem>
+                                </>
                             )
                         })
                     }
-                </Flex>
-                <Box
-                    bgColor={"teal.700"}
-                    w={"full"}
-                    p={2}
-                    position={"fixed"}
-                    bottom={0}
-                >
-                    <Flex
-                        justifyContent={"space-around"}
-                        alignItems={"center"}
-                        fontSize={"1.5em"}
-                    >
-                        <BiHome/>
-                        <GiPayMoney/>
-                        <Box
-                            fontSize={"1.75em"}
-                            backgroundColor={"gray.800"}
-                            p={2}
-                            mt={"-1em"}
-                            borderBottomRadius={24}
-                        >
-                            <Box
-                                borderRadius={16}
-                                borderWidth={1}
-                                borderColor={"white"}
-                                mt={2}
-                                p={1}
-                            >
-                                <HiOutlinePlus/>
-                            </Box>
-                        </Box>
-                        <GiReceiveMoney/>
-                        <IoSettingsOutline/>
-                    </Flex>
-                </Box>
-            </Center>
-        </>
+                </List>
+            </Box>
+        </Box>
     )
 }

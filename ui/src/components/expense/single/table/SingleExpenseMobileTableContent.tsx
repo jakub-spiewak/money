@@ -94,10 +94,7 @@ export const SingleExpenseMobileTableContent = (props: ExpenseTableContentProps<
                                                     </Text>
                                                     <Box>{new Date(expense.date || '').toLocaleDateString()}</Box>
                                                 </HStack>
-                                                <ExpenseTableTagsCell
-                                                    mobile
-                                                    tags={expense.tags || []}
-                                                />
+                                                <ExpenseTableTagsCell tags={expense.tags || []}/>
                                             </VStack>
                                         </Box>
                                     </Collapse>

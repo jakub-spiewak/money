@@ -16,11 +16,13 @@ interface ScheduledExpenseMapper {
     @Mapping(target = "tags", source = "tags")
     @Mapping(target = "date.to", source = "source.dateTo")
     @Mapping(target = "date.from", source = "source.dateFrom")
-    @Mapping(target = "spentPercentage", source = "spentPercentage")
+    @Mapping(target = "spentFactor", source = "spentFactor")
+    @Mapping(target = "spentSum", source = "spentSum")
     fun fromDocumentToResponse(
         source: ScheduledExpenseDocument,
         tags: List<TagResponse>,
-        spentPercentage: BigDecimal
+        spentFactor: BigDecimal,
+        spentSum: BigDecimal,
     ): ScheduledExpenseResponse
 
     @Mapping(target = "dateFrom", source = "source.date.from")

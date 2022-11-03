@@ -1,10 +1,14 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import currentDateSlice from "./slice/current-date-slice";
+import modalSlice from "./slice/modal-slice";
 import {api} from "./api";
+import deleteModalSlice from "./slice/delete-modal-slice";
 
 const reducer = combineReducers({
     [api.reducerPath]: api.reducer,
-    currentDate: currentDateSlice
+    currentDate: currentDateSlice,
+    modal: modalSlice,
+    deleteModal: deleteModalSlice
 })
 
 export const store = configureStore({

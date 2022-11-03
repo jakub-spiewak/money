@@ -1,30 +1,30 @@
 import {
     AlertDialog,
     AlertDialogBody,
-    AlertDialogContent, AlertDialogFooter,
+    AlertDialogContent,
+    AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogOverlay,
     Button,
 } from "@chakra-ui/react"
-import {useCallback, useRef, useState} from "react";
+import {useCallback, useRef} from "react";
 
 interface DeleteAlertDialogProps {
     isOpen: boolean,
     onClose: () => void,
     onYes: () => Promise<void>,
     name: string,
+    isLoading?: boolean
 }
 
 export const DeleteAlertDialog = (props: DeleteAlertDialogProps) => {
-    const {isOpen, onClose, onYes, name} = props
-    const [isDeleting, setIsDeleting] = useState(false)
+    const {isOpen, onClose, onYes, name, isLoading} = props
     const cancelRef = useRef(null)
 
     const onDeleteClick = useCallback(async () => {
-        setIsDeleting(true)
         await onYes()
         onClose()
-    }, [onYes, onClose, setIsDeleting])
+    }, [onYes, onClose])
 
     return (
         <AlertDialog
@@ -40,11 +40,9 @@ export const DeleteAlertDialog = (props: DeleteAlertDialogProps) => {
                     >
                         Delete
                     </AlertDialogHeader>
-
                     <AlertDialogBody>
                         Are you sure to delete <b>{name}</b>?
                     </AlertDialogBody>
-
                     <AlertDialogFooter>
                         <Button
                             ref={cancelRef}
@@ -55,7 +53,7 @@ export const DeleteAlertDialog = (props: DeleteAlertDialogProps) => {
                         <Button
                             colorScheme='red'
                             onClick={onDeleteClick}
-                            isLoading={isDeleting}
+                            isLoading={isLoading}
                             ml={3}
                         >
                             Delete

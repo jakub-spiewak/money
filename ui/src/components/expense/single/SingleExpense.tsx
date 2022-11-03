@@ -1,25 +1,21 @@
-import {SingleExpenseForm} from "./SingleExpenseForm";
 import {SingleExpenseTable} from "./SingleExpenseTable";
 import {Center} from "@chakra-ui/react";
 import {
-    SingleExpenseRequest,
     SingleExpenseResponse,
-    useCreateSingleExpenseMutation,
     useDeleteSingleExpenseMutation,
-    useReadSingleExpenseQuery,
-    useUpdateSingleExpenseMutation
+    useReadSingleExpenseQuery
 } from "../../../redux/generated/redux-api";
-import {FormModalStateType} from "../../../utils/Hooks";
-import {useAppSelector} from "../../../redux/hooks";
+import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import {openModal} from "../../../redux/slice/modal-slice";
 
 interface Props {
-    modal: FormModalStateType<SingleExpenseRequest>,
     onExpenseClick?: (id: string) => void,
 }
 
 export const SingleExpense = (props: Props) => {
-    const {modal, onExpenseClick} = props
+    const {onExpenseClick} = props
 
+    const dispatch = useAppDispatch()
     const {year, month} = useAppSelector(state => state.currentDate)
 
     const {
@@ -27,47 +23,37 @@ export const SingleExpense = (props: Props) => {
         isLoading,
         isFetching
     } = useReadSingleExpenseQuery({month: `${year}-${month <= 9 ? `0${month}` : month}`})
-    const [createExpense] = useCreateSingleExpenseMutation()
-    const [updateExpense] = useUpdateSingleExpenseMutation()
     const [deleteExpense] = useDeleteSingleExpenseMutation()
 
     const onEdit = (expense: SingleExpenseResponse) => {
-        expense.id && modal.open({
-            id: expense.id,
-            request: {
-                name: expense.name,
-                amount: expense.amount,
-                parentExpense: expense.parentExpense?.id,
-                tags: expense.tags?.map(tag => tag.id || "") || [],
-                date: expense.date
-            }
-        })
+        dispatch(
+            openModal({
+                modal: "SINGLE_EXPENSE",
+                id: expense.id,
+                value: {
+                    name: expense.name,
+                    amount: expense.amount,
+                    parentExpense: expense.parentExpense?.id,
+                    tags: expense.tags?.map(tag => tag.id || "") || [],
+                    date: expense.date
+                }
+            })
+        )
     }
 
     const onDelete = async (expense: SingleExpenseResponse) => {
-        expense.id && await deleteExpense({id: expense.id})
-    }
-
-    const onSubmit = async (expense: SingleExpenseRequest) => {
-        if (modal.value?.id) await updateExpense({id: modal.value.id, singleExpenseRequest: expense})
-        else await createExpense({singleExpenseRequest: expense})
+        await deleteExpense({id: expense.id})
     }
 
     return (
-        <>
-            <Center>
-                <SingleExpenseTable
-                    expenses={data || []}
-                    onEdit={onEdit}
-                    onDelete={onDelete}
-                    isLoading={isLoading && isFetching}
-                    onExpenseClick={onExpenseClick}
-                />
-            </Center>
-            <SingleExpenseForm
-                state={modal}
-                onSubmit={onSubmit}
+        <Center>
+            <SingleExpenseTable
+                expenses={data || []}
+                onEdit={onEdit}
+                onDelete={onDelete}
+                isLoading={isLoading && isFetching}
+                onExpenseClick={onExpenseClick}
             />
-        </>
+        </Center>
     )
 }

@@ -76,10 +76,7 @@ export const ScheduledExpenseMobileTableContent = (props: ExpenseTableContentPro
                                                 alignItems={"start"}
                                                 gap={3}
                                             >
-                                                <ExpenseTableTagsCell
-                                                    mobile
-                                                    tags={expense.tags || []}
-                                                />
+                                                <ExpenseTableTagsCell tags={expense.tags || []}/>
                                                 <VStack
                                                     gap={1}
                                                     alignItems={"start"}

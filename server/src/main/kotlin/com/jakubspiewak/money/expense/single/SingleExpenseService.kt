@@ -19,11 +19,14 @@ class SingleExpenseService(
     private val tagService: TagService,
     private val mapper: SingleExpenseMapper
 ) {
-    fun readAll(): Flux<SingleExpenseResponse> = repository.findAll()
+
+    fun readAll(): Flux<SingleExpenseResponse> = repository
+        .findAll()
         .flatMap { createResponse(it) }
         .sort { o1, o2 -> o2.amount.compareTo(o1.amount) }
 
-    fun readAll(yearMonth: YearMonth) = repository.findAllIntersects(yearMonth.atDay(1), yearMonth.atEndOfMonth())
+    fun readAll(month: YearMonth): Flux<SingleExpenseResponse> = repository
+        .findAllIntersects(month.atDay(1), month.atEndOfMonth())
         .flatMap { createResponse(it) }
         .sort { o1, o2 -> o2.amount.compareTo(o1.amount) }
 

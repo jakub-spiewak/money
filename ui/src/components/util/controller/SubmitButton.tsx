@@ -3,7 +3,7 @@ import {Control} from "react-hook-form";
 
 interface Props {
     isLoading?: boolean,
-    control?: Control
+    control?: Control<any>
 }
 
 export const SubmitButton = (props: Props) => {

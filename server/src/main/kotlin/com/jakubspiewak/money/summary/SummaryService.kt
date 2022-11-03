@@ -4,7 +4,6 @@ import com.jakubspiewak.money.common.types.maximum
 import com.jakubspiewak.money.expense.scheduled.ScheduledExpenseService
 import com.jakubspiewak.money.expense.single.SingleExpenseService
 import com.jakubspiewak.money.revenue.scheduled.ScheduledRevenueService
-import com.jakubspiewak.money.revenue.single.SingleRevenueService
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import java.math.RoundingMode.HALF_UP
@@ -15,17 +14,13 @@ class SummaryService(
     private val scheduledExpenseService: ScheduledExpenseService,
     private val singleExpenseService: SingleExpenseService,
     private val scheduledRevenueService: ScheduledRevenueService,
-    private val singleRevenueService: SingleRevenueService
+//    private val singleRevenueService: SingleRevenueService
 ) {
-    fun summary(): Mono<SummaryResponse> {
+    fun summary(month: YearMonth): Mono<SummaryResponse> {
 
-        val currentMonth = YearMonth.now()
-        val firstDayOfCurrentMonth = currentMonth.atDay(1)
-        val lastDayOfCurrentMonth = currentMonth.atEndOfMonth()
-
-        val scheduledExpenseMono = scheduledExpenseService.readAll(currentMonth).collectList()
-        val scheduledRevenueMono = scheduledRevenueService.readAll(currentMonth).collectList()
-        val singleExpenseMono = singleExpenseService.readAll(currentMonth).collectList()
+        val scheduledExpenseMono = scheduledExpenseService.readAll(month).collectList()
+        val scheduledRevenueMono = scheduledRevenueService.readAll(month).collectList()
+        val singleExpenseMono = singleExpenseService.readAll(month).collectList()
 
         return Mono.zip(
             scheduledExpenseMono,
@@ -33,6 +28,7 @@ class SummaryService(
             singleExpenseMono
         )
             .map { data ->
+
                 val scheduledExpenseList = data.t1
                 val scheduledRevenueList = data.t2
                 val singleExpenseList = data.t3

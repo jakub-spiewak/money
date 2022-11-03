@@ -17,7 +17,7 @@ data class AmountData(
     val percentage: BigDecimal? = null,
 )
 
-@Schema(enumAsRef = true)
+@Schema(enumAsRef = true, requiredProperties = ["type", "data"])
 data class Amount(
     val type: AmountType,
     val data: AmountData

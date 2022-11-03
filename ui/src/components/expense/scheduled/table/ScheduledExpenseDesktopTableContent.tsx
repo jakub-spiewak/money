@@ -23,7 +23,7 @@ export const ScheduledExpenseDesktopTableContent = (props: ExpenseTableContentPr
                         >
                             <Td>
                                 <HStack>
-                                    <SmallPercentageChart value={expense.spentPercentage || 0}/>
+                                    <SmallPercentageChart value={(expense.spentFactor || 0) * 100}/>
                                     <Text>
                                         {expense.name}
                                     </Text>

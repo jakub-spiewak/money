@@ -1,5 +1,4 @@
 import {
-    Box,
     Button,
     Modal,
     ModalBody,
@@ -11,38 +10,48 @@ import {
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
-import {FormModalStateType} from "../../../utils/Hooks";
-import {ScheduledExpenseRequest,} from "../../../redux/generated/redux-api";
+import {
+    ScheduledExpenseRequest,
+    useCreateScheduledExpenseMutation,
+    useUpdateScheduledExpenseMutation,
+} from "../../../redux/generated/redux-api";
 import {SubmitButton} from "../../util/controller/SubmitButton";
 import {TagsField} from "../../util/fields/TagsField";
 import {NameField} from "../../util/fields/NameField";
 import {sanitizeFormValues} from "../../../utils/util";
 import {TypedAmountField} from "../../util/fields/TypedAmountField";
 import {DateRangeField} from "../../util/fields/DateRangeField";
+import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import {closeModal} from "../../../redux/slice/modal-slice";
 
-interface ExpenseProps {
-    state: FormModalStateType<ScheduledExpenseRequest>,
-    onSubmit: (expense: ScheduledExpenseRequest) => Promise<void>
-}
+export const ScheduledExpenseForm = () => {
+    const dispatch = useAppDispatch()
+    const {isOpen, value, id} = useAppSelector(state => state.modal.SCHEDULED_EXPENSE)
 
-export const ScheduledExpenseForm = (props: ExpenseProps) => {
-    const {state: {isOpen, value, close}, onSubmit: onSubmitFromProps} = props
+    const [createExpense] = useCreateScheduledExpenseMutation()
+    const [updateExpense] = useUpdateScheduledExpenseMutation()
+
+    const close = () => dispatch(closeModal("SCHEDULED_EXPENSE"))
 
     const {
         handleSubmit,
         formState: {isSubmitting},
         control,
         reset,
-    } = useForm<ScheduledExpenseRequest, any>()
+    } = useForm<ScheduledExpenseRequest>()
 
     const onSubmit = async (expense: ScheduledExpenseRequest) => {
-        await onSubmitFromProps(sanitizeFormValues(expense))
+        const request = sanitizeFormValues(expense)
+
+        if (id) await updateExpense({id, scheduledExpenseRequest: request})
+        else await createExpense({scheduledExpenseRequest: request})
+
         close()
     }
 
     useEffect(() => {
         if (isOpen) {
-            reset(value?.request || {
+            reset(value || {
                 amount: {
                     type: undefined,
                     data: undefined
@@ -58,30 +67,28 @@ export const ScheduledExpenseForm = (props: ExpenseProps) => {
     }, [reset, value, isOpen])
 
     return (
-        <Box>
-            <Modal
-                isOpen={isOpen}
-                onClose={close}
-            >
-                <ModalOverlay/>
-                <ModalContent>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <ModalHeader>Add expense</ModalHeader>
-                        <ModalCloseButton/>
-                        <ModalBody pb={6}>
-                            <NameField control={control}/>
-                            <TypedAmountField control={control}/>
-                            <DateRangeField control={control}/>
-                            <TagsField control={control}/>
-                        </ModalBody>
-                        <ModalFooter>
-                            <SubmitButton isLoading={isSubmitting}/>
-                            <Button onClick={close}>Cancel</Button>
-                        </ModalFooter>
-                    </form>
-                </ModalContent>
-            </Modal>
-        </Box>
+        <Modal
+            isOpen={isOpen}
+            onClose={close}
+        >
+            <ModalOverlay/>
+            <ModalContent>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <ModalHeader>Add expense</ModalHeader>
+                    <ModalCloseButton/>
+                    <ModalBody pb={6}>
+                        <NameField control={control}/>
+                        <TypedAmountField control={control}/>
+                        <DateRangeField control={control}/>
+                        <TagsField control={control}/>
+                    </ModalBody>
+                    <ModalFooter>
+                        <SubmitButton isLoading={isSubmitting}/>
+                        <Button onClick={close}>Cancel</Button>
+                    </ModalFooter>
+                </form>
+            </ModalContent>
+        </Modal>
     )
 
 }
