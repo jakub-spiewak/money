@@ -1,0 +1,29 @@
+version: "3.1"
+services:
+  mongo:
+    container_name: mongodb
+    image: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_DATABASE=money
+#    ports:
+#      - "27017:27017"
+  server:
+    container_name: server
+    image: money:0.0.1-SNAPSHOT
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
+
+  ui:
+    container_name: ui
+    build:
+      dockerfile: ./docker/Dockerfile
+      context: ./ui
+    ports:
+      - "9090:80"

@@ -19,6 +19,7 @@ specifiers:
   esbuild-runner: ^2.2.1
   framer-motion: ^7.5.2
   postcss: ^8.4.18
+  process: ^0.11.10
   react: ^18.2.0
   react-chartjs-2: ^4.3.1
   react-dom: ^18.2.0
@@ -50,6 +51,7 @@ dependencies:
   chart.js: 3.9.1
   esbuild-runner: 2.2.2
   framer-motion: 7.6.2_biqbaboplfbrettd7655fr4n2y
+  process: 0.11.10
   react: 18.2.0
   react-chartjs-2: 4.3.1_2unjvz6v6rskedwoxtmbfw2rje
   react-dom: 18.2.0_react@18.2.0
@@ -9662,6 +9664,11 @@ packages:
 
   /process-nextick-args/2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
+    dev: false
+
+  /process/0.11.10:
+    resolution: {integrity: sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==}
+    engines: {node: '>= 0.6.0'}
     dev: false
 
   /promise/8.3.0:

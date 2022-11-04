@@ -1,0 +1,33 @@
+FROM node:14-alpine AS builder
+ENV NODE_ENV production
+
+# Add a work directory
+WORKDIR /app
+
+# Cache and Install dependencies
+COPY package.json .
+RUN yarn install --production
+
+# Copy app files
+COPY . .
+
+# Build the app
+ENV REACT_APP_API https://api.money.jakubspiewak.com
+RUN yarn build
+
+# Bundle static assets with nginx
+FROM nginx:1.21.0-alpine as production
+ENV NODE_ENV production
+ENV REACT_APP_API http://localhost:8080
+
+# Copy built assets from builder
+COPY --from=builder /app/build /usr/share/nginx/html
+
+# Add your nginx.conf
+COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose port
+EXPOSE 80
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
