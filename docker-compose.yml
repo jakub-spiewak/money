@@ -1,7 +1,7 @@
 version: "3.1"
 services:
   mongo:
-    container_name: mongodb
+    container_name: money-mongodb
     image: mongo
     restart: always
     environment:
@@ -11,7 +11,7 @@ services:
 #    ports:
 #      - "27017:27017"
   server:
-    container_name: server
+    container_name: money-server
     image: money:0.0.1-SNAPSHOT
     ports:
       - "8002:8080"
@@ -21,7 +21,7 @@ services:
       - "SPRING_PROFILES_ACTIVE=prod"
 
   ui:
-    container_name: ui
+    container_name: money-ui
     build:
       dockerfile: ./docker/Dockerfile
       context: ./ui
