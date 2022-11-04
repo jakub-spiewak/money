@@ -10,22 +10,30 @@ import {
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
-import {ScheduledRevenueRequest} from "../../../redux/generated/redux-api";
-import {FormModalStateType} from "../../../utils/Hooks";
+import {
+    ScheduledRevenueRequest,
+    useCreateScheduledRevenueMutation,
+    useUpdateScheduledRevenueMutation
+} from "../../../redux/generated/redux-api";
 import {NameField} from "../../util/fields/NameField";
 import {SubmitButton} from "../../util/controller/SubmitButton";
 import {DateRangeField} from "../../util/fields/DateRangeField";
 import {TypedAmountField} from "../../util/fields/TypedAmountField";
+import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import {closeModal} from "../../../redux/slice/modal-slice";
 import {sanitizeFormValues} from "../../../utils/util";
 
-interface Props {
-    state: FormModalStateType<ScheduledRevenueRequest>,
-    onSubmit: (revenue: ScheduledRevenueRequest) => Promise<void>
-}
+export const ScheduledRevenueForm = () => {
 
-export const ScheduledRevenueForm = (props: Props) => {
-    const {state: {isOpen, close, value}, onSubmit: onSubmitFromProps} = props
+    const dispatch = useAppDispatch()
+    const {isOpen, value, id} = useAppSelector(state => state.modal.SCHEDULED_REVENUE)
 
+    const [saveScheduledRevenue] = useCreateScheduledRevenueMutation()
+    const [updateScheduledRevenue] = useUpdateScheduledRevenueMutation()
+
+    const close = () => {
+        dispatch(closeModal("SCHEDULED_REVENUE"))
+    }
 
     const {
         handleSubmit,
@@ -44,12 +52,14 @@ export const ScheduledRevenueForm = (props: Props) => {
     })
 
     const onSubmit = async (revenue: ScheduledRevenueRequest) => {
-        await onSubmitFromProps(sanitizeFormValues(revenue))
+        const request = sanitizeFormValues(revenue)
+        if (id) await updateScheduledRevenue({id, scheduledRevenueRequest: request})
+        else await saveScheduledRevenue({scheduledRevenueRequest: request})
         close()
     }
 
     useEffect(() => {
-        if (isOpen) reset(value?.request || {
+        if (isOpen) reset(value || {
             amount: undefined,
             date: {
                 from: undefined,

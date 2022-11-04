@@ -16,3 +16,5 @@ export const toCurrencyString = (value?: number, compact?: boolean): string => {
         currency: "PLN"
     })
 }
+
+export const getCurrentDateISOString = () => new Date().toISOString().split("T")[0]

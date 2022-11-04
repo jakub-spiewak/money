@@ -4,18 +4,18 @@ import {SingleExpense} from "./single/SingleExpense";
 import {theme} from "../../theme";
 import {CurrentDateComponent} from "../util/CurrentDateComponent";
 import {useState} from "react";
-import {Navigation} from "../../App";
 import {useAppDispatch} from "../../redux/hooks";
 import {openModal} from "../../redux/slice/modal-slice";
+import {ExpenseTableScreenNavigation} from "./ExpenseTableScreenNavigation";
 
-export const ExpenseScreen = () => {
+export const ExpenseTableScreen = () => {
     const dispatch = useAppDispatch()
     const [currentExpense, setCurrentExpense] = useState<string>()
 
     return (
         <>
-            <Navigation/>
             <CurrentDateComponent/>
+            <ExpenseTableScreenNavigation/>
             <Center
                 flexDirection={'column'}
                 gap={8}

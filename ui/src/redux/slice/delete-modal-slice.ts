@@ -9,11 +9,17 @@ interface DeleteModalState {
 interface DeleteModalSliceState {
     SCHEDULED_EXPENSE: DeleteModalState,
     SINGLE_EXPENSE: DeleteModalState,
+    SCHEDULED_REVENUE: DeleteModalState,
+    SINGLE_REVENUE: DeleteModalState
 }
 
+const deleteModalInitialState = {isOpen: false, id: "", name: ""}
+
 export const initialState: DeleteModalSliceState = {
-    SCHEDULED_EXPENSE: {isOpen: false, id: "", name: ""},
-    SINGLE_EXPENSE: {isOpen: false, id: "", name: ""}
+    SCHEDULED_EXPENSE: deleteModalInitialState,
+    SINGLE_EXPENSE: deleteModalInitialState,
+    SCHEDULED_REVENUE: deleteModalInitialState,
+    SINGLE_REVENUE: deleteModalInitialState
 }
 
 const modalSlice = createSlice({

@@ -10,22 +10,26 @@ import {
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
-import {SingleRevenueRequest} from "../../../redux/generated/redux-api";
-import {FormModalStateType} from "../../../utils/Hooks";
+import {
+    SingleRevenueRequest,
+    useCreateSingleRevenueMutation,
+    useUpdateSingleRevenueMutation
+} from "../../../redux/generated/redux-api";
 import {AmountField} from "../../util/fields/amount/AmountField";
 import {NameField} from "../../util/fields/NameField";
 import {SubmitButton} from "../../util/controller/SubmitButton";
 import {DateField} from "../../util/fields/DateField";
 import {RevenueField} from "../../util/fields/RevenueField";
+import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import {closeModal} from "../../../redux/slice/modal-slice";
+import {sanitizeFormValues} from "../../../utils/util";
 
-interface Props {
-    state: FormModalStateType<SingleRevenueRequest>,
-    onSubmit: (revenue: SingleRevenueRequest) => Promise<void>
-}
+export const SingleRevenueForm = () => {
+    const {isOpen, value, id} = useAppSelector(state => state.modal.SINGLE_REVENUE)
+    const dispatch = useAppDispatch()
 
-export const SingleRevenueForm = (props: Props) => {
-    const {state: {isOpen, close, value}, onSubmit: onSubmitFromProps} = props
-
+    const [saveSingleRevenue] = useCreateSingleRevenueMutation()
+    const [updateSingleRevenue] = useUpdateSingleRevenueMutation()
 
     const {
         handleSubmit,
@@ -40,13 +44,19 @@ export const SingleRevenueForm = (props: Props) => {
         }
     })
 
+    const close = () => {
+        dispatch(closeModal("SINGLE_REVENUE"))
+    }
+
     const onSubmit = async (revenue: SingleRevenueRequest) => {
-        await onSubmitFromProps(revenue)
+        const request = sanitizeFormValues(revenue)
+        if (id) await updateSingleRevenue({id, singleRevenueRequest: request})
+        else await saveSingleRevenue({singleRevenueRequest: request})
         close()
     }
 
     useEffect(() => {
-        if (isOpen) reset(value?.request || {amount: undefined, date: undefined})
+        if (isOpen) reset(value || {amount: undefined, date: undefined})
     }, [reset, value, isOpen])
 
     return (
@@ -66,7 +76,7 @@ export const SingleRevenueForm = (props: Props) => {
                             name={"parentRevenue"}
                             label={"Parent revenue"}
                             control={control}
-                            defaultValue={value?.request?.parentRevenue}
+                            defaultValue={value?.parentRevenue}
                         />
                         <DateField control={control}/>
                     </ModalBody>

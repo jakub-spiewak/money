@@ -2,11 +2,12 @@ import {Box} from "@chakra-ui/react";
 import {Doughnut} from "react-chartjs-2";
 
 interface Props {
-    value: number
+    value: number,
+    backgroundColor?: string,
 }
 
 export const SmallPercentageChart = (props: Props) => {
-    const {value} = props
+    const {value, backgroundColor} = props
     return (
         <Box
             w={"4em"}
@@ -22,8 +23,9 @@ export const SmallPercentageChart = (props: Props) => {
                 data={{
                     datasets: [{
                         data: [value, 100 - value],
-                        backgroundColor: ["white", "transparent"],
-                        borderWidth: 1,
+                        backgroundColor: [backgroundColor || "white", "transparent"],
+                        borderAlign: "center",
+                        borderWidth: 1
                     }]
                 }}
             />

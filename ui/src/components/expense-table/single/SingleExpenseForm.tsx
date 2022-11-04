@@ -43,10 +43,8 @@ export const SingleExpenseForm = () => {
 
     const onSubmit = async (expense: SingleExpenseRequest) => {
         const request = sanitizeFormValues(expense)
-
         if (id) await updateExpense({id, singleExpenseRequest: request})
         else await createExpense({singleExpenseRequest: request})
-
         close()
     }
 

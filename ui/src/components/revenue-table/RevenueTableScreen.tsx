@@ -2,34 +2,36 @@ import {CurrentDateComponent} from "../util/CurrentDateComponent";
 import {Button, Center, HStack} from "@chakra-ui/react";
 import {theme} from "../../theme";
 import {useFormModalStateType} from "../../utils/Hooks";
-import {ScheduledRevenueRequest, SingleRevenueRequest} from "../../redux/generated/redux-api";
+import {ScheduledRevenueRequest} from "../../redux/generated/redux-api";
 import {ScheduledRevenue} from "./scheduled/ScheduledRevenue";
 import {SingleRevenue} from "./single/SingleRevenue";
-import {Navigation} from "../../App";
+import {useAppDispatch} from "../../redux/hooks";
+import {openModal} from "../../redux/slice/modal-slice";
+import {RevenueTableScreenNavigation} from "./RevenueTableScreenNavigation";
 
-export const RevenueScreen = () => {
+export const RevenueTableScreen = () => {
 
+    const dispatch = useAppDispatch()
     const scheduledRevenueModal = useFormModalStateType<ScheduledRevenueRequest>()
-    const singleRevenueModal = useFormModalStateType<SingleRevenueRequest>()
 
     return (
         <>
-            <Navigation/>
             <CurrentDateComponent/>
+            <RevenueTableScreenNavigation/>
             <Center
                 flexDirection={'column'}
                 gap={8}
                 pt={8}
             >
-                <ScheduledRevenue modal={scheduledRevenueModal}/>
-                <SingleRevenue modal={singleRevenueModal}/>
+                <ScheduledRevenue/>
+                <SingleRevenue/>
                 <HStack
                     flexDirection={"row"}
                     justifyContent={"end"}
                     minW={["100vw", null, null, theme.breakpoints.lg]}
                 >
                     <Button onClick={() => scheduledRevenueModal.open()}>Add scheduled expense</Button>
-                    <Button onClick={() => singleRevenueModal.open()}>Add single expense</Button>
+                    <Button onClick={() => dispatch(openModal({modal: "SINGLE_REVENUE"}))}>Add single expense</Button>
                 </HStack>
             </Center>
         </>

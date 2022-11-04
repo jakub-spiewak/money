@@ -17,32 +17,41 @@ import {
     useDisclosure
 } from "@chakra-ui/react";
 import {GlobalContextProvider} from "./utils/Context"
-import {ExpenseScreen} from "./components/expense/ExpenseScreen";
+import {ExpenseTableScreen} from "./components/expense-table/ExpenseTableScreen";
 import {Provider} from "react-redux";
 import {store} from "./redux/store";
 import {theme} from "./theme";
 import {RouterProvider} from "react-router";
 import {createBrowserRouter, Link} from "react-router-dom";
-import {RevenueScreen} from "./components/revenue/RevenueScreen";
+import {RevenueTableScreen} from "./components/revenue-table/RevenueTableScreen";
 import {TagScreen} from "./components/tag/TagScreen";
-import {AnalyzeScreen} from "./components/analyze2/AnalyzeScreen";
+import {ExpenseScreen} from "./components/expenses-screen/ExpenseScreen";
 import {CgMore} from "react-icons/cg";
 import {AiOutlineHome, AiOutlineTags} from 'react-icons/ai';
 import {GiPayMoney, GiReceiveMoney} from 'react-icons/gi';
 import {Modals} from "./components/Modals";
+import {RevenueScreen} from "./components/revenue-screen/RevenueScreen";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <AnalyzeScreen/>
-    },
-    {
-        path: '/expense',
         element: <ExpenseScreen/>
     },
     {
-        path: '/revenue',
+        path: "/expense",
+        element: <ExpenseScreen/>
+    },
+    {
+        path: "/revenue",
         element: <RevenueScreen/>
+    },
+    {
+        path: '/expense-table',
+        element: <ExpenseTableScreen/>
+    },
+    {
+        path: '/revenue-table',
+        element: <RevenueTableScreen/>
     },
     {
         path: '/tag',
