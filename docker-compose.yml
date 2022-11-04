@@ -14,7 +14,7 @@ services:
     container_name: server
     image: money:0.0.1-SNAPSHOT
     ports:
-      - "8080:8080"
+      - "8002:8080"
     depends_on:
       - mongo
     environment:
@@ -26,4 +26,4 @@ services:
       dockerfile: ./docker/Dockerfile
       context: ./ui
     ports:
-      - "9090:80"
+      - "8001:80"
