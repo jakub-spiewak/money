@@ -8,11 +8,9 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=root
       - MONGO_INITDB_DATABASE=money
-    ports:
-      - "27017:27017"
   server:
     container_name: money-server
-    image: money:0.0.1-SNAPSHOT
+    image: ghcr.io/jakub-spiewak/money/server:latest
     ports:
       - "8002:8080"
     depends_on:
@@ -22,6 +20,7 @@ services:
 
   ui:
     container_name: money-ui
+    image: ghcr.io/jakub-spiewak/money/ui:latest
     build:
       dockerfile: ./docker/Dockerfile
       context: ./ui

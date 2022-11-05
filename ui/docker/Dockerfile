@@ -18,7 +18,6 @@ RUN yarn build
 # Bundle static assets with nginx
 FROM nginx:1.21.0-alpine as production
 ENV NODE_ENV production
-ENV REACT_APP_API http://localhost:8080
 
 # Copy built assets from builder
 COPY --from=builder /app/build /usr/share/nginx/html
