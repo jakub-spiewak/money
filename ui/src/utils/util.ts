@@ -6,3 +6,15 @@ export const sanitizeFormValues = <T extends Record<any, any>>(value: T): T => {
     });
     return value
 }
+
+export const toCurrencyString = (value?: number, compact?: boolean): string => {
+    return (value || 0).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        style: "currency",
+        compactDisplay: "long",
+        notation: compact ? "compact" : "standard",
+        currency: "PLN"
+    })
+}
+
+export const getCurrentDateISOString = () => new Date().toISOString().split("T")[0]

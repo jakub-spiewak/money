@@ -1,7 +1,8 @@
 import {Amount} from "../../../redux/generated/redux-api";
+import {toCurrencyString} from "../../../utils/util";
 
 interface Props {
-    amount?: Amount
+    amount?: Amount,
 }
 
 const number2string = (value?: number): string => value?.toLocaleString(undefined, {minimumFractionDigits: 2}) || ''
@@ -13,29 +14,23 @@ export const AmountTableCell = (props: Props) => {
     const {type, data} = amount
     if (!type || !data) return null
 
-    if (type === "CONSTANT") return <b>{number2string(data.value)}</b>
+    if (type === "CONSTANT") return <text>{toCurrencyString(data.value)}</text>
     if (type === "RANGE") return (
         <div>
-            <b>{data.min?.toLocaleString(undefined, {minimumFractionDigits: 2})}</b>
+            <text>{toCurrencyString(data.min)}</text>
             <span> - </span>
-            <b>{data.max?.toLocaleString(undefined, {minimumFractionDigits: 2})}</b>
+            <text>{toCurrencyString(data.max)}</text>
         </div>
-        // <SimpleGrid columns={2}>
-        //     <div>From:</div>
-        //     <b>{number2string(data.min)}</b>
-        //     <div>To:</div>
-        //     <b>{number2string(data.max)}</b>
-        // </SimpleGrid>
     )
     if (type === "PERCENTAGE") return (
         <div>
-            <b>{data.value}</b>
+            <text>{toCurrencyString(data.value)}</text>
             <span> ± </span>
-            <b>{data.percentage?.toLocaleString()}%</b>
+            <text>{data.percentage?.toLocaleString()}%</text>
         </div>
     )
 
     return (
-        <b>{JSON.stringify(amount)}</b>
+        <text>{JSON.stringify(amount)}</text>
     )
 }

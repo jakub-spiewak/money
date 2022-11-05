@@ -11,6 +11,7 @@ import {
     useReadTagQuery,
     useUpdateTagMutation
 } from "../../redux/generated/redux-api";
+import { Navigation } from "../../App";
 
 export const TagScreen = () => {
 
@@ -36,6 +37,7 @@ export const TagScreen = () => {
 
     return (
         <>
+            <Navigation/>
             <Center>
                 <TagTable
                     data={data || []}

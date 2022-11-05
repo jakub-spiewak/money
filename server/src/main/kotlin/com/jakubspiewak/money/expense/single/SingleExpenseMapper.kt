@@ -1,7 +1,7 @@
 package com.jakubspiewak.money.expense.single
 
 import com.jakubspiewak.money.common.mappper.CommonMapperConfig
-import com.jakubspiewak.money.expense.scheduled.type.ScheduledExpenseResponse
+import com.jakubspiewak.money.expense.scheduled.ScheduledExpenseDocument
 import com.jakubspiewak.money.expense.single.type.SingleExpenseParentResponse
 import com.jakubspiewak.money.expense.single.type.SingleExpenseRequest
 import com.jakubspiewak.money.expense.single.type.SingleExpenseResponse
@@ -29,5 +29,5 @@ interface SingleExpenseMapper {
     @Mapping(target = "date", source = "source.date")
     fun fromRequestToDocument(source: SingleExpenseRequest, id: ObjectId? = null): SingleExpenseDocument
 
-    fun fromParentExpenseToResponse(source: ScheduledExpenseResponse): SingleExpenseParentResponse
+    fun fromParentExpenseToResponse(source: ScheduledExpenseDocument): SingleExpenseParentResponse
 }

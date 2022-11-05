@@ -11,7 +11,7 @@ interface DateRangeFieldProps {
         from?: string,
         to?: string
     },
-    control: Control
+    control: Control<any>
 }
 
 export const DateRangeField = (props: DateRangeFieldProps) => {

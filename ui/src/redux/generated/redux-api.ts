@@ -5,6 +5,7 @@ export const addTagTypes = [
   "scheduled_revenue",
   "expense",
   "scheduled_expense",
+  "summary-controller",
   "analyze",
 ] as const;
 const injectedRtkApi = api
@@ -205,6 +206,13 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["scheduled_expense", "tag"],
       }),
+      summary: build.query<SummaryApiResponse, SummaryApiArg>({
+        query: (queryArg) => ({
+          url: `/summary`,
+          params: { month: queryArg.month },
+        }),
+        providesTags: ["summary-controller"],
+      }),
       analyze: build.query<AnalyzeApiResponse, AnalyzeApiArg>({
         query: () => ({ url: `/analyze` }),
         providesTags: [
@@ -305,17 +313,21 @@ export type CreateScheduledExpenseApiResponse = /** status 200 OK */ Unit;
 export type CreateScheduledExpenseApiArg = {
   scheduledExpenseRequest: ScheduledExpenseRequest;
 };
+export type SummaryApiResponse = /** status 200 OK */ SummaryResponse;
+export type SummaryApiArg = {
+  month?: string;
+};
 export type AnalyzeApiResponse = /** status 200 OK */ AnalyzeResponse;
 export type AnalyzeApiArg = void;
 export type Unit = object;
 export type TagRequest = {
-  name?: string;
+  name: string;
 };
 export type SingleRevenueRequest = {
-  name?: string;
-  amount?: number;
+  name: string;
+  amount: number;
   parentRevenue?: string;
-  date?: string;
+  date: string;
 };
 export type AmountType = "RANGE" | "CONSTANT" | "PERCENTAGE" | "UNKNOWN";
 export type AmountData = {
@@ -325,72 +337,82 @@ export type AmountData = {
   percentage?: number;
 };
 export type Amount = {
-  type?: AmountType;
-  data?: AmountData;
+  type: AmountType;
+  data: AmountData;
 };
 export type DateRange = {
   from?: string;
   to?: string;
 };
 export type ScheduledRevenueRequest = {
-  name?: string;
-  amount?: Amount;
-  date?: DateRange;
+  name: string;
+  amount: Amount;
+  date: DateRange;
 };
 export type SingleExpenseRequest = {
-  name?: string;
-  amount?: number;
+  name: string;
+  amount: number;
   parentExpense?: string;
-  date?: string;
-  tags?: string[];
+  date: string;
+  tags: string[];
 };
 export type ScheduledExpenseRequest = {
-  name?: string;
-  amount?: Amount;
-  date?: DateRange;
-  tags?: string[];
+  name: string;
+  amount: Amount;
+  date: DateRange;
+  tags: string[];
 };
 export type TagResponse = {
-  id?: string;
-  name?: string;
+  id: string;
+  name: string;
 };
 export type SingleRevenueParentResponse = {
   id?: string;
-  name?: string;
-  amount?: Amount;
+  name: string;
+  amount: Amount;
 };
 export type SingleRevenueResponse = {
-  id?: string;
-  name?: string;
-  amount?: number;
+  id: string;
+  name: string;
+  amount: number;
   parentRevenue?: SingleRevenueParentResponse;
-  date?: string;
+  date: string;
 };
 export type ScheduledRevenueResponse = {
-  id?: string;
-  name?: string;
-  amount?: Amount;
-  date?: DateRange;
+  id: string;
+  name: string;
+  amount: Amount;
+  date: DateRange;
 };
 export type SingleExpenseParentResponse = {
-  id?: string;
-  name?: string;
-  amount?: Amount;
+  id: string;
+  name: string;
+  amount: Amount;
 };
 export type SingleExpenseResponse = {
-  id?: string;
-  name?: string;
-  amount?: number;
+  id: string;
+  name: string;
+  amount: number;
   parentExpense?: SingleExpenseParentResponse;
-  date?: string;
-  tags?: TagResponse[];
+  date: string;
+  tags: TagResponse[];
 };
 export type ScheduledExpenseResponse = {
-  id?: string;
-  name?: string;
-  amount?: Amount;
-  date?: DateRange;
-  tags?: TagResponse[];
+  id: string;
+  name: string;
+  amount: Amount;
+  date: DateRange;
+  tags: TagResponse[];
+  spentSum: number;
+  spentFactor: number;
+};
+export type SummaryResponse = {
+  budget: number;
+  reaming: number;
+  spent: number;
+  normalizedReaming: number;
+  normalizedSpent: number;
+  revenue: number;
 };
 export type ExpenseSummaryFromTag = {
   name?: string;
@@ -433,5 +455,6 @@ export const {
   useCreateSingleExpenseMutation,
   useReadScheduledExpenseQuery,
   useCreateScheduledExpenseMutation,
+  useSummaryQuery,
   useAnalyzeQuery,
 } = injectedRtkApi;
