@@ -5,11 +5,11 @@ ENV NODE_ENV production
 WORKDIR /app
 
 # Cache and Install dependencies
-COPY package.json .
+COPY ../package.json .
 RUN yarn install --production
 
 # Copy app files
-COPY . .
+COPY .. .
 
 # Build the app
 ENV REACT_APP_API https://api.money.jakubspiewak.com
