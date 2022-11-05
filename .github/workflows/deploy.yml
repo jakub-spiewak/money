@@ -67,7 +67,7 @@ jobs:
 
     steps:
       - name: Pull and run the newest docker images via ssh
-        uses: appleboy/ssh-action@0.1.4
+        uses: appleboy/ssh-action@0.1.5
         with:
           host: jakubspiewak.com
           username: ${{ secrets.SSH_USERNAME }}
