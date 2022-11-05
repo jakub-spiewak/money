@@ -7,7 +7,7 @@ on:
 jobs:
   build-and-push-docker-image:
     name: Build and push docker image
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Chechout code
         uses: actions/checkout@v3
