@@ -2,14 +2,14 @@ name: Build, publish and run docker images on the server
 
 on:
   push:
-    branches: [master]
+    branches: [ master ]
 
 jobs:
-  build-and-push-docker-image:
-    name: Build and push docker image
+  ui-build-and-publish-docker-image:
+    name: UI - Build and push docker image
     runs-on: ubuntu-latest
     steps:
-      - name: Chechout code
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Setup Docker Buildx
@@ -23,12 +23,32 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build image and push to Github Packages
+      - name: Build image and push it 24 to Github Packages
         uses: docker/build-push-action@v2
         with:
           context: ./ui
           file: ./ui/docker/Dockerfile
           tags: ghcr.io/jakub-spiewak/money/ui:latest
           push: true
+
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+
+  server-build-and-publish-docker-image:
+    name: Server - Build and push docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Build image and push it to Github Packages
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: bootBuildImage -PpublishImage=true
+

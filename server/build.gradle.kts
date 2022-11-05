@@ -33,6 +33,21 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 }
 
+val publishImage: Boolean? by project
+
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+    isPublish = publishImage ?: false
+    imageName = "ghcr.io/jakub-spiewak/money/server:latest"
+    docker {
+        publishRegistry {
+            username = "jakub-spiewak"
+            password = System.getenv("GITHUB_TOKEN") ?: throw Exception("GITHUB_TOKEN env variable is undefined!")
+            url = "https://ghcr.io"
+        }
+    }
+}
+
+
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
