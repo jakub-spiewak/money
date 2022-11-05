@@ -5,11 +5,11 @@ ENV NODE_ENV production
 WORKDIR /app
 
 # Cache and Install dependencies
-COPY ./../package.json .
+COPY package.json .
 RUN yarn install --production
 
 # Copy app files
-COPY ./.. .
+COPY . .
 
 # Build the app
 ENV REACT_APP_API https://api.money.jakubspiewak.com
@@ -24,7 +24,7 @@ ENV REACT_APP_API http://localhost:8080
 COPY --from=builder /app/build /usr/share/nginx/html
 
 # Add your nginx.conf
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port
 EXPOSE 80
