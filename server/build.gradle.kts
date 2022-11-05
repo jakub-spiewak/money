@@ -33,10 +33,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 }
 
-val publishImage: Boolean? by project
+val publishImage: String? by project
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
-    isPublish = publishImage ?: false
+    isPublish = publishImage?.equals("true") ?: false
     imageName = "ghcr.io/jakub-spiewak/money/server:latest"
     docker {
         publishRegistry {
