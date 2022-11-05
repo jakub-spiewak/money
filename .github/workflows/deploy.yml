@@ -71,7 +71,9 @@ jobs:
         with:
           host: jakubspiewak.com
           username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
+#          TODO: support ssh key authentication
+#          key: ${{ secrets.SSH_KEY }}
+          password: ${{ secrets.SSH_PASSWORD }}
           script: |
             whoami
             pwd
