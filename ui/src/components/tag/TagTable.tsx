@@ -1,15 +1,4 @@
-import {
-    Button,
-    HStack,
-    TableCaption,
-    Tbody,
-    Td,
-    Tfoot,
-    Th,
-    Thead,
-    Tr,
-    VStack,
-} from "@chakra-ui/react";
+import {Button, HStack, TableCaption, Tbody, Td, Text, Tfoot, Th, Thead, Tr, VStack} from "@chakra-ui/react";
 import {TagResponse} from "../../redux/generated/redux-api";
 import {LoadingDataTable} from "../util/table/LoadingDataTable";
 import {theme} from "../../theme";
@@ -29,10 +18,13 @@ export const TagTable = (props: SimpleTableProps<TagResponse>) => {
     const {isLoading, data, onEdit, onDelete, onAdd} = props
 
     return (
-        <VStack width={["100vw", theme.breakpoints.sm]}>
+        <VStack
+            width={["100vw", theme.breakpoints.sm]}
+            backgroundColor={"blackAlpha.500"}
+        >
             <SimpleTableContainer>
                 <TableCaption>
-                    Tags
+                    Tags <Text fontWeight={"hairline"}>(will be moved to settings...)</Text>
                 </TableCaption>
                 <Thead>
                     <TableHeadings/>
