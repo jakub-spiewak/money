@@ -18,10 +18,7 @@ export const TagTable = (props: SimpleTableProps<TagResponse>) => {
     const {isLoading, data, onEdit, onDelete, onAdd} = props
 
     return (
-        <VStack
-            width={["100vw", theme.breakpoints.sm]}
-            backgroundColor={"blackAlpha.500"}
-        >
+        <VStack width={["100vw", theme.breakpoints.sm]}>
             <SimpleTableContainer>
                 <TableCaption>
                     Tags <Text fontWeight={"hairline"}>(will be moved to settings...)</Text>
