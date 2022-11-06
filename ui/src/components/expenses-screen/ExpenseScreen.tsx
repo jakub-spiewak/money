@@ -1,11 +1,18 @@
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {ScheduledExpenseResponse, useReadScheduledExpenseQuery, useSummaryQuery} from "../../redux/generated/redux-api";
-import {Box, List, ListItem, Text} from "@chakra-ui/react";
+import {
+    ScheduledExpenseResponse,
+    SingleExpenseResponse,
+    useReadScheduledExpenseQuery,
+    useReadSingleExpenseQuery,
+    useSummaryQuery
+} from "../../redux/generated/redux-api";
+import {Box, Divider, List, ListItem, Text} from "@chakra-ui/react";
 import {Doughnut} from "react-chartjs-2";
 import {toCurrencyString} from "../../utils/util";
 import {GroupExpenseItem} from "./GroupExpenseItem";
 import {ExpenseScreenNavigation} from "./ExpenseScreenNavigation";
 import {CurrentDateComponent} from "../util/CurrentDateComponent";
+import {SingleExpenseItem} from "./SingleExpenseItem";
 
 const chartColors = [
     "#fd7f6f",
@@ -38,6 +45,10 @@ export const ExpenseScreen = () => {
     const {
         data: scheduledExpensesList,
     } = useReadScheduledExpenseQuery({month: currentMonthStr})
+
+    const {
+        data: singleExpensesList,
+    } = useReadSingleExpenseQuery({month: currentMonthStr})
 
     return (
         <Box>
@@ -114,6 +125,19 @@ export const ExpenseScreen = () => {
                                 </ListItem>
                             )
                         })
+                    }
+                    {
+                        singleExpensesList
+                            ?.filter((singleExpense) => !singleExpense.parentExpense)
+                            ?.sort((o1, o2) => new Date(o1.date).getTime() - new Date(o2.date).getTime())
+                            ?.map((singleExpense: SingleExpenseResponse, index) => {
+                                return (
+                                    <Box px={2}>
+                                        {index !== 0 && <Divider/>}
+                                        <SingleExpenseItem expense={singleExpense}/>
+                                    </Box>
+                                )
+                            })
                     }
                 </List>
             </Box>

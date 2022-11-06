@@ -33,16 +33,16 @@ export const SingleRevenueTable = (props: SimpleTableProps<SingleRevenueResponse
                 <Tbody>
                     {
                         isLoading ?
-                            <LoadingDataTable size={4}/> :
+                            <LoadingDataTable size={5}/> :
                             data.length === 0 ?
-                                <NoDataTable size={4}/> :
+                                <NoDataTable size={5}/> :
                                 data.map((revenue, index) => {
                                     return (
                                         <Tr key={`revenue_${index}`}>
                                             <Td>{revenue.name}</Td>
                                             <Td isNumeric><b>{revenue.amount?.toFixed?.(2)}</b></Td>
                                             <Td>{revenue.date && new Date(revenue.date).toLocaleDateString()}</Td>
-                                            <Td><RevenueParentTableCell revenue={revenue.parentRevenue} /> </Td>
+                                            <Td><RevenueParentTableCell revenue={revenue.parentRevenue}/> </Td>
                                             <Td isNumeric>
                                                 <ActionButtonsTableCell
                                                     onEdit={() => onEdit(revenue)}

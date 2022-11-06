@@ -14,9 +14,9 @@ export const RevenueScreenNavigation = () => {
                 {icon: <TbReportAnalytics/>, to: "/expense"},
                 {icon: <TfiStatsUp/>, to: ""},
                 {icon: <GiTakeMyMoney/>, to: "/revenue-table"},
-                {icon: <AiOutlineSetting/>, to: ""},
+                {icon: <AiOutlineSetting/>, to: "/tag"},
             ]}
-            onAdd={() => dispatch(openModal({modal: "SINGLE_EXPENSE"}))}
+            onAdd={() => dispatch(openModal({modal: "SINGLE_REVENUE"}))}
         />
     )
 };

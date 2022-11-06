@@ -5,7 +5,7 @@ export const addTagTypes = [
   "scheduled_revenue",
   "expense",
   "scheduled_expense",
-  "summary-controller",
+  "summary",
   "analyze",
 ] as const;
 const injectedRtkApi = api
@@ -211,7 +211,12 @@ const injectedRtkApi = api
           url: `/summary`,
           params: { month: queryArg.month },
         }),
-        providesTags: ["summary-controller"],
+        providesTags: [
+          "summary",
+          "scheduled_revenue",
+          "scheduled_expense",
+          "tag",
+        ],
       }),
       analyze: build.query<AnalyzeApiResponse, AnalyzeApiArg>({
         query: () => ({ url: `/analyze` }),

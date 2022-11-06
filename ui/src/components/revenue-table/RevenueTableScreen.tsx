@@ -25,13 +25,9 @@ export const RevenueTableScreen = () => {
             >
                 <ScheduledRevenue/>
                 <SingleRevenue/>
-                <HStack
-                    flexDirection={"row"}
-                    justifyContent={"end"}
-                    minW={["100vw", null, null, theme.breakpoints.lg]}
-                >
-                    <Button onClick={() => scheduledRevenueModal.open()}>Add scheduled expense</Button>
-                    <Button onClick={() => dispatch(openModal({modal: "SINGLE_REVENUE"}))}>Add single expense</Button>
+                <HStack minW={["100vw", null, null, theme.breakpoints.lg]}>
+                    <Button onClick={() => scheduledRevenueModal.open()}>Add scheduled revenue</Button>
+                    <Button onClick={() => dispatch(openModal({modal: "SINGLE_REVENUE"}))}>Add single revenue</Button>
                 </HStack>
             </Center>
         </>

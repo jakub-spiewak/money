@@ -15,7 +15,7 @@ export const ExpenseScreenNavigation = () => {
                 {icon: <TbReportAnalytics/>, to: "/expense-table"},
                 {icon: <TfiStatsUp/>, to: ""},
                 {icon: <GiTakeMyMoney/>, to: "/revenue"},
-                {icon: <AiOutlineSetting/>, to: ""},
+                {icon: <AiOutlineSetting/>, to: "/tag"},
             ]}
             onAdd={() => dispatch(openModal({modal: "SINGLE_EXPENSE"}))}
         />
