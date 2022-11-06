@@ -1,5 +1,6 @@
 version: "3.1"
 services:
+
   mongo:
     container_name: money-mongodb
     image: mongo
@@ -10,6 +11,7 @@ services:
       - MONGO_INITDB_DATABASE=money
     ports:
       - "27017:27017"
+
   server:
     container_name: money-server
     image: money:0.0.1-SNAPSHOT
@@ -17,8 +19,6 @@ services:
       - "8002:8080"
     depends_on:
       - mongo
-    environment:
-      - "SPRING_PROFILES_ACTIVE=prod"
 
   ui:
     container_name: money-ui
