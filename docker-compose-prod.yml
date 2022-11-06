@@ -1,5 +1,6 @@
 version: "3.1"
 services:
+
   mongo:
     container_name: money-mongodb
     image: mongo
@@ -8,6 +9,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=root
       - MONGO_INITDB_DATABASE=money
+
   server:
     container_name: money-server
     image: ghcr.io/jakub-spiewak/money/server:latest
@@ -21,8 +23,7 @@ services:
   ui:
     container_name: money-ui
     image: ghcr.io/jakub-spiewak/money/ui:latest
-    build:
-      dockerfile: ./docker/Dockerfile
-      context: ./ui
+    depends_on:
+      - server
     ports:
       - "8001:80"
