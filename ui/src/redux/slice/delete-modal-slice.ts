@@ -10,7 +10,8 @@ interface DeleteModalSliceState {
     SCHEDULED_EXPENSE: DeleteModalState,
     SINGLE_EXPENSE: DeleteModalState,
     SCHEDULED_REVENUE: DeleteModalState,
-    SINGLE_REVENUE: DeleteModalState
+    SINGLE_REVENUE: DeleteModalState,
+    TAG: DeleteModalState
 }
 
 const deleteModalInitialState = {isOpen: false, id: "", name: ""}
@@ -19,7 +20,8 @@ export const initialState: DeleteModalSliceState = {
     SCHEDULED_EXPENSE: deleteModalInitialState,
     SINGLE_EXPENSE: deleteModalInitialState,
     SCHEDULED_REVENUE: deleteModalInitialState,
-    SINGLE_REVENUE: deleteModalInitialState
+    SINGLE_REVENUE: deleteModalInitialState,
+    TAG: deleteModalInitialState
 }
 
 const modalSlice = createSlice({

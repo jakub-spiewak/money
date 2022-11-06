@@ -14,8 +14,8 @@ export const ExpenseTableScreen = () => {
 
     return (
         <>
-            <CurrentDateComponent/>
             <ExpenseTableScreenNavigation/>
+            <CurrentDateComponent/>
             <Center
                 flexDirection={'column'}
                 gap={8}

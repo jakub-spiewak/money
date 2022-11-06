@@ -6,6 +6,8 @@ import {DeleteSingleRevenueDialog} from "./util/delete-conformation-dialogs/Dele
 import {DeleteScheduledRevenueDialog} from "./util/delete-conformation-dialogs/DeleteScheduledRevenueDialog";
 import {SingleRevenueForm} from "./revenue-table/single/SingleRevenueForm";
 import {ScheduledRevenueForm} from "./revenue-table/scheduled/ScheduledRevenueForm";
+import {TagForm} from "./tag/TagForm";
+import {DeleteTagDialog} from "./util/delete-conformation-dialogs/DeleteTagDialog";
 
 export const Modals = () => (
     <>
@@ -13,10 +15,12 @@ export const Modals = () => (
         <ScheduledExpenseForm/>
         <SingleRevenueForm/>
         <ScheduledRevenueForm/>
+        <TagForm/>
 
         <DeleteSingleExpenseDialog/>
         <DeleteScheduledExpenseDialog/>
         <DeleteSingleRevenueDialog/>
         <DeleteScheduledRevenueDialog/>
+        <DeleteTagDialog/>
     </>
 )

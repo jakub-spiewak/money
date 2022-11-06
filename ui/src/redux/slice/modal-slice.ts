@@ -3,7 +3,7 @@ import {
     ScheduledExpenseRequest,
     ScheduledRevenueRequest,
     SingleExpenseRequest,
-    SingleRevenueRequest
+    SingleRevenueRequest, TagRequest
 } from "../generated/redux-api";
 
 interface ModalState<T> {
@@ -16,7 +16,8 @@ interface ModalSliceState {
     SCHEDULED_EXPENSE: ModalState<ScheduledExpenseRequest>,
     SINGLE_EXPENSE: ModalState<SingleExpenseRequest>,
     SCHEDULED_REVENUE: ModalState<ScheduledRevenueRequest>,
-    SINGLE_REVENUE: ModalState<SingleRevenueRequest>
+    SINGLE_REVENUE: ModalState<SingleRevenueRequest>,
+    TAG: ModalState<TagRequest>
 }
 
 const modalInitialState = {isOpen: false}
@@ -25,7 +26,8 @@ export const initialState: ModalSliceState = {
     SCHEDULED_EXPENSE: modalInitialState,
     SINGLE_EXPENSE: modalInitialState,
     SCHEDULED_REVENUE: modalInitialState,
-    SINGLE_REVENUE: modalInitialState
+    SINGLE_REVENUE: modalInitialState,
+    TAG: modalInitialState
 }
 
 const modalSlice = createSlice({

@@ -53,8 +53,8 @@ export const ExpenseScreen = () => {
     return (
         <Box>
             <Box>
-                <CurrentDateComponent/>
                 <ExpenseScreenNavigation/>
+                <CurrentDateComponent/>
                 <Box
                     position={"relative"}
                     maxW={"32em"}

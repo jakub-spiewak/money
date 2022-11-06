@@ -16,8 +16,8 @@ export const RevenueTableScreen = () => {
 
     return (
         <>
-            <CurrentDateComponent/>
             <RevenueTableScreenNavigation/>
+            <CurrentDateComponent/>
             <Center
                 flexDirection={'column'}
                 gap={8}

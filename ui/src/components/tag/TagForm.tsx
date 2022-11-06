@@ -10,18 +10,19 @@ import {
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
-import {TagRequest} from "../../redux/generated/redux-api";
-import {FormModalStateType} from "../../utils/Hooks";
+import {TagRequest, useCreateTagMutation, useUpdateTagMutation} from "../../redux/generated/redux-api";
 import {SubmitButton} from "../util/controller/SubmitButton";
 import {NameField} from "../util/fields/NameField";
+import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import {sanitizeFormValues} from "../../utils/util";
+import {closeModal} from "../../redux/slice/modal-slice";
 
-interface Props {
-    state: FormModalStateType<TagRequest>
-    onSubmit: (tag: TagRequest) => Promise<void>,
-}
+export const TagForm = () => {
+    const {isOpen, value, id} = useAppSelector(state => state.modal.TAG)
+    const dispatch = useAppDispatch()
 
-export const TagForm = (props: Props) => {
-    const {state: {isOpen, close, value}, onSubmit: onSubmitFromProps} = props
+    const [createTag] = useCreateTagMutation()
+    const [updateTag] = useUpdateTagMutation()
 
     const {
         handleSubmit,
@@ -30,13 +31,19 @@ export const TagForm = (props: Props) => {
         reset
     } = useForm<TagRequest>()
 
+    const close = () => {
+        dispatch(closeModal("TAG"))
+    }
+
     const onSubmit = async (tag: TagRequest) => {
-        await onSubmitFromProps({...tag})
+        const request = sanitizeFormValues(tag)
+        if (id) await updateTag({id, tagRequest: request})
+        else await createTag({tagRequest: request})
         close()
     }
 
     useEffect(() => {
-        if (isOpen) reset(value?.request || {name: undefined})
+        if (isOpen) reset(value || {name: undefined})
     }, [reset, value, isOpen])
 
     return (

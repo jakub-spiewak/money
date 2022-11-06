@@ -1,56 +1,40 @@
-import {TagForm} from "./TagForm";
 import {TagTable} from "./TagTable";
-import {Center} from "@chakra-ui/react";
-import {useFormModalStateType} from "../../utils/Hooks";
 
-import {
-    TagRequest,
-    TagResponse,
-    useCreateTagMutation,
-    useDeleteTagMutation,
-    useReadTagQuery,
-    useUpdateTagMutation
-} from "../../redux/generated/redux-api";
-import { Navigation } from "../../App";
+import {TagResponse, useReadTagQuery,} from "../../redux/generated/redux-api";
+import {useAppDispatch} from "../../redux/hooks";
+import {openModal} from "../../redux/slice/modal-slice";
+import {askForDelete} from "../../redux/slice/delete-modal-slice";
+import {TagNavigation} from "./TagNavigation";
+import {VStack} from "@chakra-ui/react";
 
 export const TagScreen = () => {
-
-    const modal = useFormModalStateType<TagRequest>()
+    const dispatch = useAppDispatch()
 
     const {data, isLoading, isFetching} = useReadTagQuery()
-    const [createTag] = useCreateTagMutation()
-    const [updateTag] = useUpdateTagMutation()
-    const [deleteTag] = useDeleteTagMutation()
 
     const onEdit = (tag: TagResponse) => {
-        tag.id && modal.open({id: tag.id, request: tag})
+        dispatch(openModal({modal: "TAG", id: tag.id, value: tag}))
     }
 
     const onDelete = async (tag: TagResponse) => {
-        tag.id && await deleteTag({id: tag.id})
-    }
-
-    const onSubmit = async (tag: TagRequest) => {
-        if (modal.value?.id) await updateTag({id: modal.value.id, tagRequest: tag})
-        else await createTag({tagRequest: tag})
+        dispatch(askForDelete({type: "TAG", id: tag.id, name: tag.name}))
     }
 
     return (
         <>
-            <Navigation/>
-            <Center>
+            <TagNavigation/>
+            <VStack
+                justifyContent={"space-between"}
+                alignItems={"center"}
+            >
                 <TagTable
                     data={data || []}
-                    onAdd={modal.open}
+                    onAdd={() => dispatch(openModal({modal: "TAG"}))}
                     onEdit={onEdit}
                     onDelete={onDelete}
                     isLoading={isLoading || isFetching}
                 />
-            </Center>
-            <TagForm
-                state={modal}
-                onSubmit={onSubmit}
-            />
+            </VStack>
         </>
     )
 }

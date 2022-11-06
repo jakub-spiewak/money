@@ -31,8 +31,8 @@ export const RevenueScreen = () => {
 
     return (
         <Box>
-            <CurrentDateComponent/>
             <RevenueScreenNavigation/>
+            <CurrentDateComponent/>
             <Box
                 px={4}
                 pb={4}
