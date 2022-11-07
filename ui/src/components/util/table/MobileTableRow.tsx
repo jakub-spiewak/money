@@ -14,6 +14,7 @@ interface Props {
 export const MobileTableRow = (props: Props) => {
     const {name, amount, content, isOpen, onOpenToggle} = props
 
+
     return (
         <>
             <Tr>
@@ -24,11 +25,24 @@ export const MobileTableRow = (props: Props) => {
                 </Td>
                 <Td isNumeric>
                     <Fade in={!isOpen}>
-                        {/* @ts-ignore */}
-                        <AmountTableCell amount={isNaN(Number(amount)) ? amount : {type: "CONSTANT", data: amount}}/>
+                        <AmountTableCell
+                            /* @ts-ignore */
+                            amount={
+                            isNaN(Number(amount)) ?
+                                amount :
+                                {
+                                    type: "CONSTANT",
+                                    data: {value: amount}
+                                }
+                        }
+                        />
                     </Fade>
                 </Td>
-                <Td isNumeric>
+                <Td
+                    isNumeric
+                    maxW={"100vw !important"}
+                    overflow={"hidden"}
+                >
                     <IconButton
                         aria-label={'edit'}
                         icon={

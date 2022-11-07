@@ -42,7 +42,7 @@ export const ScheduledExpenseTable = (props: ExpenseTableProps<ScheduledExpenseR
             <Thead>
                 <TableHeading/>
             </Thead>
-            <Tbody>
+            <Tbody maxW={"100vw"}>
                 {isLoading && <LoadingDataTable size={6}/>}
                 {expenses.length === 0 && <NoDataTable size={6}/>}
                 {

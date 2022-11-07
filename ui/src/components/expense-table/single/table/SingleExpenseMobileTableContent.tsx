@@ -6,6 +6,7 @@ import {ExpenseTableContentProps} from "../../types";
 import {SingleExpenseResponse} from "../../../../redux/generated/redux-api";
 import {ExpenseParentTableCell} from "../../../util/table/ExpenseParentTableCell";
 import {MobileTableRow} from "../../../util/table/MobileTableRow";
+import {toCurrencyString} from "../../../../utils/util";
 
 export const SingleExpenseMobileTableContent = (props: ExpenseTableContentProps<SingleExpenseResponse>) => {
     const [currentItemId, setCurrentItemId] = useState<string>()
@@ -29,7 +30,7 @@ export const SingleExpenseMobileTableContent = (props: ExpenseTableContentProps<
                                         justifyContent={"space-between"}
                                         gap={8}
                                     >
-                                        <Heading>{expense.amount?.toLocaleString(undefined, {minimumFractionDigits: 2})}</Heading>
+                                        <Heading>{expense.name}</Heading>
                                         <ActionButtonsTableCell
                                             onEdit={() => onEdit(expense)}
                                             onDelete={() => onDelete(expense)}
@@ -39,8 +40,14 @@ export const SingleExpenseMobileTableContent = (props: ExpenseTableContentProps<
                                     <VStack
                                         gap={1}
                                         alignItems={"start"}
-                                        pt={4}
                                     >
+                                        <Heading
+                                            pt={2}
+                                            size={"md"}
+                                            fontWeight={"hairline"}
+                                        >
+                                            {toCurrencyString(expense.amount)}
+                                        </Heading>
                                         <HStack>
                                             <Text as={"b"}>
                                                 Parent expense:

@@ -1,15 +1,15 @@
-import {TableCaption, Tbody, Td, Tfoot, Th, Thead, Tr, VStack,} from "@chakra-ui/react";
+import {TableCaption, Tbody, Tfoot, Th, Thead, Tr, useBreakpointValue, VStack,} from "@chakra-ui/react";
 import {ScheduledRevenueResponse} from "../../../redux/generated/redux-api";
 import {LoadingDataTable} from "../../util/table/LoadingDataTable";
-import {ActionButtonsTableCell} from "../../util/table/ActionButtonsTableCell";
 import {SimpleTableProps} from "../../util/table/types";
 import {theme} from "../../../theme";
 import {SimpleTableContainer} from "../../util/table/SimpleTableContainer";
 import {NoDataTable} from "../../util/table/NoDataTable";
-import {DateRangeTableCell} from "../../util/table/DateRangeTableCell";
-import {AmountTableCell} from "../../util/table/AmountTableCell";
+import {useMemo} from "react";
+import {ScheduledRevenueMobileTableContent} from "./table/ScheduledRevenueMobileTableContent";
+import {ScheduledRevenueDesktopTableContent} from "./table/ScheduledRevenueDesktopTableContent";
 
-const TableHeadings = () => (
+const DesktopTableHeadings = () => (
     <Tr>
         <Th>Name</Th>
         <Th isNumeric>Amount</Th>
@@ -18,8 +18,21 @@ const TableHeadings = () => (
     </Tr>
 )
 
+const MobileTableHeadings = () => (
+    <Tr>
+        <Th>Name</Th>
+        <Th isNumeric>Amount</Th>
+        <Th isNumeric>Actions</Th>
+    </Tr>
+)
+
 export const ScheduledRevenueTable = (props: SimpleTableProps<ScheduledRevenueResponse>) => {
     const {isLoading, data, onEdit, onDelete} = props
+
+    const isMobile = useBreakpointValue({base: true, md: false}, {fallback: 'md'})
+
+    const TableContent = useMemo(() => isMobile ? ScheduledRevenueMobileTableContent : ScheduledRevenueDesktopTableContent, [isMobile])
+    const TableHeadings = useMemo(() => isMobile ? MobileTableHeadings : DesktopTableHeadings, [isMobile])
 
     return (
         <VStack width={["100vw", theme.breakpoints.md]}>
@@ -36,26 +49,11 @@ export const ScheduledRevenueTable = (props: SimpleTableProps<ScheduledRevenueRe
                             <LoadingDataTable size={5}/> :
                             data.length === 0 ?
                                 <NoDataTable size={5}/> :
-                                data.map((revenue, index) => {
-                                    return (
-                                        <Tr key={`revenue_${index}`}>
-                                            <Td>{revenue.name}</Td>
-                                            <Td isNumeric>
-                                                <AmountTableCell amount={revenue.amount}/>
-                                            </Td>
-                                            <Td>
-                                                <DateRangeTableCell date={revenue.date}/>
-                                            </Td>
-                                            <Td isNumeric>
-                                                <ActionButtonsTableCell
-                                                    onEdit={() => onEdit(revenue)}
-                                                    onDelete={() => onDelete(revenue)}
-                                                    name={revenue?.name || ''}
-                                                />
-                                            </Td>
-                                        </Tr>
-                                    )
-                                })
+                                <TableContent
+                                    data={data}
+                                    onEdit={onEdit}
+                                    onDelete={onDelete}
+                                />
                     }
                 </Tbody>
                 <Tfoot>

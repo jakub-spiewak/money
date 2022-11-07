@@ -1,6 +1,6 @@
 import {ScheduledExpenseResponse} from "../../../../redux/generated/redux-api";
 import {ActionButtonsTableCell} from "../../../util/table/ActionButtonsTableCell";
-import {Box, Heading, HStack, VStack} from "@chakra-ui/react";
+import {Box, Heading, HStack, Text, VStack} from "@chakra-ui/react";
 import {AmountTableCell} from "../../../util/table/AmountTableCell";
 import {ExpenseTableTagsCell} from "../../ExpenseTableTagsCell";
 import {Fragment, useState} from "react";
@@ -31,7 +31,7 @@ export const ScheduledExpenseMobileTableContent = (props: ExpenseTableContentPro
                                         gap={8}
                                     >
                                         <Heading>
-                                            <AmountTableCell amount={expense.amount}/>
+                                            <Text>{expense.name}</Text>
                                         </Heading>
                                         <ActionButtonsTableCell
                                             onEdit={() => onEdit(expense)}
@@ -43,6 +43,13 @@ export const ScheduledExpenseMobileTableContent = (props: ExpenseTableContentPro
                                         alignItems={"start"}
                                         gap={3}
                                     >
+                                        <Heading
+                                            pt={2}
+                                            size={"md"}
+                                            fontWeight={"hairline"}
+                                        >
+                                            <AmountTableCell amount={expense.amount}/>
+                                        </Heading>
                                         <ExpenseTableTagsCell tags={expense.tags || []}/>
                                         <VStack
                                             gap={1}
