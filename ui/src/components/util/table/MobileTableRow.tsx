@@ -2,6 +2,7 @@ import {Amount} from "../../../redux/generated/redux-api";
 import {Collapse, Fade, IconButton, Td, Tr} from "@chakra-ui/react";
 import {AmountTableCell} from "./AmountTableCell";
 import {ChevronDownIcon} from "@chakra-ui/icons";
+import {Fragment} from "react";
 
 interface Props {
     name: string,
@@ -31,7 +32,7 @@ export const MobileTableRow = (props: Props) => {
 
 
     return (
-        <>
+        <Fragment>
             <Tr>
                 <Td>
                     <Fade in={!isOpen}>
@@ -77,6 +78,6 @@ export const MobileTableRow = (props: Props) => {
                     </Collapse>
                 </Td>
             </Tr>
-        </>
+        </Fragment>
     )
 }
