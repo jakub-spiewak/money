@@ -2,13 +2,15 @@ import {Box, Flex, IconButton} from "@chakra-ui/react";
 import {AddIcon} from "@chakra-ui/icons";
 import {useNavigate} from "react-router";
 
-interface NavigationIcon {
+export interface NavigationIcon {
     icon: JSX.Element,
     to: string
 }
 
+export type NavigationIconsType = [NavigationIcon, NavigationIcon, NavigationIcon, NavigationIcon]
+
 interface Props {
-    icons: [NavigationIcon, NavigationIcon, NavigationIcon, NavigationIcon],
+    icons: NavigationIconsType,
     centerItem: JSX.Element
 }
 

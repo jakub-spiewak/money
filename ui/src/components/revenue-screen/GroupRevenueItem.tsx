@@ -49,9 +49,9 @@ export const GroupRevenueItem = (props: Props) => {
                     flexDirection={"column"}
                 >
                     <Text fontWeight={"bold"}>{revenue.name}</Text>
-                    <Text fontWeight={"hairline"}>
+                    <Box fontWeight={"hairline"}>
                         <AmountTableCell amount={revenue.amount}/>
-                    </Text>
+                    </Box>
                 </Flex>
                 <Spacer/>
                 <Menu>
@@ -130,7 +130,10 @@ export const GroupRevenueItem = (props: Props) => {
                     ?.sort((o1, o2) => new Date(o1.date).getTime() - new Date(o2.date).getTime())
                     ?.map((singleRevenue: SingleRevenueResponse) => {
                         return (
-                            <SingleRevenueItem revenue={singleRevenue}/>
+                            <SingleRevenueItem
+                                key={`single_revenue_item_${singleRevenue.id}`}
+                                revenue={singleRevenue}
+                            />
                         )
                     })
             }

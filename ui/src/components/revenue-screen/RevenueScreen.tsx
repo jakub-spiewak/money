@@ -2,7 +2,6 @@ import {useAppSelector} from "../../redux/hooks";
 import {ScheduledRevenueResponse, useReadScheduledRevenueQuery} from "../../redux/generated/redux-api";
 import {Box, List, ListItem} from "@chakra-ui/react";
 import {GroupRevenueItem} from "./GroupRevenueItem";
-import {RevenueScreenNavigation} from "./RevenueScreenNavigation";
 import {CurrentDateComponent} from "../util/CurrentDateComponent";
 
 export const RevenueScreen = () => {
@@ -16,7 +15,6 @@ export const RevenueScreen = () => {
 
     return (
         <Box>
-            <RevenueScreenNavigation/>
             <CurrentDateComponent/>
             <Box
                 px={4}
@@ -27,7 +25,10 @@ export const RevenueScreen = () => {
                     {
                         scheduledRevenuesList?.map((scheduledRevenue: ScheduledRevenueResponse) => {
                             return (
-                                <ListItem dropShadow={"2xl"}>
+                                <ListItem
+                                    key={`list_item_${scheduledRevenue.id}`}
+                                    dropShadow={"2xl"}
+                                >
                                     <GroupRevenueItem revenue={scheduledRevenue}/>
                                 </ListItem>
                             )

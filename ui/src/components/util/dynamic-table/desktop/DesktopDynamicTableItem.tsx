@@ -30,7 +30,7 @@ export const DesktopDynamicTableItem = (props: Props) => {
         }
 
         case "name": {
-            return <Heading>{value}</Heading>
+            return <Heading size={"md"}>{value}</Heading>
         }
 
         case "date": {

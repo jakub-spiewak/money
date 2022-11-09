@@ -3,7 +3,6 @@ import {theme} from "../../theme";
 import {CurrentDateComponent} from "../util/CurrentDateComponent";
 import {useAppDispatch} from "../../redux/hooks";
 import {openModal} from "../../redux/slice/modal-slice";
-import {ExpenseTableScreenNavigation} from "./ExpenseTableScreenNavigation";
 import {ScheduledExpenseTable} from "./scheduled/ScheduledExpenseTable";
 import {SingleExpenseTable} from "./single/SingleExpenseTable";
 
@@ -12,7 +11,6 @@ export const ExpenseTableScreen = () => {
 
     return (
         <>
-            <ExpenseTableScreenNavigation/>
             <CurrentDateComponent/>
             <Center
                 flexDirection={'column'}

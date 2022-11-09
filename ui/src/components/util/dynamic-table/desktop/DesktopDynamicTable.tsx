@@ -42,7 +42,10 @@ export const DesktopDynamicTable = (props: Props) => {
                         {columns.map((columnKey) => {
                             const {isNumeric, name} = DynamicTableColumnNames[columnKey]
                             return (
-                                <Th isNumeric={isNumeric}>{name}</Th>
+                                <Th
+                                    key={`table_header_${name}`}
+                                    isNumeric={isNumeric}
+                                >{name}</Th>
                             )
                         })}
                         <Th isNumeric>Actions</Th>
@@ -52,12 +55,15 @@ export const DesktopDynamicTable = (props: Props) => {
                     {
                         data.map((item) => {
                             return (
-                                <Tr>
+                                <Tr key={`table_row_${item.id}`}>
                                     {
                                         columns.map((columnKey) => {
                                             const {isNumeric} = DynamicTableColumnNames[columnKey]
                                             return (
-                                                <Td isNumeric={isNumeric}>
+                                                <Td
+                                                    key={`table_data_${columnKey}`}
+                                                    isNumeric={isNumeric}
+                                                >
                                                     <DesktopDynamicTableItem
                                                         tableValue={item}
                                                         tableKey={columnKey}

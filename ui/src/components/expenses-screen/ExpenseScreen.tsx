@@ -10,7 +10,6 @@ import {Box, Divider, List, ListItem, Text} from "@chakra-ui/react";
 import {Doughnut} from "react-chartjs-2";
 import {toCurrencyString} from "../../utils/util";
 import {GroupExpenseItem} from "./GroupExpenseItem";
-import {ExpenseScreenNavigation} from "./ExpenseScreenNavigation";
 import {CurrentDateComponent} from "../util/CurrentDateComponent";
 import {SingleExpenseItem} from "./SingleExpenseItem";
 
@@ -50,13 +49,13 @@ export const ExpenseScreen = () => {
     return (
         <Box>
             <Box>
-                <ExpenseScreenNavigation/>
                 <CurrentDateComponent/>
                 <Box
                     position={"relative"}
                     maxW={"32em"}
                     px={8}
                     mb={8}
+                    mx={"auto"}
                 >
                     <Doughnut
                         data={{

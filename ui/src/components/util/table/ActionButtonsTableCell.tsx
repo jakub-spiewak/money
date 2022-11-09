@@ -13,7 +13,7 @@ export const ActionButtonsTableCell = (props: Props) => {
     } = props
 
     return (
-        <HStack>
+        <HStack justifyContent={"flex-end"}>
             <IconButton
                 aria-label={'edit'}
                 icon={<EditIcon/>}
