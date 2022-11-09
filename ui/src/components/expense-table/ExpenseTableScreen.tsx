@@ -1,16 +1,14 @@
 import {Button, Center, HStack} from "@chakra-ui/react";
-import {ScheduledExpense} from "./scheduled/ScheduledExpense";
-import {SingleExpense} from "./single/SingleExpense";
 import {theme} from "../../theme";
 import {CurrentDateComponent} from "../util/CurrentDateComponent";
-import {useState} from "react";
 import {useAppDispatch} from "../../redux/hooks";
 import {openModal} from "../../redux/slice/modal-slice";
 import {ExpenseTableScreenNavigation} from "./ExpenseTableScreenNavigation";
+import {ScheduledExpenseTable} from "./scheduled/ScheduledExpenseTable";
+import {SingleExpenseTable} from "./single/SingleExpenseTable";
 
 export const ExpenseTableScreen = () => {
     const dispatch = useAppDispatch()
-    const [currentExpense, setCurrentExpense] = useState<string>()
 
     return (
         <>
@@ -21,12 +19,8 @@ export const ExpenseTableScreen = () => {
                 gap={8}
                 pt={8}
             >
-                <ScheduledExpense
-                    currentExpense={currentExpense}
-                />
-                <SingleExpense
-                    onExpenseClick={setCurrentExpense}
-                />
+                <ScheduledExpenseTable/>
+                <SingleExpenseTable/>
                 <HStack
                     flexDirection={"row"}
                     justifyContent={"end"}

@@ -1,8 +1,8 @@
 import {Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
-import {ALL_POSSIBLE_COLUMNS, AnyResourceResponseKey, DynamicTableColumnNames} from "../types";
+import {ALL_POSSIBLE_COLUMNS, AnyApiResource, AnyResourceResponseKey, DynamicTableColumnNames} from "../types";
 import {ActionButtonsTableCell} from "../../table/ActionButtonsTableCell";
 import {useMemo} from "react";
-import {AnyResourceResponse, ResourceType} from "../../../../redux/slice/types";
+import {ResourceType} from "../../../../redux/slice/types";
 import {useAppDispatch} from "../../../../redux/hooks";
 import {askForDelete} from "../../../../redux/slice/delete-modal-slice";
 import {theme} from "../../../../theme";
@@ -11,21 +11,21 @@ import {mapResponseToRequest} from "../util";
 import {DesktopDynamicTableItem} from "./DesktopDynamicTableItem";
 
 interface Props {
-    data: AnyResourceResponse[],
+    resource: AnyApiResource,
     resourceType: ResourceType,
 }
 
 export const DesktopDynamicTable = (props: Props) => {
-    const {data, resourceType} = props
+    const {resource: {data}, resourceType} = props
 
     const dispatch = useAppDispatch()
 
     const columns: AnyResourceResponseKey[] = useMemo(() => {
         const result: AnyResourceResponseKey[] = []
         ALL_POSSIBLE_COLUMNS.forEach((column) => {
-            data.forEach((dataValue) => {
+            data.forEach((item) => {
                 // @ts-ignore
-                if (!result.includes(column) && dataValue[column]) {
+                if (!result.includes(column) && item[column]) {
                     result.push(column)
                 }
             })
@@ -50,7 +50,7 @@ export const DesktopDynamicTable = (props: Props) => {
                 </Thead>
                 <Tbody>
                     {
-                        data.map((value) => {
+                        data.map((item) => {
                             return (
                                 <Tr>
                                     {
@@ -59,7 +59,7 @@ export const DesktopDynamicTable = (props: Props) => {
                                             return (
                                                 <Td isNumeric={isNumeric}>
                                                     <DesktopDynamicTableItem
-                                                        tableValue={value}
+                                                        tableValue={item}
                                                         tableKey={columnKey}
                                                     />
                                                 </Td>
@@ -71,15 +71,15 @@ export const DesktopDynamicTable = (props: Props) => {
                                             onEdit={() => {
                                                 dispatch(openModal({
                                                     modal: resourceType,
-                                                    value: mapResponseToRequest(resourceType, value),
-                                                    id: value.id
+                                                    value: mapResponseToRequest(resourceType, item),
+                                                    id: item.id
                                                 }))
                                             }}
                                             onDelete={() => {
                                                 dispatch(askForDelete({
                                                     type: resourceType,
-                                                    name: value.name,
-                                                    id: value.id
+                                                    name: item.name,
+                                                    id: item.id
                                                 }))
                                             }}
                                         />

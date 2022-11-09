@@ -1,8 +1,8 @@
 import {CurrentDateComponent} from "../util/CurrentDateComponent";
 import {Center} from "@chakra-ui/react";
-import {ScheduledRevenue} from "./scheduled/ScheduledRevenue";
-import {SingleRevenue} from "./single/SingleRevenue";
 import {RevenueTableScreenNavigation} from "./RevenueTableScreenNavigation";
+import {SingleRevenueTable} from "./single/SingleRevenueTable";
+import {ScheduledRevenueTable} from "./scheduled/ScheduledRevenueTable";
 
 export const RevenueTableScreen = () => {
     return (
@@ -14,8 +14,8 @@ export const RevenueTableScreen = () => {
                 gap={8}
                 pt={8}
             >
-                <ScheduledRevenue/>
-                <SingleRevenue/>
+                <ScheduledRevenueTable/>
+                <SingleRevenueTable/>
             </Center>
         </>
     )

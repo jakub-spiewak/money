@@ -14,14 +14,14 @@ export const AmountTableCell = (props: Props) => {
     const {type, data} = amount
 
     if (type === "CONSTANT") return (
-        <text>{toCurrencyString(data.value)}</text>
+        <span>{toCurrencyString(data.value)}</span>
     )
 
     if (type === "RANGE") return (
         <div>
-            <text>{toCurrencyString(data.min)}</text>
+            <span>{toCurrencyString(data.min)}</span>
             <span> - </span>
-            <text>{toCurrencyString(data.max)}</text>
+            <span>{toCurrencyString(data.max)}</span>
         </div>
     )
 

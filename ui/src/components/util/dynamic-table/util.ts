@@ -5,6 +5,9 @@ import {
     SingleExpenseResponse,
     SingleRevenueResponse
 } from "../../../redux/generated/redux-api";
+import {AnyApiResource} from "./types";
+import {UseQueryHookResult} from "@reduxjs/toolkit/dist/query/react/buildHooks";
+import {QueryDefinition} from "@reduxjs/toolkit/query";
 
 export function mapResponseToRequest(resourceType: ResourceType, value: AnyResourceResponse): AnyResourceRequest {
     switch (resourceType) {
@@ -33,4 +36,9 @@ export function mapResponseToRequest(resourceType: ResourceType, value: AnyResou
             }
     }
 }
+
+export const mapResourceFromHook = (value: UseQueryHookResult<QueryDefinition<any, any, any, any>>): AnyApiResource => ({
+    data: value.data || [],
+    status: value
+})
 

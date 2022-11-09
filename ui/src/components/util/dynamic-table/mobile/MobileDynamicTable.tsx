@@ -1,16 +1,17 @@
 import {MobileDynamicTableItem} from "./MobileDynamicTableItem";
 import {useState} from "react";
-import {AnyResourceResponse, ResourceType} from "../../../../redux/slice/types";
+import {ResourceType} from "../../../../redux/slice/types";
 import {Table, TableContainer, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
 import {theme} from "../../../../theme";
+import {AnyApiResource} from "../types";
 
 interface Props {
-    data: AnyResourceResponse[],
+    resource: AnyApiResource,
     resourceType: ResourceType
 }
 
 export const MobileDynamicTable = (props: Props) => {
-    const {data, resourceType} = props
+    const {resource: {data}, resourceType} = props
     const state = useState<string>()
 
     return (
@@ -28,6 +29,7 @@ export const MobileDynamicTable = (props: Props) => {
                         data.map((item) => {
                             return (
                                 <MobileDynamicTableItem
+                                    key={`dynamic_table_${item.id}`}
                                     value={item}
                                     state={state}
                                     resourceType={resourceType}

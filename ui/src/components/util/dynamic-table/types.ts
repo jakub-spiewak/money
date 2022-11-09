@@ -27,4 +27,10 @@ export const ALL_POSSIBLE_COLUMNS: AnyResourceResponseKey[] = [
     "tags"
 ]
 
-export type A = AnyResourceResponse & RequestStatusFlags
+export interface ApiResource<T> {
+    data: T[],
+    status: Omit<RequestStatusFlags, 'status'>
+}
+
+export interface AnyApiResource extends ApiResource<AnyResourceResponse> {
+}

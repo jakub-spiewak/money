@@ -4,12 +4,16 @@ const currentDate = new Date()
 
 interface CurrentDateState {
     month: number,
-    year: number
+    year: number,
+    value: string
 }
+
+const createStringValue = (month: number, year: number): string => `${year}-${month <= 9 ? `0${month}` : month}`
 
 export const initialState: CurrentDateState = {
     month: currentDate.getUTCMonth() + 1,
-    year: currentDate.getUTCFullYear()
+    year: currentDate.getUTCFullYear(),
+    value: createStringValue(currentDate.getUTCMonth() + 1, currentDate.getUTCFullYear())
 }
 
 const currentDateSlice = createSlice({

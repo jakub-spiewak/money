@@ -1,4 +1,4 @@
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import {useAppSelector} from "../../redux/hooks";
 import {
     ScheduledExpenseResponse,
     SingleExpenseResponse,
@@ -29,10 +29,7 @@ const chartColors = [
 const getColor = (index: number) => chartColors[index % chartColors.length]
 
 export const ExpenseScreen = () => {
-    const {year, month} = useAppSelector(state => state.currentDate)
-    const dispatch = useAppDispatch()
-
-    const currentMonthStr = `${year}-${month <= 9 ? `0${month}` : month}`
+    const currentMonthStr = useAppSelector(state => state.currentDate.value)
 
     const {data} = useSummaryQuery({month: currentMonthStr})
 

@@ -1,24 +1,25 @@
 import {useBreakpointValue} from "@chakra-ui/react";
 import {MobileDynamicTable} from "./mobile/MobileDynamicTable";
 import {DesktopDynamicTable} from "./desktop/DesktopDynamicTable";
-import {AnyResourceResponse, ResourceType} from "../../../redux/slice/types";
+import {ResourceType} from "../../../redux/slice/types";
+import {AnyApiResource} from "./types";
 
 interface Props {
-    data: AnyResourceResponse[],
+    resource: AnyApiResource,
     resourceType: ResourceType
 }
 
 export const DynamicTable = (props: Props) => {
-    const {data, resourceType} = props
+    const {resource, resourceType} = props
     const isMobile = useBreakpointValue({base: true, md: false}, {fallback: 'md'})
 
     return isMobile ?
         <MobileDynamicTable
-            data={data}
+            resource={resource}
             resourceType={resourceType}
         /> :
         <DesktopDynamicTable
-            data={data}
+            resource={resource}
             resourceType={resourceType}
         />
 }
