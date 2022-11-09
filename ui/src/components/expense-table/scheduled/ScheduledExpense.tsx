@@ -1,8 +1,4 @@
-import {
-    ScheduledExpenseResponse,
-    useDeleteScheduledExpenseMutation,
-    useReadScheduledExpenseQuery
-} from "../../../redux/generated/redux-api";
+import {useDeleteScheduledExpenseMutation, useReadScheduledExpenseQuery} from "../../../redux/generated/redux-api";
 import {Center} from "@chakra-ui/react";
 import {ScheduledExpenseTable} from "./ScheduledExpenseTable";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
@@ -25,7 +21,9 @@ export const ScheduledExpense = (props: Props) => {
     } = useReadScheduledExpenseQuery({month: `${year}-${month <= 9 ? `0${month}` : month}`})
     const [deleteExpense] = useDeleteScheduledExpenseMutation()
 
-    const onEdit = (expense: ScheduledExpenseResponse) => {
+    const onEdit = (id: string) => {
+        const expense = data?.find((value) => value.id === id)
+        if (!expense) return
         dispatch(
             openModal({
                 modal: "SCHEDULED_EXPENSE",
@@ -40,15 +38,15 @@ export const ScheduledExpense = (props: Props) => {
         )
     }
 
-    const onDelete = async (expense: ScheduledExpenseResponse) => {
-        await deleteExpense({id: expense.id})
+    const onDelete = async (id: string) => {
+        await deleteExpense({id})
     }
 
 
     return (
         <Center>
             <ScheduledExpenseTable
-                expenses={data || []}
+                items={data || []}
                 onEdit={onEdit}
                 onDelete={onDelete}
                 isLoading={isLoading && isFetching}

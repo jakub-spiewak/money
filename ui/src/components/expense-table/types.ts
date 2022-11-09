@@ -1,7 +1,7 @@
 export interface ExpenseTableContentProps<T> {
-    expenses: T[],
-    onEdit: (expense: T) => void,
-    onDelete: (expense: T) => Promise<void>
+    items: T[],
+    onEdit: (id: string) => void,
+    onDelete: (id: string) => Promise<void>
 }
 
 export interface ExpenseTableProps<T> extends ExpenseTableContentProps<T>{

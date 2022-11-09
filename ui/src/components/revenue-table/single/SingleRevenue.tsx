@@ -50,7 +50,6 @@ export const SingleRevenue = () => {
                     isLoading={isLoading || isFetching}
                 />
             </Center>
-            <SingleRevenueForm/>
         </>
     )
 }

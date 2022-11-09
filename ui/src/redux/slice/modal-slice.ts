@@ -1,10 +1,5 @@
 import {createSlice, Draft, PayloadAction} from "@reduxjs/toolkit";
-import {
-    ScheduledExpenseRequest,
-    ScheduledRevenueRequest,
-    SingleExpenseRequest,
-    SingleRevenueRequest, TagRequest
-} from "../generated/redux-api";
+import {ResourceType} from "./types";
 
 interface ModalState<T> {
     isOpen: boolean,
@@ -12,13 +7,7 @@ interface ModalState<T> {
     id?: string
 }
 
-interface ModalSliceState {
-    SCHEDULED_EXPENSE: ModalState<ScheduledExpenseRequest>,
-    SINGLE_EXPENSE: ModalState<SingleExpenseRequest>,
-    SCHEDULED_REVENUE: ModalState<ScheduledRevenueRequest>,
-    SINGLE_REVENUE: ModalState<SingleRevenueRequest>,
-    TAG: ModalState<TagRequest>
-}
+type ModalSliceState = Record<ResourceType | "TAG", ModalState<any>>
 
 const modalInitialState = {isOpen: false}
 

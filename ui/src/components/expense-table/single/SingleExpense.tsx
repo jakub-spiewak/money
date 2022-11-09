@@ -1,10 +1,6 @@
 import {SingleExpenseTable} from "./SingleExpenseTable";
 import {Center} from "@chakra-ui/react";
-import {
-    SingleExpenseResponse,
-    useDeleteSingleExpenseMutation,
-    useReadSingleExpenseQuery
-} from "../../../redux/generated/redux-api";
+import {useDeleteSingleExpenseMutation, useReadSingleExpenseQuery} from "../../../redux/generated/redux-api";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {openModal} from "../../../redux/slice/modal-slice";
 
@@ -25,7 +21,9 @@ export const SingleExpense = (props: Props) => {
     } = useReadSingleExpenseQuery({month: `${year}-${month <= 9 ? `0${month}` : month}`})
     const [deleteExpense] = useDeleteSingleExpenseMutation()
 
-    const onEdit = (expense: SingleExpenseResponse) => {
+    const onEdit = (id: string) => {
+        const expense = data?.find(value => value.id === id)
+        if (!expense) return
         dispatch(
             openModal({
                 modal: "SINGLE_EXPENSE",
@@ -41,14 +39,14 @@ export const SingleExpense = (props: Props) => {
         )
     }
 
-    const onDelete = async (expense: SingleExpenseResponse) => {
-        await deleteExpense({id: expense.id})
+    const onDelete = async (id: string) => {
+        await deleteExpense({id})
     }
 
     return (
         <Center>
             <SingleExpenseTable
-                expenses={data || []}
+                items={data || []}
                 onEdit={onEdit}
                 onDelete={onDelete}
                 isLoading={isLoading && isFetching}

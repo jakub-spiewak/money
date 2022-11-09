@@ -1,16 +1,23 @@
 import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {Box, IconButton, useDisclosure} from "@chakra-ui/react";
-import {DeleteAlertDialog} from "../DeleteAlertDialog";
 
 interface Props {
     onEdit: () => void,
-    onDelete: () => Promise<void>,
-    name: string,
+    onDelete: () => void,
+    // name: string,
 }
 
 export const ActionButtonsTableCell = (props: Props) => {
-    const {onEdit, onDelete, name} = props
-    const {onClose, isOpen, onOpen} = useDisclosure()
+    const {
+        onEdit,
+        // onDelete,
+        // name
+    } = props
+    const {
+        // onClose,
+        // isOpen,
+        onOpen
+    } = useDisclosure()
     return (
         <>
             <Box>
@@ -28,12 +35,12 @@ export const ActionButtonsTableCell = (props: Props) => {
                     onClick={onOpen}
                 />
             </Box>
-            <DeleteAlertDialog
-                isOpen={isOpen}
-                onClose={onClose}
-                onYes={onDelete}
-                name={name}
-            />
+            {/*<DeleteAlertDialog*/}
+            {/*    isOpen={isOpen}*/}
+            {/*    onClose={onClose}*/}
+            {/*    onYes={onDelete}*/}
+            {/*    name={name}*/}
+            {/*/>*/}
         </>
     )
 }

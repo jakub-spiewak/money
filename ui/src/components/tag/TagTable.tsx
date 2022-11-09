@@ -40,7 +40,6 @@ export const TagTable = (props: SimpleTableProps<TagResponse>) => {
                                                 <ActionButtonsTableCell
                                                     onEdit={() => onEdit(tag)}
                                                     onDelete={() => onDelete(tag)}
-                                                    name={tag.name || ''}
                                                 />
                                             </Td>
                                         </Tr>

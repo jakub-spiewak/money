@@ -5,10 +5,25 @@ import {ChevronDownIcon} from "@chakra-ui/icons";
 
 interface Props {
     name: string,
-    amount: Amount | number,
+    amount?: Amount | number,
     isOpen: boolean,
     onOpenToggle: () => void,
     content: JSX.Element,
+}
+
+export const AnyAmountComponent = (props: { amount: number | Amount }) => {
+    const {amount} = props
+
+    const data: Amount = isNaN(Number(amount)) ? amount as Amount : {
+        type: "CONSTANT",
+        data: {
+            value: amount as number
+        }
+    }
+
+    return (
+        <AmountTableCell amount={data}/>
+    )
 }
 
 export const MobileTableRow = (props: Props) => {
@@ -23,21 +38,13 @@ export const MobileTableRow = (props: Props) => {
                         {name}
                     </Fade>
                 </Td>
-                <Td isNumeric>
-                    <Fade in={!isOpen}>
-                        <AmountTableCell
-                            /* @ts-ignore */
-                            amount={
-                            isNaN(Number(amount)) ?
-                                amount :
-                                {
-                                    type: "CONSTANT",
-                                    data: {value: amount}
-                                }
-                        }
-                        />
-                    </Fade>
-                </Td>
+                {amount &&
+                    <Td isNumeric>
+                        <Fade in={!isOpen}>
+                            <AnyAmountComponent amount={amount}/>
+                        </Fade>
+                    </Td>
+                }
                 <Td
                     isNumeric
                     maxW={"100vw !important"}

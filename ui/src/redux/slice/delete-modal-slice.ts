@@ -1,4 +1,5 @@
 import {createSlice, Draft, PayloadAction} from "@reduxjs/toolkit";
+import {ResourceType} from "./types";
 
 interface DeleteModalState {
     isOpen: boolean,
@@ -6,13 +7,7 @@ interface DeleteModalState {
     name: string
 }
 
-interface DeleteModalSliceState {
-    SCHEDULED_EXPENSE: DeleteModalState,
-    SINGLE_EXPENSE: DeleteModalState,
-    SCHEDULED_REVENUE: DeleteModalState,
-    SINGLE_REVENUE: DeleteModalState,
-    TAG: DeleteModalState
-}
+type DeleteModalSliceState = Record<ResourceType | "TAG", DeleteModalState>
 
 const deleteModalInitialState = {isOpen: false, id: "", name: ""}
 

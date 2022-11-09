@@ -6,7 +6,7 @@ import JSX = jsx.JSX;
 
 interface Props {
     date?: DateRange
-    emptyDateComponent?: JSX.Element
+    emptyDateComponent?: JSX.Element | null
 }
 
 export const DateRangeTableCell = (props: Props): JSX.Element => {
