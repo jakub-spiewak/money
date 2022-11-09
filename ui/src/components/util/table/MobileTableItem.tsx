@@ -48,9 +48,8 @@ export const MobileTableItem = (props: Props) => {
                 >
                     <HStack
                         justifyContent={"space-between"}
-                        w={"full"}
                     >
-                        <Heading>{name}</Heading>
+                        <Text>{name}</Text>
                         <ActionButtonsTableCell
                             onEdit={() => onEdit()}
                             onDelete={() => onDelete()}
@@ -67,6 +66,5 @@ export const MobileTableItem = (props: Props) => {
                 </VStack>
             }
         />
-
     );
 };

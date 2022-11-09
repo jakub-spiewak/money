@@ -1,5 +1,5 @@
 import {Amount} from "../../../redux/generated/redux-api";
-import {Collapse, Fade, IconButton, Td, Tr} from "@chakra-ui/react";
+import {Collapse, Fade, IconButton, Td, Text, Tr} from "@chakra-ui/react";
 import {AmountTableCell} from "./AmountTableCell";
 import {ChevronDownIcon} from "@chakra-ui/icons";
 import {Fragment} from "react";
@@ -33,10 +33,12 @@ export const MobileTableRow = (props: Props) => {
 
     return (
         <Fragment>
-            <Tr>
-                <Td>
+            <Tr maxW={"100vw"}>
+                <Td whiteSpace={"break-spaces"}>
                     <Fade in={!isOpen}>
-                        {name}
+                        <Text>
+                            {name}
+                        </Text>
                     </Fade>
                 </Td>
                 {amount &&
@@ -48,7 +50,6 @@ export const MobileTableRow = (props: Props) => {
                 }
                 <Td
                     isNumeric
-                    maxW={"100vw !important"}
                     overflow={"hidden"}
                 >
                     <IconButton
@@ -65,10 +66,11 @@ export const MobileTableRow = (props: Props) => {
                     />
                 </Td>
             </Tr>
-            <Tr>
+            <Tr maxW={"100vw"}>
                 <Td
                     py={0}
                     colSpan={3}
+                    whiteSpace={"break-spaces"}
                 >
                     <Collapse
                         animateOpacity
