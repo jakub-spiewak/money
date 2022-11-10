@@ -27,13 +27,6 @@ class ScheduledExpenseService(
         repository.findAllIntersects(month.atDay(1), month.atEndOfMonth()).flatMap { createResponse(it, month) }
             .sort { o1, o2 -> o2.amount.avg().compareTo(o1.amount.avg()) }
 
-//    fun readById(id: ObjectId): Mono<ScheduledExpenseResponse> = repository.findById(id).flatMap {
-//        createResponse(
-//            it,
-//            YearMonth.now()
-//        )
-//    }
-
     fun create(request: ScheduledExpenseRequest): Mono<Unit> =
         repository.save(mapper.fromRequestToDocument(request)).map { }
 

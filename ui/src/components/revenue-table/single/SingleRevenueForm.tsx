@@ -64,7 +64,7 @@ export const SingleRevenueForm = () => {
             isOpen={isOpen}
             onClose={close}
         >
-            <ModalOverlay/>
+            <ModalOverlay backdropFilter={"blur(3px)"}/>
             <ModalContent>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <ModalHeader>Add revenue</ModalHeader>

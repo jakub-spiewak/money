@@ -13,6 +13,7 @@ import {DesktopDynamicTableItem} from "./DesktopDynamicTableItem";
 interface Props {
     resource: AnyApiResource,
     resourceType: ResourceType,
+    name?: string,
 }
 
 export const DesktopDynamicTable = (props: Props) => {

@@ -211,12 +211,7 @@ const injectedRtkApi = api
           url: `/summary`,
           params: { month: queryArg.month },
         }),
-        providesTags: [
-          "summary",
-          "scheduled_revenue",
-          "scheduled_expense",
-          "tag",
-        ],
+        providesTags: ["summary", "scheduled_expense", "tag", "expense"],
       }),
       analyze: build.query<AnalyzeApiResponse, AnalyzeApiArg>({
         query: () => ({ url: `/analyze` }),

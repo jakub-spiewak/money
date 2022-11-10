@@ -12,6 +12,7 @@ export const SingleRevenueTable = () => {
         <DynamicTable
             resourceType={"SINGLE_REVENUE"}
             resource={mapResourceFromHook(resource)}
+            name={"Single revenue"}
         />
     )
 }

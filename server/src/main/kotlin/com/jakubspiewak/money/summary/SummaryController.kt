@@ -1,7 +1,7 @@
 package com.jakubspiewak.money.summary
 
 import com.jakubspiewak.money.expense.scheduled.ScheduledExpenseController
-import com.jakubspiewak.money.revenue.scheduled.ScheduledRevenueController
+import com.jakubspiewak.money.expense.single.SingleExpenseController
 import com.jakubspiewak.money.tag.TagController
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.format.annotation.DateTimeFormat
@@ -13,7 +13,7 @@ import java.time.YearMonth
 
 @Tag(name = SummaryController.TAG)
 @Tag(name = ScheduledExpenseController.TAG)
-@Tag(name = ScheduledRevenueController.TAG)
+@Tag(name = SingleExpenseController.TAG)
 @Tag(name = TagController.TAG)
 @RequestMapping("/summary")
 @RestController

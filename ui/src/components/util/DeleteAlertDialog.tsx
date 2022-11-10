@@ -32,7 +32,7 @@ export const DeleteAlertDialog = (props: DeleteAlertDialogProps) => {
             leastDestructiveRef={cancelRef}
             onClose={onClose}
         >
-            <AlertDialogOverlay>
+            <AlertDialogOverlay backdropFilter={"blur(3px)"}>
                 <AlertDialogContent>
                     <AlertDialogHeader
                         fontSize='lg'

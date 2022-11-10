@@ -6,20 +6,23 @@ import {AnyApiResource} from "./types";
 
 interface Props {
     resource: AnyApiResource,
-    resourceType: ResourceType
+    resourceType: ResourceType,
+    name?: string
 }
 
 export const DynamicTable = (props: Props) => {
-    const {resource, resourceType} = props
+    const {resource, resourceType, name} = props
     const isMobile = useBreakpointValue({base: true, md: false}, {fallback: 'md'})
 
     return isMobile ?
         <MobileDynamicTable
             resource={resource}
             resourceType={resourceType}
+            name={name}
         /> :
         <DesktopDynamicTable
             resource={resource}
             resourceType={resourceType}
+            name={name}
         />
 }

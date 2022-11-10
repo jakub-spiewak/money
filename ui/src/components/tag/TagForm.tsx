@@ -51,7 +51,7 @@ export const TagForm = () => {
             isOpen={isOpen}
             onClose={close}
         >
-            <ModalOverlay/>
+            <ModalOverlay backdropFilter={"blur(3px)"}/>
             <ModalContent>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <ModalHeader>Add tag</ModalHeader>

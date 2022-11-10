@@ -13,17 +13,20 @@ export const GlobalScreenNavigationContainer = (props: Props) => {
             minH={"100vh"}
             shadow={"2xl"}
             px={0}
+            maxW={'4xl'}
         >
             {children}
             <Container
-                bgColor={"gray.900"}
                 position={"fixed"}
                 bottom={0}
                 left={"50%"}
                 transform={"translateX(-50%)"}
                 shadow={"2xl"}
+                maxW={'4xl'}
+                blur={2}
+                bgColor={"gray.900"}
             >
-                <Box shadow={"2xl"}>
+                <Box>
                     <GlobalScreenNavigation/>
                 </Box>
             </Container>

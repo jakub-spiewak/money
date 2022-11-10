@@ -13,7 +13,7 @@ const ExpenseNavigation: NavigationIcon = {icon: <GiPayMoney/>, to: "/expense"}
 const ExpenseTableNavigation: NavigationIcon = {icon: <BsCalendar2Week/>, to: "/expense-table"}
 const RevenueNavigation: NavigationIcon = {icon: <GiTakeMyMoney/>, to: "/revenue"}
 const RevenueTableNavigation: NavigationIcon = {icon: <BsCalendar2Week/>, to: "/revenue-table"}
-const AnalyzeNavigation: NavigationIcon = {icon: <HiPresentationChartBar/>, to: "/"}
+const AnalyzeNavigation: NavigationIcon = {icon: <HiPresentationChartBar/>, to: "/expense"}
 const TagsNavigation: NavigationIcon = {icon: <BsTags/>, to: "/tag"}
 
 
@@ -49,6 +49,8 @@ export const GlobalScreenNavigation = () => {
                     <MenuButton
                         as={IconButton}
                         icon={<AddIcon/>}
+                        variant={'outline'}
+                        colorScheme={'green'}
                     />
                     <MenuList fontSize={"1.2em"}>
                         <MenuItem
@@ -74,6 +76,8 @@ export const GlobalScreenNavigation = () => {
                     <MenuButton
                         as={IconButton}
                         icon={<AddIcon/>}
+                        variant={'outline'}
+                        colorScheme={'green'}
                     />
                     <MenuList fontSize={"1.2em"}>
                         <MenuItem

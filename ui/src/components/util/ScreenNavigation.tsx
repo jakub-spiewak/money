@@ -21,6 +21,8 @@ export const DefaultNavigationAddButton = (props: { onAdd: () => void }) => {
             aria-label={""}
             icon={<AddIcon/>}
             onClick={onAdd}
+            variant={'outline'}
+            colorScheme={'green'}
         />
     )
 }

@@ -21,11 +21,15 @@ interface Props {
 export const GroupRevenueItem = (props: Props) => {
     const {revenue} = props
 
-    const {year, month} = useAppSelector(state => state.currentDate)
+    const {value: currentMonthStr, month, year} = useAppSelector(state => state.currentDate)
 
     const dispatch = useAppDispatch()
 
-    const currentMonthStr = `${year}-${month <= 9 ? `0${month}` : month}`
+    const now = new Date()
+    const todayMonth = now.getUTCMonth() + 1
+    const todayYear = now.getUTCFullYear()
+    const isCurrentMonthSameAsToday = year === todayYear && month === todayMonth
+    const isCurrentMonthOlderThanToday = year < todayYear || (year === todayYear && month < todayMonth)
 
     const {
         data: singleRevenuesList
@@ -69,7 +73,9 @@ export const GroupRevenueItem = (props: Props) => {
                                     modal: "SINGLE_REVENUE",
                                     value: {
                                         parentRevenue: revenue.id,
-                                        date: getCurrentDateISOString()
+                                        date: isCurrentMonthSameAsToday
+                                            ? getCurrentDateISOString()
+                                            : new Date(`${currentMonthStr}-${isCurrentMonthOlderThanToday ? getDaysInMonth(year, month).toString() : '01'}`).toISOString().split("T")[0]
                                     }
                                 })
                             )}
@@ -140,3 +146,7 @@ export const GroupRevenueItem = (props: Props) => {
         </Box>
     );
 };
+
+function getDaysInMonth(year: number, month: number) {
+    return new Date(year, month, 0).getDate();
+}
