@@ -1,6 +1,6 @@
 import {useAppSelector} from "../../redux/hooks";
 import {ScheduledRevenueResponse, useReadScheduledRevenueQuery} from "../../redux/generated/redux-api";
-import {Box, List, ListItem} from "@chakra-ui/react";
+import {Box, List, ListItem, Text} from "@chakra-ui/react";
 import {GroupRevenueItem} from "./GroupRevenueItem";
 import {CurrentDateComponent} from "../util/CurrentDateComponent";
 
@@ -16,6 +16,20 @@ export const RevenueScreen = () => {
     return (
         <Box>
             <CurrentDateComponent/>
+            <Box
+                p={4}
+                backgroundColor={"gray.900"}
+                borderRadius={16}
+                borderWidth={1}
+                m={4}
+            >
+                <Text
+                    fontSize={"2xl"}
+                    fontWeight={"hairline"}
+                >
+                    Revenues
+                </Text>
+            </Box>
             <Box
                 px={4}
                 pb={4}

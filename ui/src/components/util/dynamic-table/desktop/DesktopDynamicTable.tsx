@@ -1,4 +1,4 @@
-import {Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
+import {Box, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr} from "@chakra-ui/react";
 import {ALL_POSSIBLE_COLUMNS, AnyApiResource, AnyResourceResponseKey, DynamicTableColumnNames} from "../types";
 import {ActionButtonsTableCell} from "../../table/ActionButtonsTableCell";
 import {useMemo} from "react";
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const DesktopDynamicTable = (props: Props) => {
-    const {resource: {data}, resourceType} = props
+    const {resource: {data}, resourceType, name} = props
 
     const dispatch = useAppDispatch()
 
@@ -36,67 +36,86 @@ export const DesktopDynamicTable = (props: Props) => {
 
 
     return (
-        <TableContainer width={["100vw", null, null, theme.breakpoints.lg]}>
-            <Table>
-                <Thead>
-                    <Tr>
-                        {columns.map((columnKey) => {
-                            const {isNumeric, name} = DynamicTableColumnNames[columnKey]
-                            return (
-                                <Th
-                                    key={`table_header_${name}`}
-                                    isNumeric={isNumeric}
-                                >{name}</Th>
-                            )
-                        })}
-                        <Th isNumeric>Actions</Th>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    {
-                        data.map((item) => {
-                            return (
-                                <Tr key={`table_row_${item.id}`}>
-                                    {
-                                        columns.map((columnKey) => {
-                                            const {isNumeric} = DynamicTableColumnNames[columnKey]
-                                            return (
-                                                <Td
-                                                    key={`table_data_${columnKey}`}
-                                                    isNumeric={isNumeric}
-                                                >
-                                                    <DesktopDynamicTableItem
-                                                        tableValue={item}
-                                                        tableKey={columnKey}
-                                                    />
-                                                </Td>
-                                            )
-                                        })
-                                    }
-                                    <Td isNumeric>
-                                        <ActionButtonsTableCell
-                                            onEdit={() => {
-                                                dispatch(openModal({
-                                                    modal: resourceType,
-                                                    value: mapResponseToRequest(resourceType, item),
-                                                    id: item.id
-                                                }))
-                                            }}
-                                            onDelete={() => {
-                                                dispatch(askForDelete({
-                                                    type: resourceType,
-                                                    name: item.name,
-                                                    id: item.id
-                                                }))
-                                            }}
-                                        />
-                                    </Td>
-                                </Tr>
-                            )
-                        })
-                    }
-                </Tbody>
-            </Table>
-        </TableContainer>
+        <Box
+            borderWidth={1}
+            borderRadius={8}
+            m={4}
+        >
+            <Box
+                p={4}
+                borderRadius={8}
+                backgroundColor={"gray.900"}
+                display={name ? "block" : "none"}
+            >
+                <Text
+                    fontSize={"2xl"}
+                    fontWeight={"hairline"}
+                >
+                    {name}
+                </Text>
+            </Box>
+            <TableContainer width={["100vw", null, null, theme.breakpoints.lg]}>
+                <Table>
+                    <Thead>
+                        <Tr>
+                            {columns.map((columnKey) => {
+                                const {isNumeric, name} = DynamicTableColumnNames[columnKey]
+                                return (
+                                    <Th
+                                        key={`table_header_${name}`}
+                                        isNumeric={isNumeric}
+                                    >{name}</Th>
+                                )
+                            })}
+                            <Th isNumeric>Actions</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {
+                            data.map((item) => {
+                                return (
+                                    <Tr key={`table_row_${item.id}`}>
+                                        {
+                                            columns.map((columnKey) => {
+                                                const {isNumeric} = DynamicTableColumnNames[columnKey]
+                                                return (
+                                                    <Td
+                                                        key={`table_data_${columnKey}`}
+                                                        isNumeric={isNumeric}
+                                                    >
+                                                        <DesktopDynamicTableItem
+                                                            tableValue={item}
+                                                            tableKey={columnKey}
+                                                        />
+                                                    </Td>
+                                                )
+                                            })
+                                        }
+                                        <Td isNumeric>
+                                            <ActionButtonsTableCell
+                                                onEdit={() => {
+                                                    dispatch(openModal({
+                                                        modal: resourceType,
+                                                        value: mapResponseToRequest(resourceType, item),
+                                                        id: item.id
+                                                    }))
+                                                }}
+                                                onDelete={() => {
+                                                    dispatch(askForDelete({
+                                                        type: resourceType,
+                                                        name: item.name,
+                                                        id: item.id
+                                                    }))
+                                                }}
+                                            />
+                                        </Td>
+                                    </Tr>
+                                )
+                            })
+                        }
+                    </Tbody>
+                </Table>
+            </TableContainer>
+        </Box>
     );
 };

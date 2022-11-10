@@ -18,7 +18,7 @@ import {TfiMore} from "react-icons/tfi";
 import {AddIcon, DeleteIcon, EditIcon, Icon} from "@chakra-ui/icons";
 import {openModal} from "../../redux/slice/modal-slice";
 import {askForDelete} from "../../redux/slice/delete-modal-slice";
-import {GiTwoCoins, GiWallet} from "react-icons/gi";
+import {GiTwoCoins} from "react-icons/gi";
 import {
     ScheduledExpenseResponse,
     SingleExpenseResponse,
@@ -26,8 +26,7 @@ import {
 } from "../../redux/generated/redux-api";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {SingleExpenseItem} from "./SingleExpenseItem";
-import {CiCircleCheck} from "react-icons/ci";
-import {IoWarning} from "react-icons/io5";
+import {CiCircleAlert, CiCircleCheck, CiDollar} from "react-icons/ci";
 
 interface Props {
     expense: ScheduledExpenseResponse
@@ -77,7 +76,7 @@ export const GroupExpenseItem = (props: Props) => {
                 {
                     (expense.amount.type === "CONSTANT" && expense.spentFactor === 0 && isCurrentMonthOlderThanToday) &&
                     <Icon
-                        as={IoWarning}
+                        as={CiCircleAlert}
                         w={16}
                         h={16}
                         px={2}
@@ -90,8 +89,8 @@ export const GroupExpenseItem = (props: Props) => {
                         w={16}
                         h={16}
                         px={2}
-                        as={GiWallet}
-                        color={"whiteAlpha.400"}
+                        as={CiDollar}
+                        color={"whiteAlpha.300"}
                     />
                 }
                 {

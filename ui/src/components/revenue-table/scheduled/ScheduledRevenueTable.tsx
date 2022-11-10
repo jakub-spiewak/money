@@ -12,7 +12,7 @@ export const ScheduledRevenueTable = () => {
         <DynamicTable
             resourceType={"SCHEDULED_REVENUE"}
             resource={mapResourceFromHook(resource)}
-            name={"Scheduled revenue"}
+            name={"Scheduled revenues"}
         />
     )
 }

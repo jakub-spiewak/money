@@ -51,6 +51,20 @@ export const ExpenseScreen = () => {
             <Box>
                 <CurrentDateComponent/>
                 <Box
+                    p={4}
+                    backgroundColor={"gray.900"}
+                    borderRadius={16}
+                    borderWidth={1}
+                    m={4}
+                >
+                    <Text
+                        fontSize={"2xl"}
+                        fontWeight={"hairline"}
+                    >
+                        Expenses
+                    </Text>
+                </Box>
+                <Box
                     position={"relative"}
                     maxW={"32em"}
                     px={8}
