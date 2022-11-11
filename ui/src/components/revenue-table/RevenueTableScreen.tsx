@@ -2,10 +2,11 @@ import {CurrentDateComponent} from "../util/CurrentDateComponent";
 import {SingleRevenueTable} from "./single/SingleRevenueTable";
 import {ScheduledRevenueTable} from "./scheduled/ScheduledRevenueTable";
 import {Flex} from "@chakra-ui/react";
+import {Fragment} from "react";
 
 export const RevenueTableScreen = () => {
     return (
-        <>
+        <Fragment>
             <CurrentDateComponent/>
             <Flex
                 flexDirection={'column'}
@@ -14,6 +15,6 @@ export const RevenueTableScreen = () => {
                 <ScheduledRevenueTable/>
                 <SingleRevenueTable/>
             </Flex>
-        </>
+        </Fragment>
     )
 }
