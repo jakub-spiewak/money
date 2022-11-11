@@ -1,4 +1,5 @@
-name: Build UI docker image
+name: build-ui
+run-name: Build UI docker image
 
 on:
   push:

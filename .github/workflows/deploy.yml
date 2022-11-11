@@ -1,4 +1,5 @@
-name: Deploy docker images on server
+name: deploy
+run-name: Deploy docker images on server
 
 on:
   workflow_run:

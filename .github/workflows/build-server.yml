@@ -1,4 +1,5 @@
-name: Build server docker image
+name: build-server
+run-name: Build server docker image
 
 on:
   push:
