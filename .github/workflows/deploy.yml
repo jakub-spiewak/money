@@ -1,4 +1,4 @@
-name: Build, publish and run docker images on the server
+name: Deploy docker images on server
 
 on:
   workflow_run:
