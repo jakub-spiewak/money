@@ -4,9 +4,10 @@ run-name: Deploy docker images on server
 on:
   workflow_run:
     workflows: [ "build-server", "build-ui" ]
-  push:
-    branches: [ master ]
-    paths: [ "server/*", "ui/*" ]
+
+#  push:
+#    branches: [ master ]
+#    paths: [ "server/*", "ui/*" ]
 
 jobs:
   pull-newest-image-on-server-and-run:
