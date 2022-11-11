@@ -9,8 +9,7 @@ export const RevenueTableScreen = () => {
             <CurrentDateComponent/>
             <Flex
                 flexDirection={'column'}
-                pt={8}
-                gap={8}
+                gap={4}
             >
                 <ScheduledRevenueTable/>
                 <SingleRevenueTable/>

@@ -18,14 +18,14 @@ export const MobileDynamicTable = (props: Props) => {
     return (
         <Box
             borderWidth={1}
-            borderRadius={8}
-            m={2}
+            borderRadius={16}
+            mx={4}
         >
             <Box
                 p={4}
                 backgroundColor={"gray.900"}
                 display={name ? "block" : "none"}
-                borderRadius={8}
+                borderTopRadius={16}
                 mb={2}
                 // textAlign={"center"}
             >

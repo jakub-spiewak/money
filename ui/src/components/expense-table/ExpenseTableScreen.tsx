@@ -9,8 +9,7 @@ export const ExpenseTableScreen = () => {
             <CurrentDateComponent/>
             <Flex
                 flexDirection={'column'}
-                pt={8}
-                gap={8}
+                gap={4}
             >
                 <ScheduledExpenseTable/>
                 <SingleExpenseTable/>
