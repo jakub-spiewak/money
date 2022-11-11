@@ -22,4 +22,5 @@ class AnalyzeController(private val analyzeService: AnalyzeService) {
 
     @GetMapping
     fun analyze() = analyzeService.analyze()
+
 }
