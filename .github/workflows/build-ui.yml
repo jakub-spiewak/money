@@ -2,6 +2,8 @@ name: build-ui
 
 on:
   push:
+    paths:
+      - "ui/*"
     branches: [ master ]
 
 jobs:
