@@ -3,7 +3,7 @@ run-name: Build server docker image
 
 on:
   push:
-    paths: [ "server/*" ]
+    paths: [ "server/**" ]
     branches: [ master ]
 
 jobs:
