@@ -3,8 +3,7 @@ run-name: Build UI docker image
 
 on:
   push:
-    paths:
-      - "ui/*"
+    paths: [ "ui/*" ]
     branches: [ master ]
 
 jobs:
