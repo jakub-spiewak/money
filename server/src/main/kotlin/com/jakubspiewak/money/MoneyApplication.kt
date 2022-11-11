@@ -9,3 +9,7 @@ class MoneyApplication
 fun main(args: Array<String>) {
     runApplication<MoneyApplication>(*args)
 }
+
+class ToDelete() {
+
+}
