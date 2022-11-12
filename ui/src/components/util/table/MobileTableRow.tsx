@@ -10,6 +10,7 @@ interface Props {
     isOpen: boolean,
     onOpenToggle: () => void,
     content: JSX.Element,
+    isLast?: boolean
 }
 
 export const AnyAmountComponent = (props: { amount: number | Amount }) => {
@@ -28,13 +29,15 @@ export const AnyAmountComponent = (props: { amount: number | Amount }) => {
 }
 
 export const MobileTableRow = (props: Props) => {
-    const {name, amount, content, isOpen, onOpenToggle} = props
-
+    const {name, amount, content, isOpen, onOpenToggle, isLast} = props
 
     return (
         <Fragment>
-            <Tr maxW={"100vw"}>
-                <Td whiteSpace={"break-spaces"}>
+            <Tr>
+                <Td
+                    whiteSpace={"break-spaces"}
+                    borderWidth={isLast ? 0 : undefined}
+                >
                     <Fade in={!isOpen}>
                         <Text>
                             {name}
@@ -42,7 +45,10 @@ export const MobileTableRow = (props: Props) => {
                     </Fade>
                 </Td>
                 {amount &&
-                    <Td isNumeric>
+                    <Td
+                        isNumeric
+                        borderWidth={isLast ? 0 : undefined}
+                    >
                         <Fade in={!isOpen}>
                             <AnyAmountComponent amount={amount}/>
                         </Fade>
@@ -50,7 +56,9 @@ export const MobileTableRow = (props: Props) => {
                 }
                 <Td
                     isNumeric
-                    overflow={"hidden"}
+                    p={0}
+                    pr={2}
+                    borderWidth={isLast ? 0 : undefined}
                 >
                     <IconButton
                         aria-label={'edit'}
@@ -66,11 +74,13 @@ export const MobileTableRow = (props: Props) => {
                     />
                 </Td>
             </Tr>
-            <Tr maxW={"100vw"}>
+            <Tr>
                 <Td
                     py={0}
                     colSpan={3}
                     whiteSpace={"break-spaces"}
+                    borderWidth={0}
+                    borderRadius={16}
                 >
                     <Collapse
                         animateOpacity

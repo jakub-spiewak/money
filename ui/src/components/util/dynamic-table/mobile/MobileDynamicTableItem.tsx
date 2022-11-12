@@ -61,11 +61,12 @@ const ParentRevenueComponent = ({parentRevenue}: Pick<SingleRevenueResponse, 'pa
 interface Props {
     value: AnyResourceResponse,
     state: [string | undefined, (id?: string) => void],
-    resourceType: ResourceType
+    resourceType: ResourceType,
+    isLast?: boolean
 }
 
 export const MobileDynamicTableItem = (props: Props) => {
-    const {value, resourceType, state: [currentId, setCurrentId]} = props
+    const {value, resourceType, state: [currentId, setCurrentId], isLast} = props
 
     const dispatch = useAppDispatch()
 
@@ -77,6 +78,7 @@ export const MobileDynamicTableItem = (props: Props) => {
             amount={"amount" in value ? value.amount : undefined}
             isOpen={isOpen}
             onOpenToggle={() => setCurrentId(isOpen ? undefined : value.id)}
+            isLast={isLast}
             content={
                 <VStack
                     py={4}

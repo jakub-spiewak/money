@@ -36,24 +36,28 @@ export const MobileDynamicTable = (props: Props) => {
                     {name}
                 </Text>
             </Box>
-            <TableContainer width={["100vw", null, null, theme.breakpoints.lg]}>
-                <Table>
+            <TableContainer
+                overflow={"hidden"}
+                width={["100vw", null, null, theme.breakpoints.lg]}
+            >
+                <Table overflow={"hidden"}>
                     <Thead>
                         <Tr>
                             <Th>Name</Th>
                             <Th isNumeric>Amount</Th>
-                            <Th isNumeric>Actions</Th>
+                            <Th isNumeric/>
                         </Tr>
                     </Thead>
                     <Tbody>
                         {
-                            data.map((item) => {
+                            data.map((item, index) => {
                                 return (
                                     <MobileDynamicTableItem
                                         key={`dynamic_table_${item.id}`}
                                         value={item}
                                         state={state}
                                         resourceType={resourceType}
+                                        isLast={index === data.length - 1}
                                     />
                                 )
                             })

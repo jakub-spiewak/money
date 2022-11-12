@@ -18,11 +18,16 @@ export const AmountTableCell = (props: Props) => {
     )
 
     if (type === "RANGE") return (
-        <div>
-            <span>{toCurrencyString(data.min)}</span>
-            <span> - </span>
-            <span>{toCurrencyString(data.max)}</span>
-        </div>
+        <Flex
+            flexWrap={"wrap"}
+            justifyContent={"flex-end"}
+        >
+            <Text>{toCurrencyString(data.min)}</Text>
+            <HStack justifyContent={"flex-end"}>
+                <Text pl={2}>to</Text>
+                <Text>{toCurrencyString(data.max)}</Text>
+            </HStack>
+        </Flex>
     )
 
     if (type === "PERCENTAGE") return (
@@ -39,6 +44,6 @@ export const AmountTableCell = (props: Props) => {
     )
 
     return (
-        <text>{JSON.stringify(amount)}</text>
+        <div>{JSON.stringify(amount)}</div>
     )
 }
