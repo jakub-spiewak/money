@@ -7,6 +7,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
+    useToast,
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
@@ -20,9 +21,10 @@ import {closeModal} from "../../redux/slice/modal-slice";
 export const TagForm = () => {
     const {isOpen, value, id} = useAppSelector(state => state.modal.TAG)
     const dispatch = useAppDispatch()
+    const toast = useToast()
 
-    const [createTag] = useCreateTagMutation()
-    const [updateTag] = useUpdateTagMutation()
+    const [createTag, createResult] = useCreateTagMutation()
+    const [updateTag, updateResult] = useUpdateTagMutation()
 
     const {
         handleSubmit,
@@ -41,6 +43,29 @@ export const TagForm = () => {
         else await createTag({tagRequest: request})
         close()
     }
+
+    useEffect(() => {
+        if (createResult?.isSuccess) {
+            toast({
+                title: 'Success!',
+                description: `An tag has been created.`,
+                status: "success",
+                position: "top"
+            })
+        }
+    }, [toast, createResult])
+
+    useEffect(() => {
+        if (updateResult?.isSuccess) {
+            toast({
+                title: 'Success!',
+                description: `An tag has been updated.`,
+                status: "success",
+                position: "top"
+            })
+        }
+    }, [toast, updateResult])
+
 
     useEffect(() => {
         if (isOpen) reset(value || {name: undefined})

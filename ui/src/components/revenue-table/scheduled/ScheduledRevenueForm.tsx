@@ -7,6 +7,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
+    useToast,
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
@@ -27,9 +28,10 @@ export const ScheduledRevenueForm = () => {
 
     const dispatch = useAppDispatch()
     const {isOpen, value, id} = useAppSelector(state => state.modal.SCHEDULED_REVENUE)
+    const toast = useToast()
 
-    const [saveScheduledRevenue] = useCreateScheduledRevenueMutation()
-    const [updateScheduledRevenue] = useUpdateScheduledRevenueMutation()
+    const [saveScheduledRevenue, createResult] = useCreateScheduledRevenueMutation()
+    const [updateScheduledRevenue, updateResult] = useUpdateScheduledRevenueMutation()
 
     const close = () => {
         dispatch(closeModal("SCHEDULED_REVENUE"))
@@ -57,6 +59,28 @@ export const ScheduledRevenueForm = () => {
         else await saveScheduledRevenue({scheduledRevenueRequest: request})
         close()
     }
+
+    useEffect(() => {
+        if (createResult?.isSuccess) {
+            toast({
+                title: 'Success!',
+                description: `An revenue has been created.`,
+                status: "success",
+                position: "top"
+            })
+        }
+    }, [toast, createResult])
+
+    useEffect(() => {
+        if (updateResult?.isSuccess) {
+            toast({
+                title: 'Success!',
+                description: `An revenue has been updated.`,
+                status: "success",
+                position: "top"
+            })
+        }
+    }, [toast, updateResult])
 
     useEffect(() => {
         if (isOpen) reset(value || {

@@ -7,6 +7,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
+    useToast,
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
@@ -27,9 +28,10 @@ import {sanitizeFormValues} from "../../../utils/util";
 export const SingleRevenueForm = () => {
     const {isOpen, value, id} = useAppSelector(state => state.modal.SINGLE_REVENUE)
     const dispatch = useAppDispatch()
+    const toast = useToast()
 
-    const [saveSingleRevenue] = useCreateSingleRevenueMutation()
-    const [updateSingleRevenue] = useUpdateSingleRevenueMutation()
+    const [saveSingleRevenue, createResult] = useCreateSingleRevenueMutation()
+    const [updateSingleRevenue, updateResult] = useUpdateSingleRevenueMutation()
 
     const {
         handleSubmit,
@@ -44,9 +46,7 @@ export const SingleRevenueForm = () => {
         }
     })
 
-    const close = () => {
-        dispatch(closeModal("SINGLE_REVENUE"))
-    }
+    const close = () => dispatch(closeModal("SINGLE_REVENUE"))
 
     const onSubmit = async (revenue: SingleRevenueRequest) => {
         const request = sanitizeFormValues(revenue)
@@ -54,6 +54,28 @@ export const SingleRevenueForm = () => {
         else await saveSingleRevenue({singleRevenueRequest: request})
         close()
     }
+
+    useEffect(() => {
+        if (createResult?.isSuccess) {
+            toast({
+                title: 'Success!',
+                description: `An revenue has been created.`,
+                status: "success",
+                position: "top"
+            })
+        }
+    }, [toast, createResult])
+
+    useEffect(() => {
+        if (updateResult?.isSuccess) {
+            toast({
+                title: 'Success!',
+                description: `An revenue has been updated.`,
+                status: "success",
+                position: "top"
+            })
+        }
+    }, [toast, updateResult])
 
     useEffect(() => {
         if (isOpen) reset(value || {amount: undefined, date: undefined})

@@ -7,6 +7,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
+    useToast,
 } from "@chakra-ui/react";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
@@ -27,9 +28,10 @@ import {closeModal} from "../../../redux/slice/modal-slice";
 export const ScheduledExpenseForm = () => {
     const dispatch = useAppDispatch()
     const {isOpen, value, id} = useAppSelector(state => state.modal.SCHEDULED_EXPENSE)
+    const toast = useToast()
 
-    const [createExpense] = useCreateScheduledExpenseMutation()
-    const [updateExpense] = useUpdateScheduledExpenseMutation()
+    const [createExpense, createResult] = useCreateScheduledExpenseMutation()
+    const [updateExpense, updateResult] = useUpdateScheduledExpenseMutation()
 
     const close = () => dispatch(closeModal("SCHEDULED_EXPENSE"))
 
@@ -63,6 +65,28 @@ export const ScheduledExpenseForm = () => {
             })
         }
     }, [reset, value, isOpen])
+
+    useEffect(() => {
+        if (createResult?.isSuccess) {
+            toast({
+                title: 'Success!',
+                description: `An expense has been created.`,
+                status: "success",
+                position: "top"
+            })
+        }
+    }, [toast, createResult])
+
+    useEffect(() => {
+        if (updateResult?.isSuccess) {
+            toast({
+                title: 'Success!',
+                description: `An expense has been updated.`,
+                status: "success",
+                position: "top"
+            })
+        }
+    }, [toast, updateResult])
 
     return (
         <Modal
