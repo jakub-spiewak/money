@@ -1,9 +1,10 @@
-import {Amount, DateRange, TagResponse} from "../../../redux/generated/redux-api";
+import {DateRange} from "../../../redux/generated/redux-api";
 import {AnyAmountComponent, MobileTableRow} from "./MobileTableRow";
 import {Heading, HStack, Text, VStack} from "@chakra-ui/react";
 import {ActionButtonsTableCell} from "./ActionButtonsTableCell";
 import {DateRangeTableCell} from "./DateRangeTableCell";
 import {ExpenseTableTagsCell} from "../../expense-table/ExpenseTableTagsCell";
+import {AnyResourceResponse, ResourceType} from "../../../redux/slice/types";
 
 const DateComponent = (props: { date?: string | DateRange }) => {
     const {date} = props
@@ -17,30 +18,23 @@ const DateComponent = (props: { date?: string | DateRange }) => {
 }
 
 interface Props {
-    item: {
-        id: string,
-        name: string,
-        amount: number | Amount,
-        date: string | DateRange,
-        tags?: TagResponse[],
-    },
+    item: AnyResourceResponse,
     state: [string | undefined
         , (id?: string) => void],
     onEdit: () => void,
     onDelete: () => Promise<void>,
+    resourceType: ResourceType
 }
 
 export const MobileTableItem = (props: Props) => {
-    const {item: {id, name, amount, date, tags}, state: [currentId, setCurrentId], onEdit, onDelete} = props
-
-    const isOpen = id === currentId
+    const {item, state: [currentId, setCurrentId], onEdit, onDelete, resourceType} = props
+    const isOpen = item.id === currentId
 
     return (
         <MobileTableRow
-            name={name}
-            amount={amount}
+            value={item}
             isOpen={isOpen}
-            onOpenToggle={() => setCurrentId(isOpen ? undefined : id)}
+            onOpenToggle={() => setCurrentId(isOpen ? undefined : item.id)}
             content={
                 <VStack
                     py={4}
@@ -49,7 +43,7 @@ export const MobileTableItem = (props: Props) => {
                     <HStack
                         justifyContent={"space-between"}
                     >
-                        <Text>{name}</Text>
+                        <Text>{item.name}</Text>
                         <ActionButtonsTableCell
                             onEdit={() => onEdit()}
                             onDelete={() => onDelete()}
@@ -59,12 +53,13 @@ export const MobileTableItem = (props: Props) => {
                         size={"lg"}
                         fontWeight={"hairline"}
                     >
-                        <AnyAmountComponent amount={amount}/>
+                        <AnyAmountComponent amount={item.amount}/>
                     </Heading>
-                    <DateComponent date={date}/>
-                    {tags && <ExpenseTableTagsCell tags={tags}/>}
+                    <DateComponent date={item.date}/>
+                    {"tags" in item && <ExpenseTableTagsCell tags={item.tags}/>}
                 </VStack>
             }
+            resourceType={resourceType}
         />
     );
 };

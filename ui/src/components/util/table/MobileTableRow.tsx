@@ -3,14 +3,20 @@ import {Collapse, Fade, IconButton, Td, Text, Tr} from "@chakra-ui/react";
 import {AmountTableCell} from "./AmountTableCell";
 import {ChevronDownIcon} from "@chakra-ui/icons";
 import {Fragment} from "react";
+import {ActionButtonsTableCell} from "./ActionButtonsTableCell";
+import {mapResponseToRequest} from "../dynamic-table/util";
+import {openModal} from "../../../redux/slice/modal-slice";
+import {askForDelete} from "../../../redux/slice/delete-modal-slice";
+import {useAppDispatch} from "../../../redux/hooks";
+import {AnyResourceResponse, ResourceType} from "../../../redux/slice/types";
 
 interface Props {
-    name: string,
-    amount?: Amount | number,
     isOpen: boolean,
     onOpenToggle: () => void,
     content: JSX.Element,
-    isLast?: boolean
+    isLast?: boolean,
+    resourceType: ResourceType,
+    value: AnyResourceResponse
 }
 
 export const AnyAmountComponent = (props: { amount: number | Amount }) => {
@@ -29,36 +35,53 @@ export const AnyAmountComponent = (props: { amount: number | Amount }) => {
 }
 
 export const MobileTableRow = (props: Props) => {
-    const {name, amount, content, isOpen, onOpenToggle, isLast} = props
+    const {value, content, isOpen, onOpenToggle, isLast, resourceType} = props
+
+    const dispatch = useAppDispatch()
 
     return (
         <Fragment>
             <Tr>
                 <Td
                     whiteSpace={"break-spaces"}
-                    borderWidth={isLast ? 0 : undefined}
+                    borderRadius={16}
                 >
                     <Fade in={!isOpen}>
                         <Text>
-                            {name}
+                            {value.name}
                         </Text>
                     </Fade>
                 </Td>
-                {amount &&
-                    <Td
-                        isNumeric
-                        borderWidth={isLast ? 0 : undefined}
-                    >
-                        <Fade in={!isOpen}>
-                            <AnyAmountComponent amount={amount}/>
-                        </Fade>
-                    </Td>
-                }
+                <Td
+                    isNumeric
+                >
+                    <Collapse in={!isOpen}>
+                        <AnyAmountComponent amount={value.amount}/>
+                    </Collapse>
+                    <Collapse in={isOpen}>
+                        <ActionButtonsTableCell
+                            onEdit={() => {
+                                dispatch(openModal({
+                                    modal: resourceType,
+                                    value: mapResponseToRequest(resourceType, value),
+                                    id: value.id
+                                }))
+                            }}
+                            onDelete={() => {
+                                dispatch(askForDelete({
+                                    type: resourceType,
+                                    name: value.name,
+                                    id: value.id
+                                }))
+                            }}
+                        />
+                    </Collapse>
+                </Td>
                 <Td
                     isNumeric
                     p={0}
                     pr={2}
-                    borderWidth={isLast ? 0 : undefined}
+                    borderRadius={16}
                 >
                     <IconButton
                         aria-label={'edit'}
@@ -79,7 +102,6 @@ export const MobileTableRow = (props: Props) => {
                     py={0}
                     colSpan={3}
                     whiteSpace={"break-spaces"}
-                    borderWidth={0}
                     borderRadius={16}
                 >
                     <Collapse

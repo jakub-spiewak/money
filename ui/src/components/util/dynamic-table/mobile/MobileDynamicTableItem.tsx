@@ -2,15 +2,10 @@ import {Heading, HStack, Text, VStack} from "@chakra-ui/react";
 import {DateRange, SingleExpenseResponse, SingleRevenueResponse} from "../../../../redux/generated/redux-api";
 import {DateRangeTableCell} from "../../table/DateRangeTableCell";
 import {AnyAmountComponent, MobileTableRow} from "../../table/MobileTableRow";
-import {ActionButtonsTableCell} from "../../table/ActionButtonsTableCell";
 import {ExpenseTableTagsCell} from "../../../expense-table/ExpenseTableTagsCell";
 import {AnyResourceResponse, ResourceType} from "../../../../redux/slice/types";
 import {RevenueParentTableCell} from "../../table/RevenueParentTableCell";
 import {ExpenseParentTableCell} from "../../table/ExpenseParentTableCell";
-import {openModal} from "../../../../redux/slice/modal-slice";
-import {mapResponseToRequest} from "../util";
-import {useAppDispatch} from "../../../../redux/hooks";
-import {askForDelete} from "../../../../redux/slice/delete-modal-slice";
 
 const DateComponent = (props: { date?: string | DateRange }) => {
     const {date} = props
@@ -68,17 +63,15 @@ interface Props {
 export const MobileDynamicTableItem = (props: Props) => {
     const {value, resourceType, state: [currentId, setCurrentId], isLast} = props
 
-    const dispatch = useAppDispatch()
-
     const isOpen = value.id === currentId
 
     return (
         <MobileTableRow
-            name={value.name}
-            amount={"amount" in value ? value.amount : undefined}
+            value={value}
             isOpen={isOpen}
             onOpenToggle={() => setCurrentId(isOpen ? undefined : value.id)}
             isLast={isLast}
+            resourceType={resourceType}
             content={
                 <VStack
                     py={4}
@@ -89,22 +82,6 @@ export const MobileDynamicTableItem = (props: Props) => {
                         w={"full"}
                     >
                         <Heading>{value.name}</Heading>
-                        <ActionButtonsTableCell
-                            onEdit={() => {
-                                dispatch(openModal({
-                                    modal: resourceType,
-                                    value: mapResponseToRequest(resourceType, value),
-                                    id: value.id
-                                }))
-                            }}
-                            onDelete={() => {
-                                dispatch(askForDelete({
-                                    type: resourceType,
-                                    name: value.name,
-                                    id: value.id
-                                }))
-                            }}
-                        />
                     </HStack>
                     {"amount" in value && <AmountComponent amount={value.amount}/>}
                     {"date" in value && <DateComponent date={value.date}/>}
