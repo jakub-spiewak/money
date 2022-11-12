@@ -8,6 +8,7 @@ on:
 
 jobs:
   server-build-and-publish-docker-image:
+    if: false
     name: Server - Build and push docker image
     runs-on: ubuntu-latest
     steps:
