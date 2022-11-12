@@ -18,13 +18,15 @@ export const ActionButtonsTableCell = (props: Props) => {
                 aria-label={'edit'}
                 icon={<EditIcon/>}
                 colorScheme={'teal'}
-                mr={2}
+                variant={"outline"}
+                mr={1}
                 onClick={onEdit}
             />
             <IconButton
                 aria-label={'delete'}
                 icon={<DeleteIcon/>}
                 colorScheme={'red'}
+                variant={"outline"}
                 onClick={onDelete}
             />
         </HStack>
