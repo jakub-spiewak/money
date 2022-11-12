@@ -84,7 +84,7 @@ export const ExpenseScreen = () => {
                     </Box>
                 }
                 {
-                    dataExists && spentPercentage > 0 &&
+                    dataExists &&
                     <Box
                         position={"relative"}
                         maxW={"32em"}
