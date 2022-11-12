@@ -9,6 +9,7 @@ import {theme} from "../../../../theme";
 import {openModal} from "../../../../redux/slice/modal-slice";
 import {mapResponseToRequest} from "../util";
 import {DesktopDynamicTableItem} from "./DesktopDynamicTableItem";
+import {useDebounce} from "use-debounce";
 
 interface Props {
     resource: AnyApiResource,
@@ -17,9 +18,11 @@ interface Props {
 }
 
 export const DesktopDynamicTable = (props: Props) => {
-    const {resource: {data, status: {isLoading}}, resourceType, name} = props
+    const {resource: {data, status: {isFetching}}, resourceType, name} = props
 
     const dispatch = useAppDispatch()
+
+    const [showLoadingSpinner] = useDebounce(isFetching, 500)
 
     const columns: AnyResourceResponseKey[] = useMemo(() => {
         const result: AnyResourceResponseKey[] = []
@@ -54,7 +57,7 @@ export const DesktopDynamicTable = (props: Props) => {
                     {name}
                 </Text>
                 <Spacer/>
-                {isLoading && <Spinner/>}
+                {showLoadingSpinner && <Spinner/>}
             </Flex>
             <TableContainer width={["100vw", null, null, theme.breakpoints.lg]}>
                 <Table>
@@ -74,6 +77,20 @@ export const DesktopDynamicTable = (props: Props) => {
                     </Thead>
                     <Tbody>
                         {
+                            data.length === 0 &&
+                            <Tr>
+                                <Td
+                                    colSpan={columns.length}
+                                    fontSize={"2xl"}
+                                    fontWeight={"hairline"}
+                                    textAlign={"center"}
+                                >
+                                    No data
+                                </Td>
+                            </Tr>
+                        }
+                        {
+                            data.length > 0 &&
                             data.map((item) => {
                                 return (
                                     <Tr key={`table_row_${item.id}`}>

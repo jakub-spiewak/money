@@ -53,7 +53,10 @@ export const MobileTableRow = (props: Props) => {
                         </Text>
                     </Fade>
                 </Td>
-                <Td isNumeric>
+                <Td
+                    isNumeric
+                    px={0}
+                >
                     <Fade in={!isOpen}>
                         <AnyAmountComponent amount={value.amount}/>
                     </Fade>
@@ -61,8 +64,8 @@ export const MobileTableRow = (props: Props) => {
                 <Td
                     isNumeric
                     position={"relative"}
-                    py={0}
-                    px={3}
+                    p={0}
+                    pr={3}
                     width={"100%"}
                 >
                     <IconButton

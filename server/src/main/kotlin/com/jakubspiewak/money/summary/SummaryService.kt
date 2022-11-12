@@ -6,6 +6,8 @@ import com.jakubspiewak.money.expense.single.SingleExpenseService
 import com.jakubspiewak.money.revenue.scheduled.ScheduledRevenueService
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
+import java.math.BigDecimal.ONE
+import java.math.BigDecimal.ZERO
 import java.math.RoundingMode.HALF_UP
 import java.time.YearMonth
 
@@ -33,17 +35,25 @@ class SummaryService(
                 val scheduledRevenueList = data.t2
                 val singleExpenseList = data.t3
 
-                val maximumScheduledExpenses = scheduledExpenseList.sumOf { it.amount.maximum() }.setScale(2, HALF_UP)
+                val maximumScheduledExpensesSum =
+                    scheduledExpenseList.sumOf { it.amount.maximum() }.setScale(2, HALF_UP)
                 val revenueScheduledMaximumSum = scheduledRevenueList.sumOf { it.amount.maximum().setScale(2, HALF_UP) }
                 val currentMonthExpensesSum = singleExpenseList.sumOf { it.amount }.setScale(2, HALF_UP)
 
-                val reamingMaximumAmount = maximumScheduledExpenses.minus(currentMonthExpensesSum)
+                val reamingMaximumAmount = maximumScheduledExpensesSum.minus(currentMonthExpensesSum)
 
-                val normalizedMaximumReaming = reamingMaximumAmount.divide(maximumScheduledExpenses, HALF_UP)
-                val normalizedMaximumSpent = currentMonthExpensesSum.divide(maximumScheduledExpenses, HALF_UP)
+                val normalizedMaximumReaming = when (maximumScheduledExpensesSum) {
+                    ZERO.setScale(2, HALF_UP) -> ZERO
+                    else                      -> reamingMaximumAmount.divide(maximumScheduledExpensesSum, HALF_UP)
+                }
+
+                val normalizedMaximumSpent = when (maximumScheduledExpensesSum) {
+                    ZERO.setScale(2, HALF_UP) -> ONE
+                    else                      -> currentMonthExpensesSum.divide(maximumScheduledExpensesSum, HALF_UP)
+                }
 
                 return@map SummaryResponse(
-                    budget = maximumScheduledExpenses,
+                    budget = maximumScheduledExpensesSum,
                     reaming = reamingMaximumAmount,
                     spent = currentMonthExpensesSum,
                     normalizedReaming = normalizedMaximumReaming,

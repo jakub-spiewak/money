@@ -29,7 +29,7 @@ export const ALL_POSSIBLE_COLUMNS: AnyResourceResponseKey[] = [
 
 export interface ApiResource<T> {
     data: T[],
-    status: Omit<RequestStatusFlags, 'status'>
+    status: Omit<RequestStatusFlags, 'status'> & { isFetching: boolean }
 }
 
 export interface AnyApiResource extends ApiResource<AnyResourceResponse> {

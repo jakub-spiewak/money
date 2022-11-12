@@ -6,7 +6,7 @@ import {
     useReadSingleExpenseQuery,
     useSummaryQuery
 } from "../../redux/generated/redux-api";
-import {Box, Divider, List, ListItem, Text} from "@chakra-ui/react";
+import {Box, Divider, Heading, Image, List, ListItem, Text} from "@chakra-ui/react";
 import {Doughnut} from "react-chartjs-2";
 import {toCurrencyString} from "../../utils/util";
 import {GroupExpenseItem} from "./GroupExpenseItem";
@@ -46,6 +46,10 @@ export const ExpenseScreen = () => {
         data: singleExpensesList,
     } = useReadSingleExpenseQuery({month: currentMonthStr})
 
+    const dataExists =
+        (scheduledExpensesList && scheduledExpensesList.length > 0) ||
+        (singleExpensesList && singleExpensesList.length > 0)
+
     return (
         <Box>
             <Box>
@@ -64,62 +68,80 @@ export const ExpenseScreen = () => {
                         Expenses
                     </Text>
                 </Box>
-                <Box
-                    position={"relative"}
-                    maxW={"32em"}
-                    px={8}
-                    mb={8}
-                    mx={"auto"}
-                >
-                    <Doughnut
-                        data={{
-                            datasets: [{
-                                data: [spentPercentage, reamingPercentage],
-                                backgroundColor: [getColor(0), getColor(1)],
-                                borderRadius: 16,
-                                borderWidth: 4,
-                            }]
-                        }}
-                        options={{
-                            responsive: true,
-                            spacing: 16,
-                            cutout: 96
-                        }}
-                    />
-                    <Box
-                        position={"absolute"}
-                        top={"50%"}
-                        left={"50%"}
-                        transform={"translate(-50%, -50%)"}
-                        textAlign={"center"}
-                    >
+                {
+                    !dataExists &&
+                    <Box px={6}>
+                        <Box p={8}>
+                            <Image src={"/undraw/moonlight.svg"}/>
+                        </Box>
+                        <Heading>No data</Heading>
                         <Text
-                            fontSize={"md"}
-                            fontWeight={"thin"}
+                            fontSize={"2xl"}
+                            fontWeight={"hairline"}
                         >
-                            Reaming
-                        </Text>
-                        <Text
-                            fontSize={"3xl"}
-                            fontWeight={"extrabold"}
-                            lineHeight={"1.2em"}
-                        >
-                            {toCurrencyString(reamingNum)}
-                        </Text>
-                        <Text
-                            fontSize={"md"}
-                            fontWeight={"thin"}
-                        >
-                            from
-                        </Text>
-                        <Text
-                            fontSize={"md"}
-                            fontWeight={"thin"}
-                        >
-                            {toCurrencyString(budgetNum, true)}
+                            Add new expenses with plus button below
                         </Text>
                     </Box>
-                </Box>
+                }
+                {
+                    dataExists && spentPercentage > 0 &&
+                    <Box
+                        position={"relative"}
+                        maxW={"32em"}
+                        px={8}
+                        mb={8}
+                        mx={"auto"}
+                    >
+                        <Doughnut
+                            data={{
+                                datasets: [{
+                                    data: [spentPercentage, reamingPercentage],
+                                    backgroundColor: [getColor(0), getColor(1)],
+                                    borderRadius: 16,
+                                    borderWidth: 4,
+                                }]
+                            }}
+                            options={{
+                                responsive: true,
+                                spacing: 16,
+                                cutout: 96
+                            }}
+                        />
+                        <Box
+                            position={"absolute"}
+                            top={"50%"}
+                            left={"50%"}
+                            transform={"translate(-50%, -50%)"}
+                            textAlign={"center"}
+                        >
+                            <Text
+                                fontSize={"md"}
+                                fontWeight={"thin"}
+                            >
+                                Reaming
+                            </Text>
+                            <Text
+                                fontSize={"3xl"}
+                                fontWeight={"extrabold"}
+                                lineHeight={"1.2em"}
+                            >
+                                {toCurrencyString(reamingNum)}
+                            </Text>
+                            <Text
+                                fontSize={"md"}
+                                fontWeight={"thin"}
+                            >
+                                from
+                            </Text>
+                            <Text
+                                fontSize={"md"}
+                                fontWeight={"thin"}
+                            >
+                                {toCurrencyString(budgetNum, true)}
+                            </Text>
+                        </Box>
+                    </Box>
+                }
             </Box>
             <Box
                 px={4}
@@ -142,7 +164,11 @@ export const ExpenseScreen = () => {
                             ?.sort((o1, o2) => new Date(o1.date).getTime() - new Date(o2.date).getTime())
                             ?.map((singleExpense: SingleExpenseResponse, index) => {
                                 return (
-                                    <Box px={2}>
+                                    <Box
+                                        px={2}
+                                        borderRadius={16}
+                                        shadow={"2xl"}
+                                    >
                                         {index !== 0 && <Divider/>}
                                         <SingleExpenseItem expense={singleExpense}/>
                                     </Box>

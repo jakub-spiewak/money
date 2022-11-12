@@ -1,9 +1,10 @@
 import {MobileDynamicTableItem} from "./MobileDynamicTableItem";
 import {useState} from "react";
 import {ResourceType} from "../../../../redux/slice/types";
-import {Box, Flex, Spacer, Spinner, Table, TableContainer, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
+import {Box, Flex, Spacer, Spinner, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr} from "@chakra-ui/react";
 import {theme} from "../../../../theme";
 import {AnyApiResource} from "../types";
+import {useDebounce} from "use-debounce";
 
 interface Props {
     resource: AnyApiResource,
@@ -12,8 +13,10 @@ interface Props {
 }
 
 export const MobileDynamicTable = (props: Props) => {
-    const {resource: {data, status: {isLoading}}, resourceType, name} = props
+    const {resource: {data, status: {isFetching}}, resourceType, name} = props
     const state = useState<string>()
+
+    const [showLoadingSpinner] = useDebounce(isFetching, 500)
 
     return (
         <Box
@@ -35,7 +38,7 @@ export const MobileDynamicTable = (props: Props) => {
                     {name}
                 </Text>
                 <Spacer/>
-                {isLoading && <Spinner/>}
+                {showLoadingSpinner && <Spinner/>}
             </Flex>
             <TableContainer
                 overflow={"hidden"}
@@ -51,6 +54,20 @@ export const MobileDynamicTable = (props: Props) => {
                     </Thead>
                     <Tbody>
                         {
+                            data.length === 0 &&
+                            <Tr>
+                                <Td
+                                    colSpan={3}
+                                    fontSize={"2xl"}
+                                    fontWeight={"hairline"}
+                                    textAlign={"center"}
+                                >
+                                    No data
+                                </Td>
+                            </Tr>
+                        }
+                        {
+                            data.length > 0 &&
                             data.map((item, index) => {
                                 return (
                                     <MobileDynamicTableItem
