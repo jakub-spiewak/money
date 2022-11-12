@@ -38,12 +38,12 @@ export const DesktopDynamicTable = (props: Props) => {
     return (
         <Box
             borderWidth={1}
-            borderRadius={8}
-            m={4}
+            borderRadius={16}
+            mx={4}
         >
             <Box
                 p={4}
-                borderRadius={8}
+                borderTopRadius={16}
                 backgroundColor={"gray.900"}
                 display={name ? "block" : "none"}
             >
