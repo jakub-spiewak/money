@@ -1,4 +1,4 @@
-import {Box, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr} from "@chakra-ui/react";
+import {Box, Flex, Spacer, Spinner, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr} from "@chakra-ui/react";
 import {ALL_POSSIBLE_COLUMNS, AnyApiResource, AnyResourceResponseKey, DynamicTableColumnNames} from "../types";
 import {ActionButtonsTableCell} from "../../table/ActionButtonsTableCell";
 import {useMemo} from "react";
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const DesktopDynamicTable = (props: Props) => {
-    const {resource: {data}, resourceType, name} = props
+    const {resource: {data, status: {isLoading}}, resourceType, name} = props
 
     const dispatch = useAppDispatch()
 
@@ -41,11 +41,11 @@ export const DesktopDynamicTable = (props: Props) => {
             borderRadius={16}
             mx={4}
         >
-            <Box
+            <Flex
                 p={4}
+                alignItems={"center"}
                 borderTopRadius={16}
                 backgroundColor={"gray.900"}
-                display={name ? "block" : "none"}
             >
                 <Text
                     fontSize={"2xl"}
@@ -53,7 +53,9 @@ export const DesktopDynamicTable = (props: Props) => {
                 >
                     {name}
                 </Text>
-            </Box>
+                <Spacer/>
+                {isLoading && <Spinner/>}
+            </Flex>
             <TableContainer width={["100vw", null, null, theme.breakpoints.lg]}>
                 <Table>
                     <Thead>

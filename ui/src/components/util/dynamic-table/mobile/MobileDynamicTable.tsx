@@ -1,7 +1,7 @@
 import {MobileDynamicTableItem} from "./MobileDynamicTableItem";
 import {useState} from "react";
 import {ResourceType} from "../../../../redux/slice/types";
-import {Box, Table, TableContainer, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
+import {Box, Flex, Spacer, Spinner, Table, TableContainer, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
 import {theme} from "../../../../theme";
 import {AnyApiResource} from "../types";
 
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const MobileDynamicTable = (props: Props) => {
-    const {resource: {data}, resourceType, name} = props
+    const {resource: {data, status: {isLoading}}, resourceType, name} = props
     const state = useState<string>()
 
     return (
@@ -21,13 +21,12 @@ export const MobileDynamicTable = (props: Props) => {
             borderRadius={16}
             mx={4}
         >
-            <Box
+            <Flex
                 p={4}
-                backgroundColor={"gray.900"}
-                display={name ? "block" : "none"}
-                borderTopRadius={16}
                 mb={2}
-                // textAlign={"center"}
+                alignItems={"center"}
+                backgroundColor={"gray.900"}
+                borderTopRadius={16}
             >
                 <Text
                     fontSize={"2xl"}
@@ -35,7 +34,9 @@ export const MobileDynamicTable = (props: Props) => {
                 >
                     {name}
                 </Text>
-            </Box>
+                <Spacer/>
+                {isLoading && <Spinner/>}
+            </Flex>
             <TableContainer
                 overflow={"hidden"}
                 width={["100vw", null, null, theme.breakpoints.lg]}
