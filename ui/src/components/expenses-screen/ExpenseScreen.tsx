@@ -6,7 +6,7 @@ import {
     useReadSingleExpenseQuery,
     useSummaryQuery
 } from "../../redux/generated/redux-api";
-import {Box, Divider, Heading, Image, List, ListItem, Text} from "@chakra-ui/react";
+import {Box, Divider, Flex, Heading, Image, List, ListItem, Spacer, Spinner, Text} from "@chakra-ui/react";
 import {Doughnut} from "react-chartjs-2";
 import {toCurrencyString} from "../../utils/util";
 import {GroupExpenseItem} from "./GroupExpenseItem";
@@ -30,7 +30,7 @@ const getColor = (index: number) => chartColors[index % chartColors.length]
 export const ExpenseScreen = () => {
     const currentMonthStr = useAppSelector(state => state.currentDate.value)
 
-    const {data} = useSummaryQuery({month: currentMonthStr})
+    const {data, isFetching: isFetchingSummary} = useSummaryQuery({month: currentMonthStr})
 
     const reamingNum = data?.reaming || 0
     const budgetNum = data?.budget || 0
@@ -40,26 +40,31 @@ export const ExpenseScreen = () => {
 
     const {
         data: scheduledExpensesList,
+        isFetching: isFetchingScheduledExpenses
     } = useReadScheduledExpenseQuery({month: currentMonthStr})
 
     const {
         data: singleExpensesList,
+        isFetching: isFetchingSingleExpenses
     } = useReadSingleExpenseQuery({month: currentMonthStr})
 
     const dataExists =
         (scheduledExpensesList && scheduledExpensesList.length > 0) ||
         (singleExpensesList && singleExpensesList.length > 0)
 
+    const isLoading = isFetchingSummary || isFetchingSingleExpenses || isFetchingScheduledExpenses
+
     return (
         <Box>
             <Box>
                 <CurrentDateComponent/>
-                <Box
+                <Flex
                     p={4}
                     backgroundColor={"gray.900"}
                     borderRadius={16}
                     borderWidth={1}
                     m={4}
+                    alignItems={"center"}
                 >
                     <Text
                         fontSize={"2xl"}
@@ -67,7 +72,9 @@ export const ExpenseScreen = () => {
                     >
                         Expenses
                     </Text>
-                </Box>
+                    <Spacer/>
+                    {isLoading && <Spinner/>}
+                </Flex>
                 {
                     !dataExists &&
                     <Box px={6}>
@@ -104,7 +111,8 @@ export const ExpenseScreen = () => {
                             options={{
                                 responsive: true,
                                 spacing: 16,
-                                cutout: 96
+                                cutout: 96,
+                                events: []
                             }}
                         />
                         <Box
