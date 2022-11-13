@@ -46,6 +46,7 @@ export const TagForm = () => {
 
     useEffect(() => {
         if (createResult?.isSuccess) {
+            createResult.reset()
             toast({
                 title: 'Success!',
                 description: `An tag has been created.`,
@@ -57,6 +58,7 @@ export const TagForm = () => {
 
     useEffect(() => {
         if (updateResult?.isSuccess) {
+            updateResult.reset()
             toast({
                 title: 'Success!',
                 description: `An tag has been updated.`,

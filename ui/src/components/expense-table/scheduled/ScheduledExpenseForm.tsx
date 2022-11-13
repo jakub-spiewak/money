@@ -68,6 +68,7 @@ export const ScheduledExpenseForm = () => {
 
     useEffect(() => {
         if (createResult?.isSuccess) {
+            createResult.reset()
             toast({
                 title: 'Success!',
                 description: `An expense has been created.`,
@@ -79,6 +80,7 @@ export const ScheduledExpenseForm = () => {
 
     useEffect(() => {
         if (updateResult?.isSuccess) {
+            updateResult.reset()
             toast({
                 title: 'Success!',
                 description: `An expense has been updated.`,

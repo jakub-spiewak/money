@@ -64,6 +64,7 @@ export const SingleExpenseForm = () => {
 
     useEffect(() => {
         if (createResult?.isSuccess) {
+            createResult.reset()
             toast({
                 title: 'Success!',
                 description: `An expense has been created.`,
@@ -75,6 +76,7 @@ export const SingleExpenseForm = () => {
 
     useEffect(() => {
         if (updateResult?.isSuccess) {
+            updateResult.reset()
             toast({
                 title: 'Success!',
                 description: `An expense has been updated.`,

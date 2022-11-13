@@ -57,6 +57,7 @@ export const SingleRevenueForm = () => {
 
     useEffect(() => {
         if (createResult?.isSuccess) {
+            createResult.reset()
             toast({
                 title: 'Success!',
                 description: `An revenue has been created.`,
@@ -68,6 +69,7 @@ export const SingleRevenueForm = () => {
 
     useEffect(() => {
         if (updateResult?.isSuccess) {
+            updateResult.reset()
             toast({
                 title: 'Success!',
                 description: `An revenue has been updated.`,
