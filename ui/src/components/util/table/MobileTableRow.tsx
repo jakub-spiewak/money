@@ -44,8 +44,8 @@ export const MobileTableRow = (props: Props) => {
             <Tr>
                 <Td
                     whiteSpace={"break-spaces"}
-                    borderRadius={16}
                     w={"100%"}
+                    borderWidth={isLast ? 0 : undefined}
                 >
                     <Fade in={!isOpen}>
                         <Text>
@@ -56,6 +56,7 @@ export const MobileTableRow = (props: Props) => {
                 <Td
                     isNumeric
                     px={0}
+                    borderWidth={isLast ? 0 : undefined}
                 >
                     <Fade in={!isOpen}>
                         <AnyAmountComponent amount={value.amount}/>
@@ -67,6 +68,7 @@ export const MobileTableRow = (props: Props) => {
                     p={0}
                     pr={3}
                     width={"100%"}
+                    borderWidth={isLast ? 0 : undefined}
                 >
                     <IconButton
                         ml={3}
@@ -113,6 +115,8 @@ export const MobileTableRow = (props: Props) => {
                     colSpan={3}
                     whiteSpace={"break-spaces"}
                     borderRadius={16}
+                    borderColor={"blue"}
+                    borderWidth={0}
                 >
                     <Collapse
                         animateOpacity

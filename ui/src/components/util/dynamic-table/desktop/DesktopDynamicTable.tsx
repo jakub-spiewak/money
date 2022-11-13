@@ -91,7 +91,8 @@ export const DesktopDynamicTable = (props: Props) => {
                         }
                         {
                             data.length > 0 &&
-                            data.map((item) => {
+                            data.map((item, index) => {
+                                const isLast = index === (data.length - 1)
                                 return (
                                     <Tr key={`table_row_${item.id}`}>
                                         {
@@ -101,6 +102,7 @@ export const DesktopDynamicTable = (props: Props) => {
                                                     <Td
                                                         key={`table_data_${columnKey}`}
                                                         isNumeric={isNumeric}
+                                                        borderWidth={isLast ? 0 : undefined}
                                                     >
                                                         <DesktopDynamicTableItem
                                                             tableValue={item}
@@ -110,7 +112,10 @@ export const DesktopDynamicTable = (props: Props) => {
                                                 )
                                             })
                                         }
-                                        <Td isNumeric>
+                                        <Td
+                                            isNumeric
+                                            borderWidth={isLast ? 0 : undefined}
+                                        >
                                             <ActionButtonsTableCell
                                                 onEdit={() => {
                                                     dispatch(openModal({
