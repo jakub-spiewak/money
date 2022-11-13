@@ -1,15 +1,21 @@
 package com.jakubspiewak.money.expense.scheduled
 
+import com.jakubspiewak.money.common.types.AmountType.CONSTANT
 import com.jakubspiewak.money.common.types.avg
 import com.jakubspiewak.money.common.types.maximum
+import com.jakubspiewak.money.common.types.minimum
 import com.jakubspiewak.money.expense.scheduled.type.ScheduledExpenseRequest
 import com.jakubspiewak.money.expense.scheduled.type.ScheduledExpenseResponse
+import com.jakubspiewak.money.expense.scheduled.type.ScheduledExpenseStatus
+import com.jakubspiewak.money.expense.scheduled.type.ScheduledExpenseStatus.*
 import com.jakubspiewak.money.expense.single.SingleExpenseService
 import com.jakubspiewak.money.tag.TagService
+import com.jakubspiewak.money.util.precision2
 import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.math.BigDecimal
 import java.math.RoundingMode.HALF_UP
 import java.time.YearMonth
 
@@ -42,15 +48,42 @@ class ScheduledExpenseService(
             ?: Mono.error { throw RuntimeException() }
 
         return Mono.zip(tagsMono, childExpensesMono).map { data ->
-            val spentSum = data.t2.sumOf { it.amount }
+            val spentSum = data.t2.sumOf { it.amount }.precision2()
             val spentFactor = spentSum.divide(document.amount.maximum(), HALF_UP)
+            val status = createStatus(document, spentSum, month)
 
             return@map mapper.fromDocumentToResponse(
                 document,
                 tags = data.t1,
                 spentFactor = spentFactor,
-                spentSum = spentSum
+                spentSum = spentSum,
+                status = status
             )
+        }
+    }
+
+    private fun createStatus(
+        document: ScheduledExpenseDocument,
+        spent: BigDecimal,
+        month: YearMonth
+    ): ScheduledExpenseStatus {
+        val amount = document.amount
+        val minimum = amount.minimum()
+        val maximum = amount.maximum()
+        val zero = BigDecimal.ZERO.precision2()
+
+        return when (document.amount.type) {
+            CONSTANT -> when (spent.precision2()) {
+                zero -> if (month.isBefore(YearMonth.now())) UNPAID else FUTURE
+                else -> PAID
+            }
+
+            else     -> when (spent.precision2()) {
+                zero                -> UNPAID
+                in zero..minimum    -> BELOW_MIN
+                in minimum..maximum -> BETWEEN_MIN_MAX
+                else                -> EXCEED_MAX
+            }
         }
     }
 

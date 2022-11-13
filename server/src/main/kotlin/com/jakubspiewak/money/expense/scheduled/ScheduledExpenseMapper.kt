@@ -3,6 +3,7 @@ package com.jakubspiewak.money.expense.scheduled
 import com.jakubspiewak.money.common.mappper.CommonMapperConfig
 import com.jakubspiewak.money.expense.scheduled.type.ScheduledExpenseRequest
 import com.jakubspiewak.money.expense.scheduled.type.ScheduledExpenseResponse
+import com.jakubspiewak.money.expense.scheduled.type.ScheduledExpenseStatus
 import com.jakubspiewak.money.tag.type.TagResponse
 import org.bson.types.ObjectId
 import org.mapstruct.Mapper
@@ -18,11 +19,13 @@ interface ScheduledExpenseMapper {
     @Mapping(target = "date.from", source = "source.dateFrom")
     @Mapping(target = "spentFactor", source = "spentFactor")
     @Mapping(target = "spentSum", source = "spentSum")
+    @Mapping(target = "status", source = "status")
     fun fromDocumentToResponse(
         source: ScheduledExpenseDocument,
         tags: List<TagResponse>,
         spentFactor: BigDecimal,
         spentSum: BigDecimal,
+        status: ScheduledExpenseStatus
     ): ScheduledExpenseResponse
 
     @Mapping(target = "dateFrom", source = "source.date.from")

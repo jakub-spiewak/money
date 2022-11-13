@@ -397,6 +397,13 @@ export type SingleExpenseResponse = {
   date: string;
   tags: TagResponse[];
 };
+export type ScheduledExpenseStatus =
+  | "FUTURE"
+  | "PAID"
+  | "UNPAID"
+  | "BELOW_MIN"
+  | "BETWEEN_MIN_MAX"
+  | "EXCEED_MAX";
 export type ScheduledExpenseResponse = {
   id: string;
   name: string;
@@ -405,6 +412,7 @@ export type ScheduledExpenseResponse = {
   tags: TagResponse[];
   spentSum: number;
   spentFactor: number;
+  status: ScheduledExpenseStatus;
 };
 export type SummaryResponse = {
   budget: number;

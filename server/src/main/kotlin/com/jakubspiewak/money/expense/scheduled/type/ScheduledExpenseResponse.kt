@@ -6,7 +6,7 @@ import com.jakubspiewak.money.tag.type.TagResponse
 import io.swagger.v3.oas.annotations.media.Schema
 import java.math.BigDecimal
 
-@Schema(requiredProperties = ["id", "name", "amount", "date", "tags", "spentSum", "spentFactor"])
+@Schema(requiredProperties = ["id", "name", "amount", "date", "tags", "spentSum", "spentFactor", "status"])
 data class ScheduledExpenseResponse(
         val id: String,
         val name: String,
@@ -15,4 +15,5 @@ data class ScheduledExpenseResponse(
         val tags: List<TagResponse>,
         val spentSum: BigDecimal,
         val spentFactor: BigDecimal,
+        val status: ScheduledExpenseStatus
 )

@@ -21,6 +21,7 @@ import {askForDelete} from "../../redux/slice/delete-modal-slice";
 import {GiTwoCoins} from "react-icons/gi";
 import {
     ScheduledExpenseResponse,
+    ScheduledExpenseStatus,
     SingleExpenseResponse,
     useReadSingleExpenseQuery,
 } from "../../redux/generated/redux-api";
@@ -64,7 +65,7 @@ export const GroupExpenseItem = (props: Props) => {
                 borderRadius={16}
             >
                 {
-                    (expense.amount.type === "CONSTANT" && expense.spentFactor > 0) &&
+                    (expense.amount.type === "CONSTANT" && expense.status === "PAID") &&
                     <Icon
                         as={CiCircleCheck}
                         color={"green.500"}
@@ -74,7 +75,7 @@ export const GroupExpenseItem = (props: Props) => {
                     />
                 }
                 {
-                    (expense.amount.type === "CONSTANT" && expense.spentFactor === 0 && isCurrentMonthOlderThanToday) &&
+                    (expense.amount.type === "CONSTANT" && expense.status === "UNPAID") &&
                     <Icon
                         as={CiCircleAlert}
                         w={16}
@@ -84,7 +85,7 @@ export const GroupExpenseItem = (props: Props) => {
                     />
                 }
                 {
-                    (expense.amount.type === "CONSTANT" && expense.spentFactor === 0 && (!isCurrentMonthOlderThanToday || isCurrentMonthSameAsToday)) &&
+                    (expense.amount.type === "CONSTANT" && expense.status === "FUTURE") &&
                     <Icon
                         w={16}
                         h={16}
@@ -96,8 +97,8 @@ export const GroupExpenseItem = (props: Props) => {
                 {
                     expense.amount.type !== "CONSTANT" &&
                     <SmallPercentageChart
-                        value={(expense.spentFactor || 0) * 100}
-                        backgroundColor={getSpentFactorColor(expense.spentFactor)}
+                        value={(expense.spentFactor > 1 ? 1 : expense.spentFactor) * 100}
+                        backgroundColor={getSpentFactorColor(expense.status)}
                     />
                 }
                 <Flex
@@ -204,10 +205,22 @@ export const GroupExpenseItem = (props: Props) => {
     );
 };
 
-function getSpentFactorColor(spentFactor: number): string | undefined {
-    if (spentFactor < 1) return undefined
-    if (spentFactor === 1) return "green"
-    if (spentFactor > 1) return "red"
+function getSpentFactorColor(status: ScheduledExpenseStatus): string | undefined {
+    switch (status) {
+        case "FUTURE":
+            break;
+        case "PAID":
+            break;
+        case "UNPAID":
+            break;
+        case "BELOW_MIN":
+            break;
+        case "BETWEEN_MIN_MAX":
+            return "#ffa700"
+        case "EXCEED_MAX":
+            return "red"
+
+    }
 }
 
 function getDaysInMonth(year: number, month: number) {

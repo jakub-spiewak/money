@@ -15,7 +15,8 @@ export const DynamicTableColumnNames: Record<AnyResourceResponseKey, { name: str
     parentExpense: {name: "Parent expense"},
     parentRevenue: {name: "Parent revenue"},
     spentFactor: {name: "Spent factor"},
-    spentSum: {name: "Spent sum"}
+    spentSum: {name: "Spent sum"},
+    status: {name: "Status"}
 }
 
 export const ALL_POSSIBLE_COLUMNS: AnyResourceResponseKey[] = [
