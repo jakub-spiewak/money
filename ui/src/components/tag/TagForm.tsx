@@ -29,7 +29,7 @@ export const TagForm = () => {
     const {
         handleSubmit,
         control,
-        formState: {isSubmitting},
+        formState: {isSubmitting, isDirty},
         reset
     } = useForm<TagRequest>()
 
@@ -85,7 +85,10 @@ export const TagForm = () => {
                         <NameField control={control}/>
                     </ModalBody>
                     <ModalFooter>
-                        <SubmitButton isLoading={isSubmitting}/>
+                        <SubmitButton
+                            disabled={!isDirty}
+                            isLoading={isSubmitting}
+                        />
                         <Button onClick={close}>Cancel</Button>
                     </ModalFooter>
                 </form>

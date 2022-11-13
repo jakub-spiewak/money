@@ -39,7 +39,7 @@ export const ScheduledRevenueForm = () => {
 
     const {
         handleSubmit,
-        formState: {isSubmitting},
+        formState: {isSubmitting, isDirty},
         reset,
         control
     } = useForm<ScheduledRevenueRequest>({
@@ -110,7 +110,7 @@ export const ScheduledRevenueForm = () => {
                     <ModalFooter>
                         <SubmitButton
                             isLoading={isSubmitting}
-                            control={control}
+                            disabled={!isDirty}
                         />
                         <Button onClick={close}>Cancel</Button>
                     </ModalFooter>

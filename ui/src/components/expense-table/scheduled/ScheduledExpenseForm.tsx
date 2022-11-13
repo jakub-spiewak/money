@@ -37,7 +37,7 @@ export const ScheduledExpenseForm = () => {
 
     const {
         handleSubmit,
-        formState: {isSubmitting},
+        formState: {isSubmitting, isDirty},
         control,
         reset,
     } = useForm<ScheduledExpenseRequest>()
@@ -105,7 +105,10 @@ export const ScheduledExpenseForm = () => {
                         <TagsField control={control}/>
                     </ModalBody>
                     <ModalFooter>
-                        <SubmitButton isLoading={isSubmitting}/>
+                        <SubmitButton
+                            isLoading={isSubmitting}
+                            disabled={!isDirty}
+                        />
                         <Button onClick={close}>Cancel</Button>
                     </ModalFooter>
                 </form>

@@ -39,7 +39,7 @@ export const SingleExpenseForm = () => {
     const {
         handleSubmit,
         control,
-        formState: {isSubmitting},
+        formState: {isSubmitting, isDirty},
         reset,
     } = useForm<SingleExpenseRequest>()
 
@@ -108,7 +108,10 @@ export const SingleExpenseForm = () => {
                     </ModalBody>
 
                     <ModalFooter>
-                        <SubmitButton isLoading={isSubmitting}/>
+                        <SubmitButton
+                            disabled={!isDirty}
+                            isLoading={isSubmitting}
+                        />
                         <Button onClick={close}>Cancel</Button>
                     </ModalFooter>
                 </form>

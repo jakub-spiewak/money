@@ -18,6 +18,7 @@ export const ExpenseField = (props: ExpenseFieldProps) => {
             label={label || "Expense"}
             defaultValue={defaultValue}
         >
+            {/*TODO: option body should be text only*/}
             {data?.map((expense, index) => (
                 <option
                     key={`expense_option_${index}`}

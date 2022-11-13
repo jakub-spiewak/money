@@ -35,7 +35,7 @@ export const SingleRevenueForm = () => {
 
     const {
         handleSubmit,
-        formState: {isSubmitting},
+        formState: {isSubmitting, isDirty},
         reset,
         control
     } = useForm<SingleRevenueRequest>({
@@ -105,7 +105,7 @@ export const SingleRevenueForm = () => {
                     <ModalFooter>
                         <SubmitButton
                             isLoading={isSubmitting}
-                            control={control}
+                            disabled={!isDirty}
                         />
                         <Button onClick={close}>Cancel</Button>
                     </ModalFooter>
