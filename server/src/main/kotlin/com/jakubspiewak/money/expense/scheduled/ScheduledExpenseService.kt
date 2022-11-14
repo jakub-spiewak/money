@@ -53,19 +53,13 @@ class ScheduledExpenseService(
             val status = createStatus(document, spentSum, month)
 
             return@map mapper.fromDocumentToResponse(
-                document,
-                tags = data.t1,
-                spentFactor = spentFactor,
-                spentSum = spentSum,
-                status = status
+                document, tags = data.t1, spentFactor = spentFactor, spentSum = spentSum, status = status
             )
         }
     }
 
     private fun createStatus(
-        document: ScheduledExpenseDocument,
-        spent: BigDecimal,
-        month: YearMonth
+        document: ScheduledExpenseDocument, spent: BigDecimal, month: YearMonth
     ): ScheduledExpenseStatus {
         val amount = document.amount
         val minimum = amount.minimum()
@@ -73,18 +67,25 @@ class ScheduledExpenseService(
         val zero = BigDecimal.ZERO.precision2()
 
         return when (document.amount.type) {
-            CONSTANT -> when (spent.precision2()) {
-                zero -> if (month.isBefore(YearMonth.now())) UNPAID else FUTURE
-                else -> PAID
+
+            CONSTANT -> {
+                when (spent.precision2()) {
+                    zero -> if (month.isBefore(YearMonth.now())) UNPAID else FUTURE
+                    else -> PAID
+                }
             }
 
-            else     -> when (spent.precision2()) {
-                zero                -> UNPAID
-                in zero..minimum    -> BELOW_MIN
-                in minimum..maximum -> BETWEEN_MIN_MAX
-                else                -> EXCEED_MAX
+            else     -> {
+                when (spent.precision2()) {
+                    zero                -> UNPAID
+                    in zero..minimum    -> BELOW_MIN
+                    in minimum..maximum -> BETWEEN_MIN_MAX
+                    else                -> EXCEED_MAX
+                }
             }
+
         }
+
     }
 
 }

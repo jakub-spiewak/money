@@ -11,11 +11,10 @@ import {
     Spacer,
     Text
 } from "@chakra-ui/react";
-import {SmallPercentageChart} from "../util/chart/SmallPercentageChart";
 import {getCurrentDateISOString, toCurrencyString} from "../../utils/util";
 import {AmountTableCell} from "../util/table/AmountTableCell";
 import {TfiMore} from "react-icons/tfi";
-import {AddIcon, DeleteIcon, EditIcon, Icon} from "@chakra-ui/icons";
+import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {openModal} from "../../redux/slice/modal-slice";
 import {askForDelete} from "../../redux/slice/delete-modal-slice";
 import {GiTwoCoins} from "react-icons/gi";
@@ -27,7 +26,7 @@ import {
 } from "../../redux/generated/redux-api";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {SingleExpenseItem} from "./SingleExpenseItem";
-import {CiCircleAlert, CiCircleCheck, CiDollar} from "react-icons/ci";
+import {GroupExpenseItemStatus} from "./GroupExpenseItemStatus";
 
 interface Props {
     expense: ScheduledExpenseResponse
@@ -64,43 +63,7 @@ export const GroupExpenseItem = (props: Props) => {
                 pl={2}
                 borderRadius={16}
             >
-                {
-                    (expense.amount.type === "CONSTANT" && expense.status === "PAID") &&
-                    <Icon
-                        as={CiCircleCheck}
-                        color={"green.500"}
-                        w={16}
-                        h={16}
-                        px={2}
-                    />
-                }
-                {
-                    (expense.amount.type === "CONSTANT" && expense.status === "UNPAID") &&
-                    <Icon
-                        as={CiCircleAlert}
-                        w={16}
-                        h={16}
-                        px={2}
-                        color={"red.500"}
-                    />
-                }
-                {
-                    (expense.amount.type === "CONSTANT" && expense.status === "FUTURE") &&
-                    <Icon
-                        w={16}
-                        h={16}
-                        px={2}
-                        as={CiDollar}
-                        color={"whiteAlpha.300"}
-                    />
-                }
-                {
-                    expense.amount.type !== "CONSTANT" &&
-                    <SmallPercentageChart
-                        value={(expense.spentFactor > 1 ? 1 : expense.spentFactor) * 100}
-                        backgroundColor={getSpentFactorColor(expense.status)}
-                    />
-                }
+                <GroupExpenseItemStatus expense={expense}/>
                 <Flex
                     pl={2}
                     flexDirection={"column"}
@@ -205,23 +168,6 @@ export const GroupExpenseItem = (props: Props) => {
     );
 };
 
-function getSpentFactorColor(status: ScheduledExpenseStatus): string | undefined {
-    switch (status) {
-        case "FUTURE":
-            break;
-        case "PAID":
-            break;
-        case "UNPAID":
-            break;
-        case "BELOW_MIN":
-            break;
-        case "BETWEEN_MIN_MAX":
-            return "#ffa700"
-        case "EXCEED_MAX":
-            return "red"
-
-    }
-}
 
 function getDaysInMonth(year: number, month: number) {
     return new Date(year, month, 0).getDate();

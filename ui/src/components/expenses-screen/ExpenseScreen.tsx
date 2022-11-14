@@ -35,8 +35,8 @@ export const ExpenseScreen = () => {
     const reamingNum = data?.reaming || 0
     const budgetNum = data?.budget || 0
 
-    const reamingPercentage = (data?.normalizedReaming || 0) * 100
-    const spentPercentage = (data?.normalizedSpent || 0) * 100
+    const reamingPercentage = (clampToOne(data?.normalizedReaming)) * 100
+    const spentPercentage = (clampToOne(data?.normalizedSpent)) * 100
 
     const {
         data: scheduledExpensesList,
@@ -102,7 +102,7 @@ export const ExpenseScreen = () => {
                         <Doughnut
                             data={{
                                 datasets: [{
-                                    data: [spentPercentage, reamingPercentage],
+                                    data: [reamingPercentage, spentPercentage],
                                     backgroundColor: [getColor(0), getColor(1)],
                                     borderRadius: 16,
                                     borderWidth: 4,
@@ -189,3 +189,6 @@ export const ExpenseScreen = () => {
     )
 }
 
+const clampToOne = (value: number = 0) => {
+    return value > 1 ? 1 : value
+}
