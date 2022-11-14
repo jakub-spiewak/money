@@ -15,10 +15,6 @@ export const CurrentDateComponent = () => {
         dispatch(decrement())
     }, [dispatch])
 
-    // const onTodayClick = useCallback(() => {
-    //     dispatch(reset())
-    // }, [dispatch])
-
     return (
         <VStack
             p={4}
@@ -43,15 +39,6 @@ export const CurrentDateComponent = () => {
                     +
                 </Button>
             </HStack>
-            {/*<Button*/}
-            {/*    width={"full"}*/}
-            {/*    variant={"outline"}*/}
-            {/*    colorScheme={"teal"}*/}
-            {/*    disabled={initialState.year === year && initialState.month === month}*/}
-            {/*    onClick={onTodayClick}*/}
-            {/*>*/}
-            {/*    Today*/}
-            {/*</Button>*/}
         </VStack>
     )
 }

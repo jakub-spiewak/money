@@ -2,8 +2,7 @@ import {ScheduledExpenseResponse, ScheduledExpenseStatus} from "../../redux/gene
 import {Icon} from "@chakra-ui/icons";
 import {CiCircleAlert, CiCircleCheck, CiDollar} from "react-icons/ci";
 import {SmallPercentageChart} from "../util/chart/SmallPercentageChart";
-import {IoAlert} from "react-icons/io5";
-import {BsExclamationLg} from "react-icons/bs";
+import {theme} from "../../theme";
 
 interface Props {
     expense: ScheduledExpenseResponse
@@ -53,8 +52,6 @@ export const GroupExpenseItemStatus = (props: Props) => {
         <SmallPercentageChart
             value={(spentFactor > 1 ? 1 : spentFactor) * 100}
             backgroundColor={getSpentFactorColor(status)}
-            // borderColor={getSpentFactorColor(status)}
-            inside={getStatusIcon(status)}
         />
     );
 };
@@ -70,30 +67,9 @@ function getSpentFactorColor(status: ScheduledExpenseStatus): string | undefined
         case "BELOW_MIN":
             break;
         case "BETWEEN_MIN_MAX":
-            return "#ffa700"
+            return theme.colors.green["500"]
         case "EXCEED_MAX":
-            return "red"
+            return theme.colors.red["500"]
     }
-}
-
-const getStatusIcon = (status: ScheduledExpenseStatus): JSX.Element | undefined => {
-
-    if (status === "BETWEEN_MIN_MAX") return (
-        <Icon
-            h={6}
-            w={6}
-            as={IoAlert}
-        />
-    )
-
-    if (status === "EXCEED_MAX") return (
-        <Icon
-            as={BsExclamationLg}
-            color={"red"}
-            h={6}
-            w={6}
-        />
-    )
-
 }
 

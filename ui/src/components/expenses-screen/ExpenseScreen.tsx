@@ -56,8 +56,8 @@ export const ExpenseScreen = () => {
 
     return (
         <Box>
+            <CurrentDateComponent/>
             <Box>
-                <CurrentDateComponent/>
                 <Flex
                     p={4}
                     backgroundColor={"gray.900"}
@@ -76,7 +76,7 @@ export const ExpenseScreen = () => {
                     {isLoading && <Spinner/>}
                 </Flex>
                 {
-                    !dataExists &&
+                    !dataExists && !isLoading &&
                     <Box px={6}>
                         <Box p={8}>
                             <Image src={"/undraw/moonlight.svg"}/>
@@ -102,7 +102,7 @@ export const ExpenseScreen = () => {
                         <Doughnut
                             data={{
                                 datasets: [{
-                                    data: [reamingPercentage, spentPercentage],
+                                    data: [spentPercentage, reamingPercentage],
                                     backgroundColor: [getColor(0), getColor(1)],
                                     borderRadius: 16,
                                     borderWidth: 4,
@@ -111,7 +111,7 @@ export const ExpenseScreen = () => {
                             options={{
                                 responsive: true,
                                 spacing: 16,
-                                cutout: 96,
+                                // cutout: 96,
                                 events: []
                             }}
                         />
