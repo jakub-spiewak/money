@@ -1,10 +1,12 @@
 import {useReadTagQuery} from "../../../redux/generated/redux-api";
 import {FieldProps} from "./types";
-import {useEffect, useMemo, useState} from "react";
+import {useMemo} from "react";
 import {Controller} from "react-hook-form";
 import {
-    Button, Flex,
-    FormControl, FormLabel,
+    Button,
+    Flex,
+    FormControl,
+    FormLabel,
     Menu,
     MenuButton,
     MenuItem,
@@ -23,20 +25,15 @@ interface TagsFormComponentProps {
 }
 
 const TagsFormComponent = (props: TagsFormComponentProps) => {
-    const {value, onChange, onBlur, label} = props
+    const {value = [], onChange, onBlur, label} = props
 
-    const [formTags, setFormTags] = useState<string[]>(value || [])
     const {data: tags = []} = useReadTagQuery()
 
     const availableTags = useMemo(() => {
         return tags
-            .filter((tag) => !formTags.includes(tag?.id || ''))
+            .filter((tag) => !value.includes(tag?.id || ''))
             .sort((a, b) => a.name?.localeCompare(b.name || '') || 0)
-    }, [tags, formTags])
-
-    useEffect(() => {
-        onChange(formTags)
-    }, [formTags, onChange])
+    }, [tags, value])
 
     return (
         <FormControl
@@ -49,7 +46,7 @@ const TagsFormComponent = (props: TagsFormComponentProps) => {
                 gap={2}
                 my={2}
             >
-                {formTags.map((tag, index) => (
+                {value.map((tag, index) => (
                     <Tag
                         size={'md'}
                         key={`form_selected_tag_${index}`}
@@ -60,7 +57,7 @@ const TagsFormComponent = (props: TagsFormComponentProps) => {
                         <TagLabel>{tags.find(t => t.id === tag)?.name?.toUpperCase()}</TagLabel>
                         <TagCloseButton
                             onClick={() => {
-                                setFormTags(prev => prev.filter(t => t !== tag))
+                                onChange(value.filter(t => t !== tag))
                             }}
                         />
                     </Tag>
@@ -79,7 +76,7 @@ const TagsFormComponent = (props: TagsFormComponentProps) => {
                         <MenuItem
                             key={`form_filed_tag_${index}`}
                             onClick={() => {
-                                setFormTags(prev => [...prev, tag.id || ''])
+                                onChange([...value, tag.id || ''])
                             }}
                         >
                             {tag.name?.toUpperCase()}

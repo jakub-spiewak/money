@@ -14,6 +14,7 @@ import {useEffect} from "react";
 import {
     SingleExpenseRequest,
     useCreateSingleExpenseMutation,
+    useReadScheduledExpenseQuery,
     useUpdateSingleExpenseMutation
 } from "../../../redux/generated/redux-api";
 import {SubmitButton} from "../../util/controller/SubmitButton";
@@ -29,10 +30,12 @@ import {closeModal} from "../../../redux/slice/modal-slice";
 export const SingleExpenseForm = () => {
     const dispatch = useAppDispatch()
     const {isOpen, value, id} = useAppSelector(state => state.modal.SINGLE_EXPENSE)
+    const {value: currentMonthStr} = useAppSelector(state => state.currentDate)
     const toast = useToast()
 
     const [createExpense, createResult] = useCreateSingleExpenseMutation()
     const [updateExpense, updateResult] = useUpdateSingleExpenseMutation()
+    const {data: scheduledExpenses} = useReadScheduledExpenseQuery({month: currentMonthStr})
 
     const close = () => dispatch(closeModal("SINGLE_EXPENSE"))
 
@@ -41,6 +44,7 @@ export const SingleExpenseForm = () => {
         control,
         formState: {isSubmitting, isDirty},
         reset,
+        watch, setValue
     } = useForm<SingleExpenseRequest>()
 
     const onSubmit = async (expense: SingleExpenseRequest) => {
@@ -49,6 +53,17 @@ export const SingleExpenseForm = () => {
         else await createExpense({singleExpenseRequest: request})
         close()
     }
+
+    const parentExpense = watch("parentExpense")
+
+    useEffect(() => {
+        if (!parentExpense || !scheduledExpenses) return
+
+        const tagsFromParent = scheduledExpenses.find(v => v.id === parentExpense)?.tags
+        if (!tagsFromParent) return
+
+        setValue("tags", tagsFromParent.map(v => v.id), {shouldValidate: true, shouldTouch: true})
+    }, [parentExpense, scheduledExpenses, setValue])
 
     useEffect(() => {
         if (isOpen) {

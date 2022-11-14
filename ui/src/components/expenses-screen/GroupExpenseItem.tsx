@@ -20,7 +20,6 @@ import {askForDelete} from "../../redux/slice/delete-modal-slice";
 import {GiTwoCoins} from "react-icons/gi";
 import {
     ScheduledExpenseResponse,
-    ScheduledExpenseStatus,
     SingleExpenseResponse,
     useReadSingleExpenseQuery,
 } from "../../redux/generated/redux-api";
@@ -93,7 +92,8 @@ export const GroupExpenseItem = (props: Props) => {
                                         parentExpense: expense.id,
                                         date: isCurrentMonthSameAsToday
                                             ? getCurrentDateISOString()
-                                            : new Date(`${currentMonthStr}-${isCurrentMonthOlderThanToday ? getDaysInMonth(year, month).toString() : '01'}`).toISOString().split("T")[0]
+                                            : new Date(`${currentMonthStr}-${isCurrentMonthOlderThanToday ? getDaysInMonth(year, month).toString() : '01'}`).toISOString().split("T")[0],
+                                        tags: expense.tags.map(t => t.id)
                                     }
                                 })
                             )}

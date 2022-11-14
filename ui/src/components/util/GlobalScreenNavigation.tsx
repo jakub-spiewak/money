@@ -13,7 +13,7 @@ const ExpenseNavigation: NavigationIcon = {icon: <GiPayMoney/>, to: "/expense"}
 const ExpenseTableNavigation: NavigationIcon = {icon: <BsCalendar2Week/>, to: "/expense-table"}
 const RevenueNavigation: NavigationIcon = {icon: <GiTakeMyMoney/>, to: "/revenue"}
 const RevenueTableNavigation: NavigationIcon = {icon: <BsCalendar2Week/>, to: "/revenue-table"}
-const AnalyzeNavigation: NavigationIcon = {icon: <HiPresentationChartBar/>, to: "/expense"}
+const AnalyzeNavigation: NavigationIcon = {icon: <HiPresentationChartBar/>, to: "/analyze"}
 const TagsNavigation: NavigationIcon = {icon: <BsTags/>, to: "/tag"}
 
 

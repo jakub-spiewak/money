@@ -16,6 +16,7 @@ import {Modals} from "./components/Modals";
 import {RevenueScreen} from "./components/revenue-screen/RevenueScreen";
 import {BrowserRouter} from "react-router-dom";
 import {GlobalScreenNavigationContainer} from "./components/util/GlobalScreenNavigationContainer";
+import {AnalyzeScreen} from "./components/analyze/AnalyzeScreen";
 
 function App() {
     return (
@@ -60,6 +61,14 @@ function App() {
                                 element={
                                     <GlobalScreenNavigationContainer>
                                         <RevenueTableScreen/>
+                                    </GlobalScreenNavigationContainer>
+                                }
+                            />
+                            <Route
+                                path={"/analyze"}
+                                element={
+                                    <GlobalScreenNavigationContainer>
+                                        <AnalyzeScreen/>
                                     </GlobalScreenNavigationContainer>
                                 }
                             />
