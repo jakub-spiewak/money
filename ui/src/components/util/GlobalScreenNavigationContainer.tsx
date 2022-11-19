@@ -12,7 +12,7 @@ export const GlobalScreenNavigationContainer = (props: Props) => {
             pb={20}
             minH={"100vh"}
             px={0}
-            maxW={'4xl'}
+            maxW={'8xl'}
         >
             {children}
             <Container

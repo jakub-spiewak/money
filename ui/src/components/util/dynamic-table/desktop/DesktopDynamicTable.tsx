@@ -5,7 +5,6 @@ import {useMemo} from "react";
 import {ResourceType} from "../../../../redux/slice/types";
 import {useAppDispatch} from "../../../../redux/hooks";
 import {askForDelete} from "../../../../redux/slice/delete-modal-slice";
-import {theme} from "../../../../theme";
 import {openModal} from "../../../../redux/slice/modal-slice";
 import {mapResponseToRequest} from "../util";
 import {DesktopDynamicTableItem} from "./DesktopDynamicTableItem";
@@ -59,7 +58,7 @@ export const DesktopDynamicTable = (props: Props) => {
                 <Spacer/>
                 {showLoadingSpinner && <Spinner/>}
             </Flex>
-            <TableContainer width={["100vw", null, null, theme.breakpoints.lg]}>
+            <TableContainer>
                 <Table>
                     <Thead>
                         <Tr>
