@@ -213,8 +213,14 @@ const injectedRtkApi = api
         }),
         providesTags: ["summary", "scheduled_expense", "tag", "expense"],
       }),
-      analyze: build.query<AnalyzeApiResponse, AnalyzeApiArg>({
-        query: () => ({ url: `/analyze` }),
+      analyzeScheduled: build.query<
+        AnalyzeScheduledApiResponse,
+        AnalyzeScheduledApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/analyze`,
+          params: { month: queryArg.month },
+        }),
         providesTags: [
           "scheduled_revenue",
           "analyze",
@@ -317,8 +323,10 @@ export type SummaryApiResponse = /** status 200 OK */ SummaryResponse;
 export type SummaryApiArg = {
   month?: string;
 };
-export type AnalyzeApiResponse = /** status 200 OK */ AnalyzeResponse;
-export type AnalyzeApiArg = void;
+export type AnalyzeScheduledApiResponse = /** status 200 OK */ AnalyzeResponse;
+export type AnalyzeScheduledApiArg = {
+  month?: string;
+};
 export type Unit = object;
 export type TagRequest = {
   name: string;
@@ -423,24 +431,24 @@ export type SummaryResponse = {
   revenue: number;
 };
 export type ExpenseSummaryFromTag = {
-  name?: string;
-  amount?: number;
-  part?: number;
+  name: string;
+  amount: number;
+  factor: number;
 };
 export type TagSummary = {
-  name?: string;
-  amount?: number;
-  expenses?: ExpenseSummaryFromTag[];
-  partOfRevenues?: number;
-  partOfExpenses?: number;
+  name: string;
+  amount: number;
+  expenses: ExpenseSummaryFromTag[];
+  revenuesFactor: number;
+  expensesFactor: number;
 };
 export type AnalyzeResponse = {
-  revenueAmountSum?: number;
-  expensesAmountSum?: number;
-  savingAmountSum?: number;
-  savingPart?: number;
-  expensesPart?: number;
-  tags?: TagSummary[];
+  revenueAmountSum: number;
+  expensesAmountSum: number;
+  savingAmountSum: number;
+  savingFactor: number;
+  expensesFactor: number;
+  tags: TagSummary[];
 };
 export const {
   useUpdateTagMutation,
@@ -464,5 +472,5 @@ export const {
   useReadScheduledExpenseQuery,
   useCreateScheduledExpenseMutation,
   useSummaryQuery,
-  useAnalyzeQuery,
+  useAnalyzeScheduledQuery,
 } = injectedRtkApi;

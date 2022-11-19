@@ -30,7 +30,7 @@ export const AnalyzeTagTable = (props: Props) => {
                 <Tbody>
                     {
                         tags.map((tag, index) => {
-                            const {name, amount, partOfExpenses, partOfRevenues} = tag
+                            const {name, amount, expensesFactor, revenuesFactor} = tag
 
                             return (
                                 <Tr
@@ -40,8 +40,8 @@ export const AnalyzeTagTable = (props: Props) => {
                                     <Td><AnalyzeTagTableExpensesCell tag={tag}/></Td>
                                     <Td>{name}</Td>
                                     <Td isNumeric>{amount?.toFixed(2)}</Td>
-                                    <Td isNumeric>{`${partOfExpenses?.toFixed(2)}%`}</Td>
-                                    <Td isNumeric>{`${partOfRevenues?.toFixed(2)}%`}</Td>
+                                    <Td isNumeric>{`${expensesFactor.toFixed(2)}%`}</Td>
+                                    <Td isNumeric>{`${revenuesFactor.toFixed(2)}%`}</Td>
                                 </Tr>
                             )
                         })

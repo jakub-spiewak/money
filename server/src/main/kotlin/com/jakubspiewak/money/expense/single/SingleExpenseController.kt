@@ -28,8 +28,7 @@ class SingleExpenseController(private val service: SingleExpenseService) {
         @RequestParam(name = "month", required = false)
         @DateTimeFormat(pattern = "yyyy-MM")
         month: YearMonth?
-    ) = month?.let { service.readAll(it) }
-        ?: service.readAll()
+    ) = service.readAll(month)
 
     @PutMapping("/{id}")
     fun updateSingleExpense(

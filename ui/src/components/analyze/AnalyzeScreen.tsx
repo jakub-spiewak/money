@@ -1,6 +1,6 @@
 import 'chart.js/auto';
 import {Flex} from "@chakra-ui/react";
-import {useAnalyzeQuery, useReadScheduledExpenseQuery} from "../../redux/generated/redux-api";
+import {useAnalyzeScheduledQuery, useReadScheduledExpenseQuery} from "../../redux/generated/redux-api";
 import {AnalyzeTagTable} from "./AnalyzeTagTable";
 import {AnalyzeExpenseSavingChart} from "./AnalyzeExpenseSavingChart";
 import {AnalyzeScreenHeadings} from "./AnalyzeScreenHeadings";
@@ -8,7 +8,7 @@ import {AnalyzeExpenseChart} from "./AnalyzeExpensesChart";
 
 export const AnalyzeScreen = () => {
 
-    const {data} = useAnalyzeQuery()
+    const {data} = useAnalyzeScheduledQuery({})
     const {data: expenses = []} = useReadScheduledExpenseQuery({})
 
     if (!data) return null
@@ -18,8 +18,8 @@ export const AnalyzeScreen = () => {
         expensesAmountSum = 0,
         revenueAmountSum = 0,
         savingAmountSum = 0,
-        expensesPart = 0,
-        savingPart = 0
+        expensesFactor = 0,
+        savingFactor = 0
     } = data
 
     return (
@@ -28,8 +28,8 @@ export const AnalyzeScreen = () => {
                 revenueAmount={revenueAmountSum}
                 expensesAmount={expensesAmountSum}
                 savingAmount={savingAmountSum}
-                expensesPercentage={expensesPart}
-                savingPercentage={savingPart}
+                expensesPercentage={expensesFactor}
+                savingPercentage={savingFactor}
             />
             <Flex
                 gap={8}

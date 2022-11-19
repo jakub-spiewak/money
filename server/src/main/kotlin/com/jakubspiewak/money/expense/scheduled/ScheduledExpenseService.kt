@@ -26,11 +26,17 @@ class ScheduledExpenseService(
     private val singleExpenseService: SingleExpenseService,
     private val mapper: ScheduledExpenseMapper
 ) {
-    fun readAll(): Flux<ScheduledExpenseResponse> = repository.findAll().flatMap { createResponse(it, YearMonth.now()) }
-        .sort { o1, o2 -> o2.amount.avg().compareTo(o1.amount.avg()) }
 
-    fun readAll(month: YearMonth): Flux<ScheduledExpenseResponse> =
-        repository.findAllIntersects(month.atDay(1), month.atEndOfMonth()).flatMap { createResponse(it, month) }
+    fun readAll(month: YearMonth?): Flux<ScheduledExpenseResponse> =
+        (month?.let { repository.findAllIntersects(month.atDay(1), month.atEndOfMonth()) }
+            ?: repository.findAll())
+            .flatMap {
+                createResponse(
+                    it,
+                    month
+                        ?: YearMonth.now()
+                )
+            }
             .sort { o1, o2 -> o2.amount.avg().compareTo(o1.amount.avg()) }
 
     fun create(request: ScheduledExpenseRequest): Mono<Unit> =

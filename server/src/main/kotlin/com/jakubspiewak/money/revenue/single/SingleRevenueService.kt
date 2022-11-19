@@ -21,14 +21,11 @@ class SingleRevenueService(
     fun create(request: SingleRevenueRequest): Mono<Unit> =
         repository.save(mapper.fromRequestToDocument(request)).map { }
 
-    fun readAll(): Flux<SingleRevenueResponse> = repository.findAll()
-        .flatMap { createResponse(it) }
-        .sort {o1, o2 -> o2.amount.compareTo(o1.amount) }
-
-    fun readAll(month: YearMonth): Flux<SingleRevenueResponse> = repository
-        .findAllInMonth(month.monthValue, month.year)
-        .flatMap { createResponse(it) }
-        .sort {o1, o2 -> o2.amount.compareTo(o1.amount) }
+    fun readAll(month: YearMonth? = null): Flux<SingleRevenueResponse> =
+        (month?.let { repository.findAllInMonth(month.monthValue, month.year) }
+            ?: repository.findAll())
+            .flatMap { createResponse(it) }
+            .sort { o1, o2 -> o2.amount.compareTo(o1.amount) }
 
     fun update(id: String, request: SingleRevenueRequest): Mono<Unit> =
         repository.save(mapper.fromRequestToDocument(request, ObjectId(id))).map { }

@@ -26,8 +26,7 @@ class ScheduledRevenueController(private val service: ScheduledRevenueService) {
     fun readScheduledRevenue(
         @RequestParam("month", required = false)
         month: YearMonth?
-    ) = month?.let { service.readAll(it) }
-        ?: service.readAll()
+    ) = service.readAll(month)
 
     @PutMapping("/{id}")
     fun updateScheduledRevenue(

@@ -1,5 +1,4 @@
 import {Button} from "@chakra-ui/react";
-import {Control} from "react-hook-form";
 
 interface Props {
     isLoading?: boolean,

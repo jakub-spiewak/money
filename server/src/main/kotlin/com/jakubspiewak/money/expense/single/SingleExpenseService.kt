@@ -20,15 +20,11 @@ class SingleExpenseService(
     private val mapper: SingleExpenseMapper
 ) {
 
-    fun readAll(): Flux<SingleExpenseResponse> = repository
-        .findAll()
-        .flatMap { createResponse(it) }
-        .sort { o1, o2 -> o2.amount.compareTo(o1.amount) }
-
-    fun readAll(month: YearMonth): Flux<SingleExpenseResponse> = repository
-        .findAllIntersects(month.atDay(1), month.atEndOfMonth())
-        .flatMap { createResponse(it) }
-        .sort { o1, o2 -> o2.amount.compareTo(o1.amount) }
+    fun readAll(month: YearMonth?): Flux<SingleExpenseResponse> =
+        (month?.let { repository.findAllIntersects(month.atDay(1), month.atEndOfMonth()) }
+            ?: repository.findAll())
+            .flatMap { createResponse(it) }
+            .sort { o1, o2 -> o2.amount.compareTo(o1.amount) }
 
     fun readAllByParent(parentId: ObjectId, month: YearMonth = YearMonth.now()) = repository
         .findAllByParentExpenseIntersects(parentId, month.atDay(1), month.atEndOfMonth())

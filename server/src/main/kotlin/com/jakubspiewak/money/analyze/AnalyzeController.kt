@@ -6,11 +6,11 @@ import com.jakubspiewak.money.tag.TagController
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.time.YearMonth
 
 @Tag(name = AnalyzeController.TAG)
-@Tag(name = ScheduledExpenseController.TAG)
-@Tag(name = ScheduledRevenueController.TAG)
 @Tag(name = TagController.TAG)
 @RequestMapping("/analyze")
 @RestController
@@ -20,7 +20,12 @@ class AnalyzeController(private val analyzeService: AnalyzeService) {
         const val TAG = "analyze"
     }
 
+    @Tag(name = ScheduledExpenseController.TAG)
+    @Tag(name = ScheduledRevenueController.TAG)
     @GetMapping
-    fun analyze() = analyzeService.analyze()
+    fun analyzeScheduled(
+        @RequestParam("month", required = false)
+        month: YearMonth?
+    ) = analyzeService.analyzeScheduled(month)
 
 }

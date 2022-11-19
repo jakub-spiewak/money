@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono
 
 @Service
 class TagService(private val repository: TagRepository, private val mapper: TagMapper) {
+
     fun readAll(): Flux<TagResponse> =
         repository.findAll(Sort.by(Sort.Direction.ASC, "name")).map { mapper.documentToResponse(it) }
 

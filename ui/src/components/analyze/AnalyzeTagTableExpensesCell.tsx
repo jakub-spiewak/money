@@ -1,17 +1,22 @@
 import {
     IconButton,
     Popover,
-    PopoverArrow, PopoverBody,
+    PopoverArrow,
+    PopoverBody,
     PopoverCloseButton,
     PopoverContent,
     PopoverHeader,
-    PopoverTrigger, Table, Tbody, Td, Tr
+    PopoverTrigger,
+    Table,
+    Tbody,
+    Td,
+    Tr
 } from "@chakra-ui/react";
 import {InfoIcon} from "@chakra-ui/icons";
 import {TagSummary} from "../../redux/generated/redux-api";
 
 interface Props {
-   tag: TagSummary
+    tag: TagSummary
 }
 
 export const AnalyzeTagTableExpensesCell = (props: Props) => {
@@ -42,7 +47,7 @@ export const AnalyzeTagTableExpensesCell = (props: Props) => {
                                 expenses?.map((e, index) => (
                                     <Tr key={`summary_expense_row_${index}`}>
                                         <Td>{e.name}</Td>
-                                        <Td isNumeric>{e.amount?.toFixed(2) + ` (${e.part}%)`}</Td>
+                                        <Td isNumeric>{e.amount?.toFixed(2) + ` (${e.factor}%)`}</Td>
                                     </Tr>
                                 ))
                             }
