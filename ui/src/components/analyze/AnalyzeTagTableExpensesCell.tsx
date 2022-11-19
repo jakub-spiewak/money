@@ -47,7 +47,7 @@ export const AnalyzeTagTableExpensesCell = (props: Props) => {
                                 expenses?.map((e, index) => (
                                     <Tr key={`summary_expense_row_${index}`}>
                                         <Td>{e.name}</Td>
-                                        <Td isNumeric>{e.amount?.toFixed(2) + ` (${e.factor}%)`}</Td>
+                                        <Td isNumeric>{e.amount.toFixed(2) + ` (${(e.factor * 100).toFixed(2)}%)`}</Td>
                                     </Tr>
                                 ))
                             }

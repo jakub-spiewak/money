@@ -18,8 +18,10 @@ export const AnalyzeScreenHeadings = (props: Props) => {
             >
                 <Center flexDirection={"column"}>
                     <Text fontSize={'4xl'}>Revenues: <b>{revenueAmount.toLocaleString()}</b></Text>
-                    <Text fontSize={'xl'}>Expenses: <b>{expensesAmount.toLocaleString()}</b> ({expensesPercentage}%)</Text>
-                    <Text fontSize={'xl'}>Savings: <b>{savingAmount.toLocaleString()}</b> ({savingPercentage}%)</Text>
+                    <Text
+                        fontSize={'xl'}>Expenses: <b>{expensesAmount.toLocaleString()}</b> ({expensesPercentage * 100}%)</Text>
+                    <Text
+                        fontSize={'xl'}>Savings: <b>{savingAmount.toLocaleString()}</b> ({savingPercentage * 100}%)</Text>
                 </Center>
             </Container>
         </Center>
