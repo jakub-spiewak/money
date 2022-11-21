@@ -6,12 +6,27 @@ import {
     useReadSingleExpenseQuery,
     useSummaryQuery
 } from "../../redux/generated/redux-api";
-import {Box, Divider, Flex, Heading, Image, List, ListItem, Spacer, Spinner, Text} from "@chakra-ui/react";
+import {
+    Box,
+    Divider,
+    Flex,
+    Heading,
+    Image,
+    List,
+    ListItem,
+    Spacer,
+    Spinner,
+    Text,
+    useBreakpointValue
+} from "@chakra-ui/react";
 import {Doughnut} from "react-chartjs-2";
 import {toCurrencyString} from "../../utils/util";
 import {GroupExpenseItem} from "./GroupExpenseItem";
 import {CurrentDateComponent} from "../util/CurrentDateComponent";
 import {SingleExpenseItem} from "./SingleExpenseItem";
+import {useChunkedArray} from "../../utils/Hooks";
+import {jsx} from "@emotion/react";
+import JSX = jsx.JSX;
 
 const chartColors = [
     "#fd7f6f",
@@ -54,17 +69,57 @@ export const ExpenseScreen = () => {
 
     const isLoading = isFetchingSummary || isFetchingSingleExpenses || isFetchingScheduledExpenses
 
+    // TODO: pls refactor this later
+    const columnsNumber = useBreakpointValue({base: 1, md: 2, lg: 3, xl: 4}, {fallback: 'base'}) || 1
+    const expensesChunks: ScheduledExpenseResponse[][] = useChunkedArray(scheduledExpensesList || [], columnsNumber);
+    const chunksComponents: JSX.Element[][] = expensesChunks.map((chunk) => {
+        return chunk.map((scheduledExpense) => {
+            return (
+                <ListItem mb={4} w={'full'} dropShadow={"2xl"}>
+                    <GroupExpenseItem expense={scheduledExpense}/>
+                </ListItem>
+            )
+        })
+    })
+
+    chunksComponents[chunksComponents.length - 1].push((
+        <Box
+            borderWidth={1}
+            borderRadius={16}
+        >
+            {
+                singleExpensesList
+                    ?.filter((singleExpense) => !singleExpense.parentExpense)
+                    ?.sort((o1, o2) => new Date(o1.date).getTime() - new Date(o2.date).getTime())
+                    ?.map((singleExpense: SingleExpenseResponse, index) => {
+                        return (
+                            <Box
+                                px={2}
+                                borderRadius={16}
+                                shadow={"2xl"}
+                            >
+                                {index !== 0 && <Divider/>}
+                                <SingleExpenseItem expense={singleExpense}/>
+                            </Box>
+                        )
+                    })
+            }
+        </Box>
+    ))
+    const components: JSX.Element[][] = chunksComponents
+
+
     return (
         <Box>
             <CurrentDateComponent/>
             <Box>
                 <Flex
-                    p={4}
+                    alignItems={"center"}
                     backgroundColor={"gray.900"}
                     borderRadius={16}
                     borderWidth={1}
                     m={4}
-                    alignItems={"center"}
+                    p={4}
                 >
                     <Text
                         fontSize={"2xl"}
@@ -93,11 +148,11 @@ export const ExpenseScreen = () => {
                 {
                     dataExists &&
                     <Box
-                        position={"relative"}
                         maxW={"32em"}
-                        px={8}
                         mb={8}
                         mx={"auto"}
+                        position={"relative"}
+                        px={8}
                     >
                         <Doughnut
                             data={{
@@ -116,11 +171,11 @@ export const ExpenseScreen = () => {
                             }}
                         />
                         <Box
-                            position={"absolute"}
-                            top={"50%"}
                             left={"50%"}
-                            transform={"translate(-50%, -50%)"}
+                            position={"absolute"}
                             textAlign={"center"}
+                            top={"50%"}
+                            transform={"translate(-50%, -50%)"}
                         >
                             <Text
                                 fontSize={"md"}
@@ -151,40 +206,26 @@ export const ExpenseScreen = () => {
                     </Box>
                 }
             </Box>
-            <Box
-                px={4}
+            <Flex
                 pb={4}
-                className={""}
+                gap={4}
+                px={4}
+                justifyContent={'center'}
             >
-                <List>
-                    {
-                        scheduledExpensesList?.map((scheduledExpense: ScheduledExpenseResponse) => {
-                            return (
-                                <ListItem dropShadow={"2xl"}>
-                                    <GroupExpenseItem expense={scheduledExpense}/>
-                                </ListItem>
-                            )
-                        })
-                    }
-                    {
-                        singleExpensesList
-                            ?.filter((singleExpense) => !singleExpense.parentExpense)
-                            ?.sort((o1, o2) => new Date(o1.date).getTime() - new Date(o2.date).getTime())
-                            ?.map((singleExpense: SingleExpenseResponse, index) => {
-                                return (
-                                    <Box
-                                        px={2}
-                                        borderRadius={16}
-                                        shadow={"2xl"}
-                                    >
-                                        {index !== 0 && <Divider/>}
-                                        <SingleExpenseItem expense={singleExpense}/>
-                                    </Box>
-                                )
-                            })
-                    }
-                </List>
-            </Box>
+                {
+                    components.map((chunk) => {
+                        return (
+                            <List w={'full'}>
+                                {
+                                    chunk.map((element) => {
+                                        return element
+                                    })
+                                }
+                            </List>
+                        )
+                    })
+                }
+            </Flex>
         </Box>
     )
 }

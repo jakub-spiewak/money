@@ -1,22 +1,20 @@
-import {useEffect, useState} from "react";
+export const useChunkedArray = <T>(arr: T[], chunksAmount: number): T[][] => {
+    const chunkSize = Math.round(arr.length / chunksAmount)
 
-export const useMinTimeChange = (val: any, time: number) => {
-    const [value, setValue] = useState()
-    const [isChanging, setIsChanging] = useState(false)
+    if (chunkSize === 0 || arr.length === 0) return []
 
-    useEffect(() => {
-        if (isChanging) return
+    const chunks: T[][] = []
 
-        setIsChanging(true)
-        setValue(val)
+    for (let i = 0; i < chunksAmount; i++) {
+        chunks.push(arr.slice(i * chunkSize, (i + 1) * chunkSize))
+    }
 
-        const timeoutId = setTimeout(() => {
-            setIsChanging(false)
-            setValue(val)
-        }, time)
-        return () => {
-            clearTimeout(timeoutId)
-        }
-    }, [isChanging, val])
-    return value
+    const offset = arr.length % chunksAmount
+
+    for (let i = 0; i < offset; i++) {
+        // TODO: wtf with that "+ 2"
+        chunks[i].push(arr[i + offset + 2])
+    }
+
+    return chunks;
 }
