@@ -36,20 +36,16 @@ export const GroupRevenueItem = (props: Props) => {
     } = useReadSingleRevenueQuery({month: currentMonthStr})
 
     return (
-        <Box
-            borderWidth={1}
-            borderRadius={16}
-            shadow={"xl"}
-            mb={2}
-        >
+        <Flex w={'100%'} flexDirection={'column'}>
             <Flex
                 alignItems={"center"}
                 justifyContent={"flex-start"}
                 py={2}
                 pl={2}
+                w={'full'}
             >
                 <Flex
-                    pl={2}
+                    px={2}
                     flexDirection={"column"}
                 >
                     <Text fontWeight={"bold"}>{revenue.name}</Text>
@@ -143,7 +139,7 @@ export const GroupRevenueItem = (props: Props) => {
                         )
                     })
             }
-        </Box>
+        </Flex>
     );
 };
 

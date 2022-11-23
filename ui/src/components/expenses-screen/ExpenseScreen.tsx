@@ -1,30 +1,18 @@
 import {useAppSelector} from "../../redux/hooks";
 import {
-    ScheduledExpenseResponse,
     SingleExpenseResponse,
     useReadScheduledExpenseQuery,
     useReadSingleExpenseQuery,
     useSummaryQuery
 } from "../../redux/generated/redux-api";
-import {
-    Box,
-    Divider,
-    Flex,
-    Heading,
-    Image,
-    List,
-    ListItem,
-    Spacer,
-    Spinner,
-    Text,
-    useBreakpointValue
-} from "@chakra-ui/react";
+import {Box, Divider, Flex, Heading, Image, Spacer, Spinner, Text} from "@chakra-ui/react";
 import {Doughnut} from "react-chartjs-2";
 import {toCurrencyString} from "../../utils/util";
-import {GroupExpenseItem} from "./GroupExpenseItem";
 import {CurrentDateComponent} from "../util/CurrentDateComponent";
+import {DynamicGrid} from "../util/dynamic-grid/DynamicGrid";
 import {SingleExpenseItem} from "./SingleExpenseItem";
-import {useChunkedArray} from "../../utils/Hooks";
+import {GroupExpenseItem} from "./GroupExpenseItem";
+import {useMemo} from "react";
 import {jsx} from "@emotion/react";
 import JSX = jsx.JSX;
 
@@ -69,56 +57,45 @@ export const ExpenseScreen = () => {
 
     const isLoading = isFetchingSummary || isFetchingSingleExpenses || isFetchingScheduledExpenses
 
-    // TODO: pls refactor this later
-    const columnsNumber = useBreakpointValue({base: 1, md: 2, lg: 3, xl: 4}, {fallback: 'base'}) || 1
-    const expensesChunks: ScheduledExpenseResponse[][] = useChunkedArray(scheduledExpensesList || [], columnsNumber);
-    const chunksComponents: JSX.Element[][] = expensesChunks.map((chunk) => {
-        return chunk.map((scheduledExpense) => {
-            return (
-                <ListItem mb={4} w={'full'} dropShadow={"2xl"}>
-                    <GroupExpenseItem expense={scheduledExpense}/>
-                </ListItem>
-            )
-        })
-    })
+    const elements = useMemo(() => {
+        const result: JSX.Element[] = []
 
-    chunksComponents[chunksComponents.length - 1].push((
-        <Box
-            borderWidth={1}
-            borderRadius={16}
-        >
-            {
-                singleExpensesList
-                    ?.filter((singleExpense) => !singleExpense.parentExpense)
-                    ?.sort((o1, o2) => new Date(o1.date).getTime() - new Date(o2.date).getTime())
-                    ?.map((singleExpense: SingleExpenseResponse, index) => {
-                        return (
-                            <Box
-                                px={2}
-                                borderRadius={16}
-                                shadow={"2xl"}
-                            >
-                                {index !== 0 && <Divider/>}
-                                <SingleExpenseItem expense={singleExpense}/>
-                            </Box>
-                        )
-                    })
-            }
-        </Box>
-    ))
-    const components: JSX.Element[][] = chunksComponents
+        const scheduledExpensesElements: JSX.Element[] = (scheduledExpensesList || []).map((scheduledExpense) => (
+            <GroupExpenseItem expense={scheduledExpense}/>
+        ))
 
+        result.push(...scheduledExpensesElements)
+
+        const singleExpensesElement: JSX.Element[] = (singleExpensesList || [])
+            .filter((singleExpense) => !singleExpense.parentExpense)
+            .sort((o1, o2) => new Date(o1.date).getTime() - new Date(o2.date).getTime())
+            .map((singleExpense: SingleExpenseResponse, index) => {
+                return (
+                    <Box
+                        px={2}
+                        borderRadius={16}
+                        shadow={"2xl"}
+                    >
+                        {index !== 0 && <Divider/>}
+                        <SingleExpenseItem expense={singleExpense}/>
+                    </Box>
+                )
+            })
+
+        result.push(<Box>{singleExpensesElement}</Box>)
+
+        return result
+    }, [scheduledExpensesList, singleExpensesList])
 
     return (
-        <Box>
+        <Box p={4}>
             <CurrentDateComponent/>
-            <Box>
+            <Box pt={4}>
                 <Flex
                     alignItems={"center"}
                     backgroundColor={"gray.900"}
                     borderRadius={16}
                     borderWidth={1}
-                    m={4}
                     p={4}
                 >
                     <Text
@@ -206,26 +183,9 @@ export const ExpenseScreen = () => {
                     </Box>
                 }
             </Box>
-            <Flex
-                pb={4}
-                gap={4}
-                px={4}
-                justifyContent={'center'}
-            >
-                {
-                    components.map((chunk) => {
-                        return (
-                            <List w={'full'}>
-                                {
-                                    chunk.map((element) => {
-                                        return element
-                                    })
-                                }
-                            </List>
-                        )
-                    })
-                }
-            </Flex>
+            <DynamicGrid>
+                {elements}
+            </DynamicGrid>
         </Box>
     )
 }

@@ -36,6 +36,7 @@ export const SingleRevenueItem = (props: Props) => {
                         {toCurrencyString(revenue.amount)}
                     </Text>
                 </Flex>
+                <Spacer/>
                 <Menu>
                     <MenuButton
                         as={IconButton}

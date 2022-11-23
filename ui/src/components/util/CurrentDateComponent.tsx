@@ -18,7 +18,6 @@ export const CurrentDateComponent = () => {
     return (
         <VStack
             p={4}
-            m={4}
             borderWidth={1}
             borderRadius={16}
             shadow={"2xl"}

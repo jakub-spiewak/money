@@ -49,18 +49,13 @@ export const GroupExpenseItem = (props: Props) => {
     } = useReadSingleExpenseQuery({month: currentMonthStr})
 
     return (
-        <Box
-            borderWidth={1}
-            borderRadius={16}
-            mb={2}
-        >
+        <>
             <Flex
                 alignItems={"center"}
-                shadow={"2xl"}
                 justifyContent={"flex-start"}
-                py={2}
                 pl={2}
-                borderRadius={16}
+                py={2}
+                shadow={"2xl"}
             >
                 <GroupExpenseItemStatus expense={expense}/>
                 <Flex
@@ -164,7 +159,7 @@ export const GroupExpenseItem = (props: Props) => {
                         )
                     })
             }
-        </Box>
+        </>
     );
 };
 

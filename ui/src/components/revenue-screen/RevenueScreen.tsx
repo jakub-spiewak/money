@@ -1,8 +1,9 @@
 import {useAppSelector} from "../../redux/hooks";
 import {ScheduledRevenueResponse, useReadScheduledRevenueQuery} from "../../redux/generated/redux-api";
-import {Box, Flex, Heading, Image, List, ListItem, Spacer, Spinner, Text} from "@chakra-ui/react";
+import {Box, Flex, Heading, Image, Spacer, Spinner, Text} from "@chakra-ui/react";
 import {GroupRevenueItem} from "./GroupRevenueItem";
 import {CurrentDateComponent} from "../util/CurrentDateComponent";
+import {DynamicGrid} from "../util/dynamic-grid/DynamicGrid";
 
 export const RevenueScreen = () => {
     const {year, month} = useAppSelector(state => state.currentDate)
@@ -15,15 +16,15 @@ export const RevenueScreen = () => {
     } = useReadScheduledRevenueQuery({month: currentMonthStr})
 
     return (
-        <Box>
+        <Box p={4}>
             <CurrentDateComponent/>
             <Flex
                 p={4}
                 backgroundColor={"gray.900"}
                 borderRadius={16}
                 borderWidth={1}
-                m={4}
                 alignItems={"center"}
+                my={4}
             >
                 <Text
                     fontSize={"2xl"}
@@ -37,39 +38,33 @@ export const RevenueScreen = () => {
                 }
             </Flex>
             <Box
-                px={4}
                 pb={4}
-                className={""}
+                w={'full'}
             >
-                <List>
-                    {
-                        data && data.length === 0 &&
-                        <Box px={2}>
-                            <Box p={8}>
-                                <Image src={"/undraw/moonlight.svg"}/>
-                            </Box>
-                            <Heading>No data</Heading>
-                            <Text
-                                fontSize={"2xl"}
-                                fontWeight={"hairline"}
-                            >
-                                Add revenues with plus button below
-                            </Text>
+                {
+                    data && data.length === 0 &&
+                    <Box px={2}>
+                        <Box p={8}>
+                            <Image src={"/undraw/moonlight.svg"}/>
                         </Box>
-                    }
+                        <Heading>No data</Heading>
+                        <Text
+                            fontSize={"2xl"}
+                            fontWeight={"hairline"}
+                        >
+                            Add revenues with plus button below
+                        </Text>
+                    </Box>
+                }
+                <DynamicGrid>
                     {
                         data?.map((scheduledRevenue: ScheduledRevenueResponse) => {
                             return (
-                                <ListItem
-                                    key={`list_item_${scheduledRevenue.id}`}
-                                    dropShadow={"2xl"}
-                                >
-                                    <GroupRevenueItem revenue={scheduledRevenue}/>
-                                </ListItem>
+                                <GroupRevenueItem revenue={scheduledRevenue}/>
                             )
                         })
                     }
-                </List>
+                </DynamicGrid>
             </Box>
         </Box>
     )
