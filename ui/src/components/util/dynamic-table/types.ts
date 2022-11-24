@@ -28,6 +28,8 @@ export const ALL_POSSIBLE_COLUMNS: AnyResourceResponseKey[] = [
     "tags"
 ]
 
+export type DynamicTableColumnType = typeof ALL_POSSIBLE_COLUMNS[number]
+
 export interface ApiResource<T> {
     data: T[],
     status: Omit<RequestStatusFlags, 'status'> & { isFetching: boolean }
