@@ -103,3 +103,16 @@ export const getResourceSortFunction = (key: AnyResourceResponseKey) => {
             return () => 0
     }
 }
+
+export const getAmountString = (amount: Amount): string => {
+    switch (amount.type) {
+        case "RANGE":
+            return `From: ${toCurrencyString(amount.data.min)} to ${toCurrencyString(amount.data.max)}`
+        case "CONSTANT":
+            return toCurrencyString(amount.data.value)
+        case "PERCENTAGE":
+            return `${toCurrencyString(amount.data.value)} ± ${amount.data.percentage?.toLocaleString()}%`
+        default:
+            return ""
+    }
+}

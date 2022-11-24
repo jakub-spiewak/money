@@ -1,8 +1,9 @@
 import {ScheduledExpenseResponse, ScheduledExpenseStatus} from "../../redux/generated/redux-api";
 import {Icon} from "@chakra-ui/icons";
-import {CiCircleAlert, CiCircleCheck, CiDollar} from "react-icons/ci";
+import {CiCircleAlert, CiDollar} from "react-icons/ci";
 import {SmallPercentageChart} from "../util/chart/SmallPercentageChart";
 import {theme} from "../../theme";
+import {BsCheckCircle} from "react-icons/bs";
 
 interface Props {
     expense: ScheduledExpenseResponse
@@ -15,7 +16,7 @@ export const GroupExpenseItemStatus = (props: Props) => {
         return (
 
             <Icon
-                as={CiCircleCheck}
+                as={BsCheckCircle}
                 color={"green.500"}
                 w={16}
                 h={16}

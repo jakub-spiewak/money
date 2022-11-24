@@ -1,7 +1,7 @@
 import {useReadScheduledRevenueQuery} from "../../../redux/generated/redux-api";
 import {FieldProps} from "./types";
 import {SelectFormController} from "../controller/SelectFormController";
-import {AmountTableCell} from "../table/AmountTableCell";
+import {getAmountString} from "../../../utils/util";
 
 interface ExpenseFieldProps extends FieldProps {
     defaultValue?: string
@@ -25,10 +25,7 @@ export const RevenueField = (props: ExpenseFieldProps) => {
                     key={`expense_option_${index}`}
                     value={revenue.id}
                 >
-                    {revenue.name}
-                    <span> (</span>
-                    <AmountTableCell amount={revenue.amount}/>
-                    <span>)</span>
+                    {`${revenue.name} (${getAmountString(revenue.amount)})`}
                 </option>
             ))}
         </SelectFormController>

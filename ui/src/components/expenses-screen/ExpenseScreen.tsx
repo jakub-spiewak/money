@@ -60,8 +60,8 @@ export const ExpenseScreen = () => {
     const elements = useMemo(() => {
         const result: JSX.Element[] = []
 
-        const scheduledExpensesElements: JSX.Element[] = (scheduledExpensesList || []).map((scheduledExpense) => (
-            <GroupExpenseItem expense={scheduledExpense}/>
+        const scheduledExpensesElements: JSX.Element[] = (scheduledExpensesList || []).map((scheduledExpense, index) => (
+            <GroupExpenseItem key={`group_expense_item_${index}`} expense={scheduledExpense}/>
         ))
 
         result.push(...scheduledExpensesElements)
@@ -72,6 +72,7 @@ export const ExpenseScreen = () => {
             .map((singleExpense: SingleExpenseResponse, index) => {
                 return (
                     <Box
+                        key={`single_expense_item_${index}`}
                         px={2}
                         borderRadius={16}
                         shadow={"2xl"}
@@ -82,7 +83,7 @@ export const ExpenseScreen = () => {
                 )
             })
 
-        result.push(<Box>{singleExpensesElement}</Box>)
+        result.push(<Box key={'single_expense_element'}>{singleExpensesElement}</Box>)
 
         return result
     }, [scheduledExpensesList, singleExpensesList])
@@ -143,7 +144,7 @@ export const ExpenseScreen = () => {
                             options={{
                                 responsive: true,
                                 spacing: 16,
-                                // cutout: 96,
+                                cutout: 96,
                                 events: []
                             }}
                         />

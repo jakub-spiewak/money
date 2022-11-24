@@ -58,9 +58,9 @@ export const RevenueScreen = () => {
                 }
                 <DynamicGrid>
                     {
-                        data?.map((scheduledRevenue: ScheduledRevenueResponse) => {
+                        data?.map((scheduledRevenue: ScheduledRevenueResponse, index) => {
                             return (
-                                <GroupRevenueItem revenue={scheduledRevenue}/>
+                                <GroupRevenueItem key={`group_revenue_item_${index}`} revenue={scheduledRevenue}/>
                             )
                         })
                     }

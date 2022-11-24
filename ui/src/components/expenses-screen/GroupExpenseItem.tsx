@@ -11,8 +11,7 @@ import {
     Spacer,
     Text
 } from "@chakra-ui/react";
-import {getCurrentDateISOString, toCurrencyString} from "../../utils/util";
-import {AmountTableCell} from "../util/table/AmountTableCell";
+import {getAmountString, getCurrentDateISOString, toCurrencyString} from "../../utils/util";
 import {TfiMore} from "react-icons/tfi";
 import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {openModal} from "../../redux/slice/modal-slice";
@@ -66,7 +65,7 @@ export const GroupExpenseItem = (props: Props) => {
                     <Text fontWeight={"bold"}>{expense.name}</Text>
                     <Text>{toCurrencyString(expense.spentSum)}</Text>
                     <Text fontWeight={"hairline"}>
-                        <AmountTableCell amount={expense.amount}/>
+                        {getAmountString(expense.amount)}
                     </Text>
                 </Flex>
                 <Spacer/>
@@ -152,7 +151,7 @@ export const GroupExpenseItem = (props: Props) => {
                     ?.sort((o1, o2) => new Date(o1.date).getTime() - new Date(o2.date).getTime())
                     ?.map((singleExpense: SingleExpenseResponse, index) => {
                         return (
-                            <Box px={2}>
+                            <Box px={2} key={`no_parent_expense_item_${index}`}>
                                 {index !== 0 && <Divider/>}
                                 <SingleExpenseItem expense={singleExpense}/>
                             </Box>
