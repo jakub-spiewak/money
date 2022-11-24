@@ -22,7 +22,6 @@ export const MobileDynamicTable = (props: Props) => {
         <Box
             borderWidth={1}
             borderRadius={16}
-            mx={4}
         >
             <Flex
                 p={4}
