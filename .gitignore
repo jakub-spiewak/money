@@ -6,6 +6,7 @@
 **/node_modules/
 **/.pnp
 **/pnpm-lock.json
+**/pnpm-lock.yaml
 **/.pnp.js
 **/.gradle/
 
