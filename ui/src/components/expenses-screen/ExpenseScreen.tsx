@@ -83,7 +83,8 @@ export const ExpenseScreen = () => {
                 )
             })
 
-        result.push(<Box key={'single_expense_element'}>{singleExpensesElement}</Box>)
+        if (singleExpensesElement.length !== 0)
+            result.push(<Box key={'single_expense_element'}>{singleExpensesElement}</Box>)
 
         return result
     }, [scheduledExpensesList, singleExpensesList])
