@@ -12,7 +12,7 @@ RUN yarn install --production
 COPY . .
 
 # Build the app
-ENV REACT_APP_API https://api.money.jakubspiewak.com
+ENV VITE_API https://api.money.jakubspiewak.com
 RUN yarn build
 
 # Bundle static assets with nginx
