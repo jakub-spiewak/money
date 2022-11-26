@@ -9,8 +9,10 @@ import com.jakubspiewak.money.expense.single.SingleExpenseService
 import com.jakubspiewak.money.revenue.scheduled.ScheduledRevenueService
 import com.jakubspiewak.money.revenue.single.SingleRevenueService
 import com.jakubspiewak.money.tag.TagService
+import com.jakubspiewak.money.util.precision2
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
+import java.math.BigDecimal.ONE
 import java.math.BigDecimal.ZERO
 import java.math.RoundingMode.HALF_UP
 import java.time.YearMonth
@@ -34,12 +36,15 @@ class AnalyzeService(
             val expenseList = data.t2
             val tagList = data.t3
 
-            val revenueAmountSum = revenueList.sumOf { it.amount.avg() }
-            val expenseAmountSum = expenseList.sumOf { it.amount.avg() }
+            val revenueAmountSum = revenueList.sumOf { it.amount.avg() }.precision2()
+            val expenseAmountSum = expenseList.sumOf { it.amount.avg() }.precision2()
             val savingAmountSum = (revenueAmountSum - expenseAmountSum).coerceAtLeast(ZERO)
 
-            val savingFactor = savingAmountSum.divide(revenueAmountSum, 4, HALF_UP)
-            val expenseFactor = expenseAmountSum.divide(revenueAmountSum, 4, HALF_UP)
+            val savingFactor = if (revenueAmountSum == ZERO.precision2()) ZERO
+            else savingAmountSum.divide(revenueAmountSum, 4, HALF_UP)
+
+            val expenseFactor = if (revenueAmountSum == ZERO.precision2()) ONE
+            else expenseAmountSum.divide(revenueAmountSum, 4, HALF_UP)
 
             val tags = tagList.map { tag ->
                 val expensesWithCurrentTag = expenseList.filter { expense -> expense.tags.contains(tag) }
@@ -61,9 +66,7 @@ class AnalyzeService(
                     expensesFactor = currentTagExpenseSum.divide(expenseAmountSum, 4, HALF_UP),
                     expenses = currentTagExpensesSummary
                 )
-            }
-                .filter { it.amount > ZERO }
-                .sortedByDescending { it.amount }
+            }.filter { it.amount > ZERO }.sortedByDescending { it.amount }
 
             AnalyzeResponse(
                 revenueAmountSum = revenueAmountSum,
@@ -88,12 +91,15 @@ class AnalyzeService(
             val expenseList = data.t2
             val tagList = data.t3
 
-            val revenueAmountSum = revenueList.sumOf { it.amount }
-            val expenseAmountSum = expenseList.sumOf { it.amount }
+            val revenueAmountSum = revenueList.sumOf { it.amount }.precision2()
+            val expenseAmountSum = expenseList.sumOf { it.amount }.precision2()
             val savingAmountSum = (revenueAmountSum - expenseAmountSum).coerceAtLeast(ZERO)
 
-            val savingFactor = savingAmountSum.div(revenueAmountSum)
-            val expenseFactor = expenseAmountSum.div(revenueAmountSum)
+            val savingFactor = if (revenueAmountSum == ZERO.precision2()) ZERO
+            else savingAmountSum.div(revenueAmountSum)
+
+            val expenseFactor = if (revenueAmountSum == ZERO.precision2()) ONE
+            else expenseAmountSum.div(revenueAmountSum)
 
             val tags = tagList.map { tag ->
                 val expensesWithCurrentTag = expenseList.filter { expense -> expense.tags.contains(tag) }
@@ -109,14 +115,16 @@ class AnalyzeService(
                 TagSummary(
                     name = tag.name,
                     amount = currentTagExpenseSum,
-                    revenuesFactor = currentTagExpenseSum.div(revenueAmountSum),
-                    expensesFactor = currentTagExpenseSum.div(expenseAmountSum),
+                    revenuesFactor = if (revenueAmountSum == ZERO.precision2()) ZERO else currentTagExpenseSum.div(
+                        revenueAmountSum
+                    ),
+                    expensesFactor = if (expenseAmountSum == ZERO.precision2()) ONE else currentTagExpenseSum.div(
+                        expenseAmountSum
+                    ),
                     expenses = currentTagExpensesSummary
                 )
 
-            }
-                .filter { it.amount > ZERO }
-                .sortedByDescending { it.amount }
+            }.filter { it.amount > ZERO }.sortedByDescending { it.amount }
 
             AnalyzeResponse(
                 revenueAmountSum = revenueAmountSum,

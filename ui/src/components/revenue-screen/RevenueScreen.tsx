@@ -6,14 +6,14 @@ import {CurrentDateComponent} from "../util/CurrentDateComponent";
 import {DynamicGrid} from "../util/dynamic-grid/DynamicGrid";
 
 const RevenueScreen = () => {
-    const {year, month} = useAppSelector(state => state.currentDate)
-
-    const currentMonthStr = `${year}-${month <= 9 ? `0${month}` : month}`
-
+    const month = useAppSelector(state => state.currentDate.value)
+    console.log(month)
     const {
         data,
         isFetching
-    } = useReadScheduledRevenueQuery({month: currentMonthStr})
+    } = useReadScheduledRevenueQuery({month})
+
+    const dataExists = (data && data.length > 0)
 
     return (
         <Box p={4}>
@@ -42,7 +42,7 @@ const RevenueScreen = () => {
                 w={'full'}
             >
                 {
-                    data && data.length === 0 &&
+                    !dataExists && !isFetching &&
                     <Box px={2}>
                         <Box p={8}>
                             <Image src={"/undraw/moonlight.svg"}/>

@@ -32,7 +32,6 @@ const getColor = (index: number) => chartColors[index % chartColors.length]
 
 const ExpenseScreen = () => {
     const currentMonthStr = useAppSelector(state => state.currentDate.value)
-
     const {data, isFetching: isFetchingSummary} = useSummaryQuery({month: currentMonthStr})
 
     const reamingNum = data?.reaming || 0

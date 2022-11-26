@@ -8,6 +8,7 @@ export const CurrentDateComponent = () => {
     const dispatch = useAppDispatch()
 
     const onPlusClick = useCallback(() => {
+        console.log("penis")
         dispatch(increment())
     }, [dispatch])
 
