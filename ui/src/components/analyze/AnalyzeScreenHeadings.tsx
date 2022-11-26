@@ -1,4 +1,5 @@
 import {Center, Container, Text} from "@chakra-ui/react";
+import {toCurrencyString} from "../../utils/util";
 
 interface Props {
     revenueAmount: number,
@@ -17,11 +18,11 @@ export const AnalyzeScreenHeadings = (props: Props) => {
                 maxW={"6xl"}
             >
                 <Center flexDirection={"column"}>
-                    <Text fontSize={'4xl'}>Revenues: <b>{revenueAmount.toLocaleString()}</b></Text>
+                    <Text fontSize={'4xl'}>Revenues: <b>{toCurrencyString(revenueAmount)}</b></Text>
                     <Text
-                        fontSize={'xl'}>Expenses: <b>{expensesAmount.toLocaleString()}</b> ({expensesPercentage * 100}%)</Text>
+                        fontSize={'xl'}>Expenses: <b>{toCurrencyString(expensesAmount)}</b> ({expensesPercentage * 100}%)</Text>
                     <Text
-                        fontSize={'xl'}>Savings: <b>{savingAmount.toLocaleString()}</b> ({savingPercentage * 100}%)</Text>
+                        fontSize={'xl'}>Savings: <b>{toCurrencyString(savingAmount)}</b> ({savingPercentage * 100}%)</Text>
                 </Center>
             </Container>
         </Center>

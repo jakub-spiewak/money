@@ -3,7 +3,7 @@ import {CurrentDateComponent} from "../util/CurrentDateComponent";
 import {ScheduledExpenseTable} from "./scheduled/ScheduledExpenseTable";
 import {SingleExpenseTable} from "./single/SingleExpenseTable";
 
-export const ExpenseTableScreen = () => {
+const ExpenseTableScreen = () => {
     return (
         <Box p={4}>
             <CurrentDateComponent/>
@@ -18,3 +18,5 @@ export const ExpenseTableScreen = () => {
         </Box>
     )
 }
+
+export default ExpenseTableScreen

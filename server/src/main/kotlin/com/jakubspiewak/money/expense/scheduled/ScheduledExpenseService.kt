@@ -28,8 +28,8 @@ class ScheduledExpenseService(
 ) {
 
     fun readAll(month: YearMonth?): Flux<ScheduledExpenseResponse> =
-        (month?.let { repository.findAllIntersects(month.atDay(1), month.atEndOfMonth()) }
-            ?: repository.findAll())
+        (if (month != null) repository.findAllIntersects(month.atDay(1), month.atEndOfMonth())
+        else repository.findAll())
             .flatMap {
                 createResponse(
                     it,

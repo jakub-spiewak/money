@@ -3,7 +3,7 @@ import {TagTable} from "./TagTable";
 import {useReadTagQuery,} from "../../redux/generated/redux-api";
 import {VStack} from "@chakra-ui/react";
 
-export const TagScreen = () => {
+const TagScreen = () => {
     const {data, isLoading, isFetching} = useReadTagQuery()
 
     return (
@@ -18,3 +18,4 @@ export const TagScreen = () => {
         </VStack>
     )
 }
+export default TagScreen;

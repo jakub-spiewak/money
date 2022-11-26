@@ -1,0 +1,1 @@
+.breath{animation:breath-animation 4s infinite ease-in-out}@keyframes breath-animation{0%{scale:105%;rotate:0deg}25%{scale:100%;rotate:1.5deg}50%{scale:95%;rotate:0deg}75%{scale:105%;rotate:-1.5deg}to{scale:105%;rotate:0deg}}

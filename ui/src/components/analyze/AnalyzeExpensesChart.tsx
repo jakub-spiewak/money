@@ -1,4 +1,4 @@
-import {Pie} from "react-chartjs-2"
+import {Doughnut} from "react-chartjs-2"
 import {Amount, ScheduledExpenseResponse} from "../../redux/generated/redux-api";
 import {Box} from "@chakra-ui/react";
 
@@ -43,7 +43,7 @@ export const AnalyzeExpenseChart = (props: Props) => {
             height={["50vh", "100vh", "50vh"]}
             mx={"auto"}
         >
-            <Pie
+            <Doughnut
                 data={{
                     labels,
                     datasets: [{
@@ -52,9 +52,12 @@ export const AnalyzeExpenseChart = (props: Props) => {
                         hoverOffset: 16,
                         borderJoinStyle: "round",
                         offset: 4,
+                        borderRadius: 16,
+                        borderWidth: 4,
                     }],
                 }}
                 options={{
+                    spacing: 12,
                     layout: {
                         padding: 8,
                         autoPadding: true,
@@ -63,10 +66,15 @@ export const AnalyzeExpenseChart = (props: Props) => {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
+                        tooltip: {
+                            padding: 16,
+                            titleSpacing: 2,
+                            boxPadding: 8
+                        },
                         legend: {
-                            position: "chartArea",
-                            align: "start",
-                            fullSize: false
+                            position: "bottom",
+                            align: "center",
+                            fullSize: true,
                         }
                     }
                 }}

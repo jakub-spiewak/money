@@ -1,22 +1,24 @@
 import 'chart.js/auto';
 import "./App.css"
 
-import React from 'react';
+import React, {lazy, Suspense} from 'react';
 import {ChakraProvider} from "@chakra-ui/react";
 import {GlobalContextProvider} from "./utils/Context"
-import {ExpenseTableScreen} from "./components/expense-table/ExpenseTableScreen";
 import {Provider} from "react-redux";
 import {store} from "./redux/store";
 import {theme} from "./theme";
 import {Route, Routes} from "react-router";
-import {RevenueTableScreen} from "./components/revenue-table/RevenueTableScreen";
-import {TagScreen} from "./components/tag/TagScreen";
-import {ExpenseScreen} from "./components/expenses-screen/ExpenseScreen";
 import {Modals} from "./components/Modals";
-import {RevenueScreen} from "./components/revenue-screen/RevenueScreen";
-import {BrowserRouter} from "react-router-dom";
 import {GlobalScreenNavigationContainer} from "./components/util/GlobalScreenNavigationContainer";
-import {AnalyzeScreen} from "./components/analyze/AnalyzeScreen";
+
+import {BrowserRouter} from "react-router-dom";
+
+const ExpenseTableScreen = lazy(() => import("./components/expense-table/ExpenseTableScreen"));
+const RevenueTableScreen = lazy(() => import( "./components/revenue-table/RevenueTableScreen"));
+const ExpenseScreen = lazy(() => import( "./components/expenses-screen/ExpenseScreen"));
+const AnalyzeScreen = lazy(() => import("./components/analyze/AnalyzeScreen"));
+const RevenueScreen = lazy(() => import( "./components/revenue-screen/RevenueScreen"));
+const TagScreen = lazy(() => import( "./components/tag/TagScreen"));
 
 function App() {
     return (
@@ -29,55 +31,71 @@ function App() {
                             <Route
                                 path={""}
                                 element={
-                                    <GlobalScreenNavigationContainer>
-                                        <ExpenseScreen/>
-                                    </GlobalScreenNavigationContainer>
+                                    <Suspense>
+                                        <GlobalScreenNavigationContainer>
+                                            <ExpenseScreen/>
+                                        </GlobalScreenNavigationContainer>
+                                    </Suspense>
                                 }
                             />
                             <Route
                                 path={"/expense"}
                                 element={
-                                    <GlobalScreenNavigationContainer>
-                                        <ExpenseScreen/>
-                                    </GlobalScreenNavigationContainer>}
+                                    <Suspense>
+                                        <GlobalScreenNavigationContainer>
+                                            <ExpenseScreen/>
+                                        </GlobalScreenNavigationContainer>
+                                    </Suspense>
+                                }
                             />
                             <Route
                                 path={"/expense-table"}
                                 element={
-                                    <GlobalScreenNavigationContainer>
-                                        <ExpenseTableScreen/>
-                                    </GlobalScreenNavigationContainer>}
+                                    <Suspense>
+                                        <GlobalScreenNavigationContainer>
+                                            <ExpenseTableScreen/>
+                                        </GlobalScreenNavigationContainer>
+                                    </Suspense>
+                                }
                             />
                             <Route
                                 path={"/revenue"}
                                 element={
-                                    <GlobalScreenNavigationContainer>
-                                        <RevenueScreen/>
-                                    </GlobalScreenNavigationContainer>
+                                    <Suspense>
+                                        <GlobalScreenNavigationContainer>
+                                            <RevenueScreen/>
+                                        </GlobalScreenNavigationContainer>
+                                    </Suspense>
                                 }
                             />
                             <Route
                                 path={"/revenue-table"}
                                 element={
-                                    <GlobalScreenNavigationContainer>
-                                        <RevenueTableScreen/>
-                                    </GlobalScreenNavigationContainer>
+                                    <Suspense>
+                                        <GlobalScreenNavigationContainer>
+                                            <RevenueTableScreen/>
+                                        </GlobalScreenNavigationContainer>
+                                    </Suspense>
                                 }
                             />
                             <Route
                                 path={"/analyze"}
                                 element={
-                                    <GlobalScreenNavigationContainer>
-                                        <AnalyzeScreen/>
-                                    </GlobalScreenNavigationContainer>
+                                    <Suspense>
+                                        <GlobalScreenNavigationContainer>
+                                            <AnalyzeScreen/>
+                                        </GlobalScreenNavigationContainer>
+                                    </Suspense>
                                 }
                             />
                             <Route
                                 path={"/tag"}
                                 element={
-                                    <GlobalScreenNavigationContainer>
-                                        <TagScreen/>
-                                    </GlobalScreenNavigationContainer>
+                                    <Suspense>
+                                        <GlobalScreenNavigationContainer>
+                                            <TagScreen/>
+                                        </GlobalScreenNavigationContainer>
+                                    </Suspense>
                                 }
                             />
                         </Routes>

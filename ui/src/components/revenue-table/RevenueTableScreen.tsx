@@ -3,7 +3,7 @@ import {SingleRevenueTable} from "./single/SingleRevenueTable";
 import {ScheduledRevenueTable} from "./scheduled/ScheduledRevenueTable";
 import {Box, Flex} from "@chakra-ui/react";
 
-export const RevenueTableScreen = () => {
+const RevenueTableScreen = () => {
     return (
         <Box p={4}>
             <CurrentDateComponent/>
@@ -18,3 +18,5 @@ export const RevenueTableScreen = () => {
         </Box>
     )
 }
+
+export default RevenueTableScreen;

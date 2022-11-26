@@ -26,6 +26,9 @@ class AnalyzeController(private val analyzeService: AnalyzeService) {
     fun analyzeScheduled(
         @RequestParam("month", required = false)
         month: YearMonth?
-    ) = analyzeService.analyzeScheduled(month)
-
+    ) = if (month?.isAfter(YearMonth.now()) == true) {
+        analyzeService.analyzeScheduled(month)
+    } else {
+        analyzeService.analyzeSingle(month)
+    }
 }

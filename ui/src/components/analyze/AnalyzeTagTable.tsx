@@ -1,6 +1,7 @@
-import {Table, TableCaption, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr} from "@chakra-ui/react";
-import {AnalyzeTagTableExpensesCell} from "./AnalyzeTagTableExpensesCell";
+import {Box, Divider, Flex, HStack, Spacer, Text} from "@chakra-ui/react";
 import {TagSummary} from "../../redux/generated/redux-api";
+import {DynamicGrid} from "../util/dynamic-grid/DynamicGrid";
+import {toCurrencyString} from "../../utils/util";
 
 interface Props {
     tags: TagSummary[]
@@ -10,53 +11,50 @@ export const AnalyzeTagTable = (props: Props) => {
     const {tags} = props
 
     return (
-        <TableContainer
-            pt={8}
-            maxW={"100vw"}
-            flex={2}
-            overflow={"auto"}
-        >
-            <Table variant={'simple'}>
-                <TableCaption>Summary</TableCaption>
-                <Thead>
-                    <Tr>
-                        <Th>Info</Th>
-                        <Th>Name</Th>
-                        <Th isNumeric>Amount</Th>
-                        <Th isNumeric>% of expenses</Th>
-                        <Th isNumeric>% of revenues</Th>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    {
-                        tags.map((tag, index) => {
-                            const {name, amount, expensesFactor, revenuesFactor} = tag
-
-                            return (
-                                <Tr
-                                    key={`analyze_tag_${index}`}
-                                    _hover={{background: "blue.300"}}
-                                >
-                                    <Td><AnalyzeTagTableExpensesCell tag={tag}/></Td>
-                                    <Td>{name}</Td>
-                                    <Td isNumeric>{amount?.toFixed(2)}</Td>
-                                    <Td isNumeric>{`${(expensesFactor * 100).toFixed(2)}%`}</Td>
-                                    <Td isNumeric>{`${(revenuesFactor * 100).toFixed(2)}%`}</Td>
-                                </Tr>
-                            )
-                        })
-                    }
-                </Tbody>
-                <Tfoot>
-                    <Tr>
-                        <Th>Info</Th>
-                        <Th>Name</Th>
-                        <Th isNumeric>Amount</Th>
-                        <Th isNumeric>% of expenses</Th>
-                        <Th isNumeric>% of revenues</Th>
-                    </Tr>
-                </Tfoot>
-            </Table>
-        </TableContainer>
+        <DynamicGrid>
+            {
+                tags.map((tag, index) => {
+                    return (
+                        <Flex
+                            key={`summary_tag_${index}`}
+                            p={4}
+                            flexDirection={"column"}
+                            w={"full"}
+                        >
+                            <HStack>
+                                <Text fontSize={"2xl"} fontWeight={"extrabold"}>{tag.name}</Text>
+                                <Spacer/>
+                                <Text fontSize={"4xl"} fontWeight={"hairline"}>{toCurrencyString(tag.amount)}</Text>
+                            </HStack>
+                            <HStack w={"max-content"}>
+                                <Text>{`${(tag.revenuesFactor * 100).toFixed(2)}%`}</Text>
+                                <Text fontWeight={"hairline"}>of revenues</Text>
+                            </HStack>
+                            <HStack w={"max-content"}>
+                                <Text>{`${(tag.expensesFactor * 100).toFixed(2)}%`}</Text>
+                                <Text fontWeight={"hairline"}>of expenses</Text>
+                            </HStack>
+                            <Divider my={2}/>
+                            <Flex flexDirection={"column"} gap={4}>
+                                {tag.expenses.map((expense, index2) => {
+                                    return (
+                                        <HStack key={`summary_tag_${index}_${index2}`} justifyContent={"space-between"}>
+                                            <Text>
+                                                {expense.name}
+                                            </Text>
+                                            <Box>
+                                                <Text w={"max-content"}>
+                                                    {`${toCurrencyString(expense.amount)} (${(expense.factor * 100).toFixed(2)}%)`}
+                                                </Text>
+                                            </Box>
+                                        </HStack>
+                                    )
+                                })}
+                            </Flex>
+                        </Flex>
+                    )
+                })
+            }
+        </DynamicGrid>
     )
 }

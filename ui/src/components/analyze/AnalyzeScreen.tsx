@@ -1,12 +1,13 @@
 import 'chart.js/auto';
-import {Flex} from "@chakra-ui/react";
 import {useAnalyzeScheduledQuery, useReadScheduledExpenseQuery} from "../../redux/generated/redux-api";
 import {AnalyzeTagTable} from "./AnalyzeTagTable";
 import {AnalyzeExpenseSavingChart} from "./AnalyzeExpenseSavingChart";
 import {AnalyzeScreenHeadings} from "./AnalyzeScreenHeadings";
 import {AnalyzeExpenseChart} from "./AnalyzeExpensesChart";
+import {Box, Flex} from "@chakra-ui/react";
+import {CurrentDateComponent} from "../util/CurrentDateComponent";
 
-export const AnalyzeScreen = () => {
+const AnalyzeScreen = () => {
 
     const {data} = useAnalyzeScheduledQuery({})
     const {data: expenses = []} = useReadScheduledExpenseQuery({})
@@ -24,25 +25,28 @@ export const AnalyzeScreen = () => {
 
     return (
         <>
-            <AnalyzeScreenHeadings
-                revenueAmount={revenueAmountSum}
-                expensesAmount={expensesAmountSum}
-                savingAmount={savingAmountSum}
-                expensesPercentage={expensesFactor}
-                savingPercentage={savingFactor}
-            />
-            <Flex
-                gap={8}
-                flexDirection={["column", null, null, null, "row"]}
-                alignItems={'center'}
-            >
+            <Box p={4}>
+                <CurrentDateComponent/>
+            </Box>
+            <Flex justifyContent={"center"} flexDirection={["column", null, "row"]}>
+                <AnalyzeScreenHeadings
+                    revenueAmount={revenueAmountSum}
+                    expensesAmount={expensesAmountSum}
+                    savingAmount={savingAmountSum}
+                    expensesPercentage={expensesFactor}
+                    savingPercentage={savingFactor}
+                />
                 <AnalyzeExpenseSavingChart
                     expensesAmount={expensesAmountSum}
                     savingAmount={savingAmountSum}
                 />
-                <AnalyzeTagTable tags={tags}/>
             </Flex>
-            <AnalyzeExpenseChart expenses={expenses}/>
+            <Flex flexDirection={"column"} p={4} gap={4}>
+                <AnalyzeTagTable tags={tags}/>
+                <AnalyzeExpenseChart expenses={expenses}/>
+            </Flex>
         </>
     )
 }
+
+export default AnalyzeScreen;

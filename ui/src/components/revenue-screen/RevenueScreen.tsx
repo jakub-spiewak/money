@@ -5,7 +5,7 @@ import {GroupRevenueItem} from "./GroupRevenueItem";
 import {CurrentDateComponent} from "../util/CurrentDateComponent";
 import {DynamicGrid} from "../util/dynamic-grid/DynamicGrid";
 
-export const RevenueScreen = () => {
+const RevenueScreen = () => {
     const {year, month} = useAppSelector(state => state.currentDate)
 
     const currentMonthStr = `${year}-${month <= 9 ? `0${month}` : month}`
@@ -70,3 +70,4 @@ export const RevenueScreen = () => {
     )
 }
 
+export default RevenueScreen;

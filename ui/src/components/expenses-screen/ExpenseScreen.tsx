@@ -30,7 +30,7 @@ const chartColors = [
 
 const getColor = (index: number) => chartColors[index % chartColors.length]
 
-export const ExpenseScreen = () => {
+const ExpenseScreen = () => {
     const currentMonthStr = useAppSelector(state => state.currentDate.value)
 
     const {data, isFetching: isFetchingSummary} = useSummaryQuery({month: currentMonthStr})
@@ -146,7 +146,7 @@ export const ExpenseScreen = () => {
                                 responsive: true,
                                 spacing: 16,
                                 cutout: 96,
-                                events: []
+                                events: [],
                             }}
                         />
                         <Box
@@ -195,3 +195,5 @@ export const ExpenseScreen = () => {
 const clampToOne = (value: number = 0) => {
     return value > 1 ? 1 : value
 }
+
+export default ExpenseScreen;

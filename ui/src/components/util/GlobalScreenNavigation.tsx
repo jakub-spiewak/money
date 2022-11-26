@@ -31,7 +31,7 @@ export const GlobalScreenNavigation = () => {
     }, [pathname])
 
     const centerItem = useMemo(() => {
-        if (pathname === ExpenseNavigation.to) {
+        if (pathname === ExpenseNavigation.to || pathname === "/") {
             return (
                 <DefaultNavigationAddButton onAdd={() => dispatch(openModal({modal: "SINGLE_EXPENSE"}))}/>
             )

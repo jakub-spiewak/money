@@ -14,7 +14,8 @@ export const AnalyzeExpenseSavingChart = (props: Props) => {
         <Box
             width={'100%'}
             maxW={theme.breakpoints.sm}
-            flex={1}
+            p={8}
+            mx={"auto"}
         >
             <Doughnut
                 data={{
@@ -22,15 +23,20 @@ export const AnalyzeExpenseSavingChart = (props: Props) => {
                     datasets: [{
                         data: [expensesAmount, savingAmount],
                         backgroundColor: ["#0bb4ff", "#50e991"],
-                        hoverOffset: 32,
-                        borderJoinStyle: "round"
+                        borderRadius: 16,
+                        borderWidth: 4,
                     }]
                 }}
                 options={{
-                    layout: {
-                        padding: 32,
-                    },
-                    responsive: true
+                    responsive: true,
+                    spacing: 16,
+                    cutout: 96,
+                    events: [],
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
                 }}
             />
         </Box>
